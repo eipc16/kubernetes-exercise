@@ -30,4 +30,4 @@ jobs:
           name: Install default MySQL client
           command: |
             sudo apt-get install default-mysql-client
-      - run: ./mvnw -pl backend clean install
+     - run: ./mvnw -pl backend clean install
