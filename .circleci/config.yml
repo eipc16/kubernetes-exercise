@@ -33,8 +33,6 @@ jobs:
           name: Install default MySQL client
           command: |
             sudo apt-get install default-mysql-client
-            mysqld --skip-grant-tables
-            mysql -u root mysql
-            UPDATE user SET Password=PASSWORD('my_password') where USER='root';
-            FLUSH PRIVILEGES;
+            mysql -u root -e "UPDATE user SET Password=PASSWORD('root123') where USER='root';"
+            mysql -u root -e "FLUSH PRIVILEGES;"
       - run: ./mvnw -pl backend clean install
