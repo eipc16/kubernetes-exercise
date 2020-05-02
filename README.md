@@ -51,8 +51,10 @@ While the server is running, you may interact with it in the following ways:
 ```
 {
   "id": 1,
-  "username": "janek12",
   "name": "Jan Kowalski",
-  "email": "janek@wp.pl"
+  "surname": "Smith",
+  "username": "janek12",
+  "email": "janek@wp.pl",
+  "phoneNumber": "12345678"
 }
 ```
