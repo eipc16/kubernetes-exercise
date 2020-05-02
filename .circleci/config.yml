@@ -26,8 +26,8 @@ jobs:
               sleep 1
             done
             echo Failed waiting for MySQL && exit 1
-     - run:
+      - run:
           name: Install default MySQL client
           command: |
             sudo apt-get install default-mysql-client
-     - run: ./mvnw -pl backend clean install
+      - run: ./mvnw -pl backend clean install
