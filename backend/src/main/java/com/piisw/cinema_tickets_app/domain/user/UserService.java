@@ -34,7 +34,6 @@ public class UserService {
         validatePasswordRules(newUser.getPassword());
 
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-
         return userRepository.save(newUser);
     }
 
@@ -87,6 +86,7 @@ public class UserService {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .phoneNumber(user.getPhoneNumber())
+                .role(user.getUserRole().name())
                 .build();
     }
 

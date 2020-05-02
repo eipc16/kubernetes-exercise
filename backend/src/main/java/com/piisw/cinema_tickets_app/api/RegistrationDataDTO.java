@@ -1,21 +1,14 @@
 package com.piisw.cinema_tickets_app.api;
 
-import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
 
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @Data
-@Builder
-public class UserDTO {
-
-    @Id
-    private Long id;
+public class RegistrationDataDTO {
 
     @NotBlank
     @Size(max = 40)
@@ -42,7 +35,4 @@ public class UserDTO {
     @NotBlank
     private String phoneNumber;
 
-    private String role;
-
 }
-
