@@ -4,33 +4,13 @@ jobs:
   build:
     docker:
       - image: circleci/openjdk:11
-      - image: circleci/mysql:8.0.4
      
     working_directory: ~/repo
 
     environment:
       JVM_OPTS: -Xms512m -Xmx1200m
-      MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: root123
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root123
-      MYSQL_DATABASE: cinema_tickets_app_db
       TERM: dumb
 
     steps:
       - checkout
-      - run:
-          name: Waiting for MySQL to be ready
-          command: |
-            for i in `seq 1 100`;
-            do
-              nc -z 127.0.0.1 3306 && echo Success && exit 0
-              echo -n .
-              sleep 1
-            done
-            echo Failed waiting for MySQL && exit 1
-      - run:
-          name: Install default MySQL client
-          command: |
-            sudo apt-get install default-mysql-client
       - run: ./mvnw -pl backend clean install
