@@ -1,11 +1,15 @@
 package com.piisw.cinema_tickets_app.domain.user;
 
 import com.piisw.cinema_tickets_app.domain.managedobject.ManagedObject;
+import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -17,6 +21,7 @@ import java.util.Objects;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "User")
 public class User extends ManagedObject {
 
@@ -48,6 +53,9 @@ public class User extends ManagedObject {
 
     @NotBlank
     private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
     public Long getId() {
         return id;
@@ -103,6 +111,14 @@ public class User extends ManagedObject {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 
     @Override

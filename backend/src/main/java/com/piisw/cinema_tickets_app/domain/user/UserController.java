@@ -2,6 +2,9 @@ package com.piisw.cinema_tickets_app.domain.user;
 
 import com.piisw.cinema_tickets_app.api.AvailableDTO;
 import com.piisw.cinema_tickets_app.api.UserDTO;
+import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
+import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
+import com.piisw.cinema_tickets_app.infrastructure.security.validation.LoggedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -37,8 +40,16 @@ public class UserController {
     }
 
     @GetMapping(ID_PATH)
+    @HasAnyRole
     public UserDTO getUser(@PathVariable(ID) Long id) {
         User user = userService.getExistingUser(id);
+        return userService.mapToUserDTO(user);
+    }
+
+    @GetMapping("/current")
+    @HasAnyRole
+    public UserDTO getCurrentUser(@LoggedUser UserInfo currentUserInfo) {
+        User user = userService.getExistingUser(currentUserInfo.getId());
         return userService.mapToUserDTO(user);
     }
 
