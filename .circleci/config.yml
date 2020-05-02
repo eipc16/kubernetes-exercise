@@ -10,6 +10,7 @@ jobs:
 
     environment:
       JVM_OPTS: -Xms512m -Xmx1200m
+      MYSQL_ROOT_HOST: %
       MYSQL_ROOT_PASSWORD: root123
       MYSQL_DATABASE: cinema_tickets_app_db
       TERM: dumb
