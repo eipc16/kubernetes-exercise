@@ -12,12 +12,12 @@ import java.util.regex.Pattern;
 @Service
 public class UserService {
 
-    private static final String USERNAME_ALREADY_TAKEN_MSG = "User with username {0} already exists!";
-    private static final String EMAIL_ALREADY_TAKEN_MSG = "User with email {0} already exists!";
+    public static final String USERNAME_ALREADY_TAKEN_MSG = "User with username {0} already exists!";
+    public static final String EMAIL_ALREADY_TAKEN_MSG = "User with email {0} already exists!";
     private static final String NO_SUCH_USER = "There is no user with id {0}";
-    private static final String PASSWORD_NOT_PASSED_VALIDATION_RULES = "Password not passed validation rules";
+    public static final String PASSWORD_NOT_PASSED_VALIDATION_RULES = "Password not passed validation rules";
     private static final Pattern EMAIL_REGEX = Pattern.compile("[^@ ]+@[^@ ]+\\.[^@ ]+");
-    private static final String EMAIL_INCORRECT = "Supplied email is incorrect";
+    public static final String EMAIL_INCORRECT = "Supplied email is incorrect";
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -27,7 +27,7 @@ public class UserService {
 
     public User registerUser(User newUser) {
         validateUsernameUniqueness(newUser);
-        validateEmailCorrectnes(newUser.getEmail());
+        validateEmailCorrectness(newUser.getEmail());
         validateEmailUniqueness(newUser.getEmail());
         validatePasswordRules(newUser.getPassword());
 
@@ -47,7 +47,7 @@ public class UserService {
         }
     }
 
-    private void validateEmailCorrectnes(String email) {
+    private void validateEmailCorrectness(String email) {
         if (!EMAIL_REGEX.matcher(email).matches()) {
             throw new IllegalArgumentException(EMAIL_INCORRECT);
         }
@@ -95,7 +95,7 @@ public class UserService {
     }
 
     public void setNewEmail(User user, String email) {
-        validateEmailCorrectnes(email);
+        validateEmailCorrectness(email);
         validateEmailUniqueness(email);
         user.setEmail(email);
         userRepository.save(user);

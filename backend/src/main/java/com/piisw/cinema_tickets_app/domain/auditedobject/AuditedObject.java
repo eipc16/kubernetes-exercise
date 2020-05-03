@@ -1,4 +1,4 @@
-package com.piisw.cinema_tickets_app.domain.managedobject;
+package com.piisw.cinema_tickets_app.domain.auditedobject;
 
 import com.piisw.cinema_tickets_app.domain.user.User;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public abstract class ManagedObject {
+public abstract class AuditedObject {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -44,7 +44,7 @@ public abstract class ManagedObject {
     private User updatedBy;
 
     @Enumerated(EnumType.STRING)
-    private ManagedObjectState objectState;
+    private AuditedObjectState objectState = AuditedObjectState.ACTIVE;
 
     public Instant getCreatedAt() {
         return createdAt;
@@ -78,11 +78,11 @@ public abstract class ManagedObject {
         this.updatedBy = updatedBy;
     }
 
-    public ManagedObjectState getObjectState() {
+    public AuditedObjectState getObjectState() {
         return objectState;
     }
 
-    public void setObjectState(ManagedObjectState objectState) {
+    public void setObjectState(AuditedObjectState objectState) {
         this.objectState = objectState;
     }
 }
