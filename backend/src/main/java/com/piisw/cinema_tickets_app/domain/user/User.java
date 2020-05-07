@@ -1,6 +1,6 @@
 package com.piisw.cinema_tickets_app.domain.user;
 
-import com.piisw.cinema_tickets_app.domain.managedobject.ManagedObject;
+import com.piisw.cinema_tickets_app.domain.auditedobject.AuditedObject;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +23,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Builder
 @Table(name = "User")
-public class User extends ManagedObject {
+public class User extends AuditedObject {
 
     @Id
     @GeneratedValue(generator = "ID_GENERATOR")
