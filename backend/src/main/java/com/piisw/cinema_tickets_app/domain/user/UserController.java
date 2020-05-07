@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(UserController.MAIN_PATH)
 public class UserController {
 
     @Autowired
     private UserService userService;
 
+    public static final String MAIN_PATH = "/api/users";
     private static final String USERNAME = "username";
     private static final String EMAIL = "email";
     private static final String CHECK_USERNAME_PATH = "/check/username/{" + USERNAME + "}";

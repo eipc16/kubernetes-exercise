@@ -1,8 +1,10 @@
 package com.piisw.cinema_tickets_app.infrastructure.configuration;
 
+import com.piisw.cinema_tickets_app.domain.user.UserController;
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationEntryPointImpl;
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationFilter;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserDetailsServiceImpl;
+import com.piisw.cinema_tickets_app.screeningroom.boundary.ScreeningRoomController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         prePostEnabled = true
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private static final String WILDCARD_PATH = "/**";
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -84,8 +88,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/auth/**")
                 .permitAll()
                 .antMatchers(
-                        "/api/user/check/username/**",
-                        "/api/user/check/email/**")
+                        UserController.MAIN_PATH + WILDCARD_PATH,
+                        ScreeningRoomController.MAIN_PATH + WILDCARD_PATH)
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/users/**")
                 .permitAll()
