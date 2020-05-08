@@ -7,6 +7,8 @@ import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminR
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import com.piisw.cinema_tickets_app.screeningroom.control.ScreeningRoomService;
 import com.piisw.cinema_tickets_app.screeningroom.entity.ScreeningRoom;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,11 +25,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Api(tags = "Screening Rooms")
 @RestController
 @RequestMapping(ScreeningRoomController.MAIN_PATH)
 public class ScreeningRoomController {
 
-    public static final String MAIN_PATH = "api/screening-rooms";
+    public static final String MAIN_PATH = "/screening-rooms";
     private static final String IDS = "ids";
     private static final String IDS_PATH = "/{" + IDS + "}";
     private static final String STATE = "objectState";
@@ -38,15 +41,18 @@ public class ScreeningRoomController {
     @Autowired
     private ScreeningRoomMapper screeningRoomMapper;
 
+    @ApiOperation(value = "Return screening rooms by ids", notes = "Returns screening rooms with supplied ids. "
+            + "Additionally allowed object states for queried screening rooms may by specified.")
     @GetMapping(IDS_PATH)
     @HasAnyRole
     public List<ScreeningRoomDTO> getScreeningRoomsByIds(@PathVariable(IDS) Set<Long> ids,
-                                                         @RequestParam(name = STATE) Set<AuditedObjectState> objectStates) {
+                                                         @RequestParam(name = STATE, required = false) Set<AuditedObjectState> objectStates) {
         return screeningRoomService.getAllScreeningRoomsByIdsAndObjectStates(ids, objectStates).stream()
                 .map(screeningRoomMapper::mapToScreeningRoomDTO)
                 .collect(Collectors.toList());
     }
 
+    @ApiOperation(value = "Create screening room", notes = "Creates screening room based on supplied data.")
     @PostMapping
     @HasAdminRole
     public ResourceDTO createScreeningRoom(@RequestBody @Validated ScreeningRoomDTO screeningRoomDTO) {

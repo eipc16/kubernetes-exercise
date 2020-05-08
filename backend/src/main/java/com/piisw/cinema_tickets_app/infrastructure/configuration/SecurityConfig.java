@@ -1,5 +1,6 @@
 package com.piisw.cinema_tickets_app.infrastructure.configuration;
 
+import com.piisw.cinema_tickets_app.domain.authentication.AuthenticationController;
 import com.piisw.cinema_tickets_app.domain.user.UserController;
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationEntryPointImpl;
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationFilter;
@@ -8,7 +9,6 @@ import com.piisw.cinema_tickets_app.screeningroom.boundary.ScreeningRoomControll
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -85,13 +85,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers("/api/auth/**")
-                .permitAll()
                 .antMatchers(
+                        AuthenticationController.MAIN_PATH + WILDCARD_PATH,
                         UserController.MAIN_PATH + WILDCARD_PATH,
                         ScreeningRoomController.MAIN_PATH + WILDCARD_PATH)
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/users/**")
+                .antMatchers(
+                        "/v2/api-docs",
+                    "/configuration/ui",
+                    "/swagger-resources/**",
+                    "/configuration/security",
+                    "/swagger-ui.html",
+                    "/webjars/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
