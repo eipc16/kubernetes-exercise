@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cinema-tickets-backend</artifactId>
+    <artifactId>cinema-tickets-core</artifactId>
 
     <dependencies>
         <dependency>
