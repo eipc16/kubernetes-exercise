@@ -1,7 +1,7 @@
 package com.piisw.cinema_tickets_app.domain.user;
 
 
-import com.piisw.cinema_tickets_app.domain.managedobject.ManagedObject;
+import com.piisw.cinema_tickets_app.domain.auditedobject.AuditedObject;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
