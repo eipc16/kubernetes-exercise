@@ -1,4 +1,4 @@
-package com.piisw.cinema_tickets_app.screeningroom.entity;
+package com.piisw.cinema_tickets_app.domain.screeningroom.entity;
 
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 import lombok.AllArgsConstructor;

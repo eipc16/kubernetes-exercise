@@ -1,11 +1,11 @@
-package com.piisw.cinema_tickets_app.screeningroom.control;
+package com.piisw.cinema_tickets_app.domain.screeningroom.control;
 
 import com.google.common.collect.Sets;
-import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObjectState;
-import com.piisw.cinema_tickets_app.screeningroom.entity.ScreeningRoom;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
+import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class ScreeningRoomService {
 
     private static final String SCREENING_ROOM_NOT_FOUND = "Screening room with id {0} doesn''t exists";
@@ -21,14 +21,14 @@ public class ScreeningRoomService {
     @Autowired
     private ScreeningRoomRepository screeningRoomRepository;
 
-    public List<ScreeningRoom> getAllScreeningRoomsByIdsAndObjectStates(Set<Long> ids, Set<AuditedObjectState> objectStates) {
+    public List<ScreeningRoom> getAllScreeningRoomsByIdsAndObjectStates(Set<Long> ids, Set<ObjectState> objectStates) {
         return screeningRoomRepository.findAll(ScreeningRoomSpecifications.hasIdInSetAndObjectStateInSet(ids, objectStates));
     }
 
     public ScreeningRoom createScreeningRoom(ScreeningRoom screeningRoom) {
         ScreeningRoom newScreeningRoom = screeningRoom.toBuilder()
                 .id(null)
-                .objectState(AuditedObjectState.ACTIVE)
+                .objectState(ObjectState.ACTIVE)
                 .build();
         return screeningRoomRepository.save(newScreeningRoom);
     }
@@ -44,16 +44,16 @@ public class ScreeningRoomService {
     }
 
     private ScreeningRoom getExistingScreeningRoomById(Long id) {
-        return screeningRoomRepository.findByIdAndObjectState(id, AuditedObjectState.ACTIVE)
+        return screeningRoomRepository.findByIdAndObjectState(id, ObjectState.ACTIVE)
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(SCREENING_ROOM_NOT_FOUND, id)));
     }
 
     public List<ScreeningRoom> deleteScreeningRoomsByIds(Set<Long> ids) {
         List<ScreeningRoom> screeningRoomsToRemove = screeningRoomRepository
-                .findAll(ScreeningRoomSpecifications.hasIdInSetAndObjectStateInSet(ids, AuditedObjectState.existingStates()));
+                .findAll(ScreeningRoomSpecifications.hasIdInSetAndObjectStateInSet(ids, ObjectState.existingStates()));
         validateIfAllScreeningRoomsToRemoveExists(ids, screeningRoomsToRemove);
         screeningRoomsToRemove.stream()
-                .forEach(screeningRoom -> screeningRoom.setObjectState(AuditedObjectState.REMOVED));
+                .forEach(screeningRoom -> screeningRoom.setObjectState(ObjectState.REMOVED));
         return screeningRoomRepository.saveAll(screeningRoomsToRemove);
     }
 

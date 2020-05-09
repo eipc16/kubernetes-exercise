@@ -44,7 +44,7 @@ public abstract class AuditedObject {
     private User updatedBy;
 
     @Enumerated(EnumType.STRING)
-    private AuditedObjectState objectState = AuditedObjectState.ACTIVE;
+    private ObjectState objectState = ObjectState.ACTIVE;
 
     public Instant getCreatedAt() {
         return createdAt;
@@ -78,11 +78,11 @@ public abstract class AuditedObject {
         this.updatedBy = updatedBy;
     }
 
-    public AuditedObjectState getObjectState() {
+    public ObjectState getObjectState() {
         return objectState;
     }
 
-    public void setObjectState(AuditedObjectState objectState) {
+    public void setObjectState(ObjectState objectState) {
         this.objectState = objectState;
     }
 }

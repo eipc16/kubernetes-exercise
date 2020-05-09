@@ -7,6 +7,7 @@ import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.LoggedUser;
+import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,6 @@ public class UserController {
     private static final String EMAIL = "email";
     private static final String CHECK_USERNAME_PATH = "/check/username/{" + USERNAME + "}";
     private static final String CHECK_EMAIL_PATH = "/check/email/{" + EMAIL + "}";
-    private static final String ID = "id";
-    private static final String ID_PATH = "/{" + ID + "}";
 
     @ApiOperation(value = "${api.users.check.username.value}", notes = "${api.users.check.username.notes}")
     @GetMapping(CHECK_USERNAME_PATH)

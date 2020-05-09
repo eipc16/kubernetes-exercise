@@ -1,12 +1,13 @@
-package com.piisw.cinema_tickets_app.screeningroom.boundary;
+package com.piisw.cinema_tickets_app.domain.screeningroom.boundary;
 
+import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.*;
 import com.piisw.cinema_tickets_app.api.ResourceDTO;
 import com.piisw.cinema_tickets_app.api.ScreeningRoomDTO;
-import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObjectState;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
-import com.piisw.cinema_tickets_app.screeningroom.control.ScreeningRoomService;
-import com.piisw.cinema_tickets_app.screeningroom.entity.ScreeningRoom;
+import com.piisw.cinema_tickets_app.domain.screeningroom.control.ScreeningRoomService;
+import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -32,9 +33,6 @@ import java.util.stream.Collectors;
 public class ScreeningRoomController {
 
     public static final String MAIN_PATH = "/screening-rooms";
-    private static final String IDS = "ids";
-    public static final String IDS_PATH = "/{" + IDS + "}";
-    private static final String STATE = "objectState";
 
     @Autowired
     private ScreeningRoomService screeningRoomService;
@@ -46,7 +44,7 @@ public class ScreeningRoomController {
     @GetMapping(IDS_PATH)
     @HasAnyRole
     public List<ScreeningRoomDTO> getScreeningRoomsByIds(@ApiParam(value = "${api.screening.room.ids}") @PathVariable(IDS) Set<Long> ids,
-            @ApiParam(value = "${api.screening.room.states}") @RequestParam(name = STATE, defaultValue = "ACTIVE") Set<AuditedObjectState> objectStates) {
+            @ApiParam(value = "${api.screening.room.states}") @RequestParam(name = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         return screeningRoomService.getAllScreeningRoomsByIdsAndObjectStates(ids, objectStates).stream()
                 .map(screeningRoomMapper::mapToScreeningRoomDTO)
                 .collect(Collectors.toList());

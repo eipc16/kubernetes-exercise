@@ -1,6 +1,6 @@
 package com.piisw.cinema_tickets_app.api;
 
-import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObjectState;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +23,6 @@ public class ScreeningRoomDTO {
     @Positive
     private Long numberOfSeats;
 
-    AuditedObjectState objectState;
+    ObjectState objectState;
 
 }
