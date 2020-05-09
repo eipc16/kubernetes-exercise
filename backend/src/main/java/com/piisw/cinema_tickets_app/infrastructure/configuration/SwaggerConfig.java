@@ -3,10 +3,15 @@ package com.piisw.cinema_tickets_app.infrastructure.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.Contact;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
@@ -18,6 +23,8 @@ import java.util.List;
 
 @Configuration
 @EnableSwagger2
+@Import(BeanValidatorPluginsConfiguration.class)
+@PropertySource("classpath:swagger.properties")
 public class SwaggerConfig {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
@@ -30,7 +37,8 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build()
                 .securitySchemes(Collections.singletonList(getApiKey()))
-                .securityContexts(Collections.singletonList(getSecurityContext()));
+                .securityContexts(Collections.singletonList(getSecurityContext()))
+                .apiInfo(getApiInfo());
     }
 
     private ApiKey getApiKey() {
@@ -49,6 +57,19 @@ public class SwaggerConfig {
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
         return Collections.singletonList(new SecurityReference("JWT", authorizationScopes));
+    }
+
+    private ApiInfo getApiInfo() {
+        return new ApiInfo(
+                "Cinema Tickets Application Api",
+                "Api documentation for Cinema Tickets Application",
+                "1.0",
+                "TERMS OF SERVICE URL",
+                new Contact("Admin","www.cinema-tickets-app.support.com","admin@example.com"),
+                "Apache 2.0",
+                "http://www.apache.org/licenses/LICENSE-2.0",
+                Collections.emptyList()
+        );
     }
 
 }

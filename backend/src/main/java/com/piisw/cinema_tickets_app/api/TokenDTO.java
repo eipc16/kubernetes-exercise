@@ -6,7 +6,7 @@ import lombok.Data;
 public class TokenDTO {
 
     private String accessToken;
-    private final static String tokenType = "Bearer";
+    private String tokenType = "Bearer";
 
     public TokenDTO(String accessToken) {
         this.accessToken = accessToken;

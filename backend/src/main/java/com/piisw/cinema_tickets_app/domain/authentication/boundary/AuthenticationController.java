@@ -48,11 +48,7 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "Login", notes = "Allows login to system. Returns Json Web Token required to use api.\n"
-            + "When performing request on secured endpoint following header must be attached:\n"
-            + "<i>Authorization: Bearer <token></i>\n"
-            + "For authorization in swagger click authorize button and paste in text field returned token prefixed with <i>Bearer</i>, e.g: \n"
-            + "<i>Bearer {acquired_token}</i>")
+    @ApiOperation(value = "${api.auth.signin.value}", notes = "${api.auth.signin.notes}")
     @PostMapping("/signin")
     public TokenDTO authenticateUser(@Valid @RequestBody LoginDataDTO loginData) {
         Authentication authentication = authenticationManager.authenticate(authenticationService.getAuthenticationToken(loginData));
@@ -61,7 +57,7 @@ public class AuthenticationController {
         return authenticationService.mapToTokenDTO(token);
     }
 
-    @ApiOperation(value = "Register user", notes = "Allows to register new user based on supplied registration data.")
+    @ApiOperation(value = "${api.auth.signup.value}", notes = "${api.auth.signup.notes}")
     @PostMapping("/signup")
     public ResourceDTO registerUser(@Valid @RequestBody RegistrationDataDTO registrationData) {
         User newUser = authenticationService.createUserBasedOnRegistrationData(registrationData);
@@ -76,7 +72,7 @@ public class AuthenticationController {
                 .build();
     }
 
-    @ApiOperation(value = "Change password", notes = "Changes password for current user. New password must be confirmed with current password.")
+    @ApiOperation(value = "${api.auth.change.password.value}", notes = "${api.auth.change.password.notes}")
     @PostMapping("/change-password")
     @HasAnyRole
     public ResponseDTO changePassword(@Valid @RequestBody PasswordConfirmedDataDTO passwordChange, @ApiIgnore @LoggedUser UserInfo userInfo) {
@@ -88,7 +84,7 @@ public class AuthenticationController {
                 .build();
     }
 
-    @ApiOperation(value = "Change email", notes = "Changes email of current user. New email must be confirmed with password.")
+    @ApiOperation(value = "${api.auth.change.email.value}", notes = "${api.auth.change.email.notes}")
     @PostMapping("/change-email")
     @HasAnyRole
     public ResponseDTO changeEmail(@Valid @RequestBody PasswordConfirmedDataDTO emailChange, @ApiIgnore @LoggedUser UserInfo userInfo) {

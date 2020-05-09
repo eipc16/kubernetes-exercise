@@ -9,6 +9,7 @@ import com.piisw.cinema_tickets_app.screeningroom.control.ScreeningRoomService;
 import com.piisw.cinema_tickets_app.screeningroom.entity.ScreeningRoom;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,18 +42,20 @@ public class ScreeningRoomController {
     @Autowired
     private ScreeningRoomMapper screeningRoomMapper;
 
-    @ApiOperation(value = "Return screening rooms by ids", notes = "Returns screening rooms with supplied ids. "
-            + "Additionally allowed object states for queried screening rooms may by specified.")
+    @ApiOperation(value = "${api.screening.room.get.value}", notes = "${api.screening.room.get.notes}")
     @GetMapping(IDS_PATH)
     @HasAnyRole
-    public List<ScreeningRoomDTO> getScreeningRoomsByIds(@PathVariable(IDS) Set<Long> ids,
-                                                         @RequestParam(name = STATE, required = false) Set<AuditedObjectState> objectStates) {
+    public List<ScreeningRoomDTO> getScreeningRoomsByIds(
+            @ApiParam(value = "${api.screening.room.ids}")
+            @PathVariable(IDS) Set<Long> ids,
+            @ApiParam(value = "${api.screening.room.states}")
+            @RequestParam(name = STATE, defaultValue = "ACTIVE") Set<AuditedObjectState> objectStates) {
         return screeningRoomService.getAllScreeningRoomsByIdsAndObjectStates(ids, objectStates).stream()
                 .map(screeningRoomMapper::mapToScreeningRoomDTO)
                 .collect(Collectors.toList());
     }
 
-    @ApiOperation(value = "Create screening room", notes = "Creates screening room based on supplied data.")
+    @ApiOperation(value = "${api.screening.room.post.value}", notes = "${api.screening.room.post.notes}")
     @PostMapping
     @HasAdminRole
     public ResourceDTO createScreeningRoom(@RequestBody @Validated ScreeningRoomDTO screeningRoomDTO) {

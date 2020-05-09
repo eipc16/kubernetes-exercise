@@ -33,21 +33,21 @@ public class UserController {
     private static final String ID = "id";
     private static final String ID_PATH = "/{" + ID + "}";
 
-    @ApiOperation(value = "Check username availability", notes = "Checks if given username is available.")
+    @ApiOperation(value = "${api.users.check.username.value}", notes = "${api.users.check.username.notes}")
     @GetMapping(CHECK_USERNAME_PATH)
     public AvailableDTO checkUsernameAvailability(@PathVariable(USERNAME) String username) {
         Boolean isAvailable = !userService.userExistsByUsername(username);
         return new AvailableDTO(isAvailable);
     }
 
-    @ApiOperation(value = "Check email availability", notes = "Checks if given email is available.")
+    @ApiOperation(value = "${api.users.check.email.value}", notes = "${api.users.check.email.notes}")
     @GetMapping(CHECK_EMAIL_PATH)
     public AvailableDTO checkIfEmailAvailability(@PathVariable(EMAIL) String email) {
         Boolean isAvailable = !userService.userExistsByEmail(email);
         return new AvailableDTO(isAvailable);
     }
 
-    @ApiOperation(value = "Get user by id", notes = "Returns user with given id.")
+    @ApiOperation(value = "${api.users.get.value}", notes = "${api.users.get.notes}")
     @GetMapping(ID_PATH)
     @HasAnyRole
     public UserDTO getUser(@PathVariable(ID) Long id) {
@@ -55,7 +55,7 @@ public class UserController {
         return userService.mapToUserDTO(user);
     }
 
-    @ApiOperation(value = "Get current user", notes = "Returns information about currently logged user.")
+    @ApiOperation(value = "${api.users.current.value}", notes = "${api.users.current.notes}")
     @GetMapping("/current")
     @HasAnyRole
     public UserDTO getCurrentUser(@ApiIgnore @LoggedUser UserInfo currentUserInfo) {
