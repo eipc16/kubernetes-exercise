@@ -1,6 +1,7 @@
-package com.piisw.cinema_tickets_app.domain.user;
+package com.piisw.cinema_tickets_app.domain.user.control;
 
 import com.piisw.cinema_tickets_app.api.UserDTO;
+import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

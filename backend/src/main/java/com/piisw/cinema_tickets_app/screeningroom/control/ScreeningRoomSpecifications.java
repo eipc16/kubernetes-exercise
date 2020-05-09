@@ -1,7 +1,7 @@
 package com.piisw.cinema_tickets_app.screeningroom.control;
 
-import com.piisw.cinema_tickets_app.domain.auditedobject.AuditedObjectState;
-import com.piisw.cinema_tickets_app.domain.auditedobject.AuditedObject_;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObjectState;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject_;
 import com.piisw.cinema_tickets_app.screeningroom.entity.ScreeningRoom;
 import com.piisw.cinema_tickets_app.screeningroom.entity.ScreeningRoom_;
 import lombok.experimental.UtilityClass;

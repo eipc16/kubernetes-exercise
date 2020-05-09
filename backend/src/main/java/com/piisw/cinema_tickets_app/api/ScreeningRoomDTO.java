@@ -1,6 +1,6 @@
 package com.piisw.cinema_tickets_app.api;
 
-import com.piisw.cinema_tickets_app.domain.auditedobject.AuditedObjectState;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObjectState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

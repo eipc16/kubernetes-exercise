@@ -1,6 +1,6 @@
-package com.piisw.cinema_tickets_app.domain.auditedobject;
+package com.piisw.cinema_tickets_app.domain.auditedobject.entity;
 
-import com.piisw.cinema_tickets_app.domain.user.User;
+import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

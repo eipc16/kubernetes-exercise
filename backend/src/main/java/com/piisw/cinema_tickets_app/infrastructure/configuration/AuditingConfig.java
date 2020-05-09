@@ -1,8 +1,8 @@
 package com.piisw.cinema_tickets_app.infrastructure.configuration;
 
 
-import com.piisw.cinema_tickets_app.domain.user.User;
-import com.piisw.cinema_tickets_app.domain.user.UserService;
+import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.control.UserService;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

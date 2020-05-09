@@ -1,4 +1,4 @@
-package com.piisw.cinema_tickets_app.domain.authentication;
+package com.piisw.cinema_tickets_app.domain.authentication.boundary;
 
 import com.piisw.cinema_tickets_app.api.LoginDataDTO;
 import com.piisw.cinema_tickets_app.api.PasswordConfirmedDataDTO;
@@ -6,8 +6,9 @@ import com.piisw.cinema_tickets_app.api.RegistrationDataDTO;
 import com.piisw.cinema_tickets_app.api.ResourceDTO;
 import com.piisw.cinema_tickets_app.api.ResponseDTO;
 import com.piisw.cinema_tickets_app.api.TokenDTO;
-import com.piisw.cinema_tickets_app.domain.user.User;
-import com.piisw.cinema_tickets_app.domain.user.UserService;
+import com.piisw.cinema_tickets_app.domain.authentication.control.AuthenticationService;
+import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.control.UserService;
 import com.piisw.cinema_tickets_app.infrastructure.security.TokenHandler;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -49,8 +51,8 @@ public class AuthenticationController {
     @ApiOperation(value = "Login", notes = "Allows login to system. Returns Json Web Token required to use api.\n"
             + "When performing request on secured endpoint following header must be attached:\n"
             + "<i>Authorization: Bearer <token></i>\n"
-            + "For authorization in swagger click authorize button and paste in text field returned token prefixed with <i>Bearer</>, e.g: \n"
-            + "\"Bearer &lt token &gt\"")
+            + "For authorization in swagger click authorize button and paste in text field returned token prefixed with <i>Bearer</i>, e.g: \n"
+            + "<i>Bearer {acquired_token}</i>")
     @PostMapping("/signin")
     public TokenDTO authenticateUser(@Valid @RequestBody LoginDataDTO loginData) {
         Authentication authentication = authenticationManager.authenticate(authenticationService.getAuthenticationToken(loginData));
@@ -77,7 +79,7 @@ public class AuthenticationController {
     @ApiOperation(value = "Change password", notes = "Changes password for current user. New password must be confirmed with current password.")
     @PostMapping("/change-password")
     @HasAnyRole
-    public ResponseDTO changePassword(@Valid @RequestBody PasswordConfirmedDataDTO passwordChange, @LoggedUser UserInfo userInfo) {
+    public ResponseDTO changePassword(@Valid @RequestBody PasswordConfirmedDataDTO passwordChange, @ApiIgnore @LoggedUser UserInfo userInfo) {
         authenticationManager.authenticate(authenticationService.getAuthenticationToken(userInfo.getUsername(), passwordChange.getPassword()));
         User user = userService.getExistingUser(userInfo.getId());
         userService.setNewPassword(user, passwordChange.getValue());
@@ -89,7 +91,7 @@ public class AuthenticationController {
     @ApiOperation(value = "Change email", notes = "Changes email of current user. New email must be confirmed with password.")
     @PostMapping("/change-email")
     @HasAnyRole
-    public ResponseDTO changeEmail(@Valid @RequestBody PasswordConfirmedDataDTO emailChange, @LoggedUser UserInfo userInfo) {
+    public ResponseDTO changeEmail(@Valid @RequestBody PasswordConfirmedDataDTO emailChange, @ApiIgnore @LoggedUser UserInfo userInfo) {
         authenticationManager.authenticate(authenticationService.getAuthenticationToken(userInfo.getUsername(), emailChange.getPassword()));
         User user = userService.getExistingUser(userInfo.getId());
         userService.setNewEmail(user, emailChange.getValue());

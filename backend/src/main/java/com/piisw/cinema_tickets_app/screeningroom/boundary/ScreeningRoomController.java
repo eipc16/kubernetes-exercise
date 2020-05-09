@@ -2,7 +2,7 @@ package com.piisw.cinema_tickets_app.screeningroom.boundary;
 
 import com.piisw.cinema_tickets_app.api.ResourceDTO;
 import com.piisw.cinema_tickets_app.api.ScreeningRoomDTO;
-import com.piisw.cinema_tickets_app.domain.auditedobject.AuditedObjectState;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObjectState;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import com.piisw.cinema_tickets_app.screeningroom.control.ScreeningRoomService;

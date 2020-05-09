@@ -1,11 +1,9 @@
 package com.piisw.cinema_tickets_app.infrastructure.configuration;
 
-import com.piisw.cinema_tickets_app.domain.authentication.AuthenticationController;
-import com.piisw.cinema_tickets_app.domain.user.UserController;
+import com.piisw.cinema_tickets_app.domain.authentication.boundary.AuthenticationController;
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationEntryPointImpl;
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationFilter;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserDetailsServiceImpl;
-import com.piisw.cinema_tickets_app.screeningroom.boundary.ScreeningRoomController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -86,9 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js")
                 .permitAll()
                 .antMatchers(
-                        AuthenticationController.MAIN_PATH + WILDCARD_PATH,
-                        UserController.MAIN_PATH + WILDCARD_PATH,
-                        ScreeningRoomController.MAIN_PATH + WILDCARD_PATH)
+                        AuthenticationController.MAIN_PATH + WILDCARD_PATH)
                 .permitAll()
                 .antMatchers(
                         "/v2/api-docs",

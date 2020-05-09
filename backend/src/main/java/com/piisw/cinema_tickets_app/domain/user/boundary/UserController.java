@@ -1,7 +1,9 @@
-package com.piisw.cinema_tickets_app.domain.user;
+package com.piisw.cinema_tickets_app.domain.user.boundary;
 
 import com.piisw.cinema_tickets_app.api.AvailableDTO;
 import com.piisw.cinema_tickets_app.api.UserDTO;
+import com.piisw.cinema_tickets_app.domain.user.control.UserService;
+import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.LoggedUser;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 
 @Api(tags = "Users")
@@ -55,7 +58,7 @@ public class UserController {
     @ApiOperation(value = "Get current user", notes = "Returns information about currently logged user.")
     @GetMapping("/current")
     @HasAnyRole
-    public UserDTO getCurrentUser(@LoggedUser UserInfo currentUserInfo) {
+    public UserDTO getCurrentUser(@ApiIgnore @LoggedUser UserInfo currentUserInfo) {
         User user = userService.getExistingUser(currentUserInfo.getId());
         return userService.mapToUserDTO(user);
     }

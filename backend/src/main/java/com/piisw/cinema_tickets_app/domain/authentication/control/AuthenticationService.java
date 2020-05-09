@@ -1,10 +1,10 @@
-package com.piisw.cinema_tickets_app.domain.authentication;
+package com.piisw.cinema_tickets_app.domain.authentication.control;
 
 import com.piisw.cinema_tickets_app.api.LoginDataDTO;
 import com.piisw.cinema_tickets_app.api.RegistrationDataDTO;
 import com.piisw.cinema_tickets_app.api.TokenDTO;
-import com.piisw.cinema_tickets_app.domain.user.User;
-import com.piisw.cinema_tickets_app.domain.user.UserService;
+import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.control.UserService;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

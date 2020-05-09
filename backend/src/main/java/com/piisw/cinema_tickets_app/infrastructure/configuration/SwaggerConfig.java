@@ -21,7 +21,6 @@ import java.util.List;
 public class SwaggerConfig {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String DEFAULT_INCLUDE_PATTERN = "/api/.*";
 
     @Bean
     public Docket api() {
@@ -41,7 +40,7 @@ public class SwaggerConfig {
     private SecurityContext getSecurityContext() {
         return SecurityContext.builder()
                 .securityReferences(getDefaultAuth())
-                .forPaths(PathSelectors.regex(DEFAULT_INCLUDE_PATTERN))
+                .forPaths(PathSelectors.any())
                 .build();
     }
 

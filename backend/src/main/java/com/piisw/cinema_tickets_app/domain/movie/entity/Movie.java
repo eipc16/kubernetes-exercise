@@ -1,6 +1,6 @@
 package com.piisw.cinema_tickets_app.domain.movie.entity;
 
-import com.piisw.cinema_tickets_app.domain.auditedobject.AuditedObject;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

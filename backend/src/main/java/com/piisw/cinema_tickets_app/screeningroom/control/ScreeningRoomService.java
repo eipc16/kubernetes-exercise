@@ -1,6 +1,6 @@
 package com.piisw.cinema_tickets_app.screeningroom.control;
 
-import com.piisw.cinema_tickets_app.domain.auditedobject.AuditedObjectState;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObjectState;
 import com.piisw.cinema_tickets_app.screeningroom.entity.ScreeningRoom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
