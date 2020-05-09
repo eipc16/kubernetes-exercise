@@ -76,6 +76,11 @@
             <version>2.9.2</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.10</version>
+        </dependency>
+        <dependency>
             <groupId>com.diffplug.spotless</groupId>
             <artifactId>spotless-plugin-gradle</artifactId>
             <version>3.28.0</version>

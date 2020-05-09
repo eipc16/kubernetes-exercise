@@ -2,8 +2,8 @@ package com.piisw.cinema_tickets_app.screeningroom.entity;
 
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +14,7 @@ import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name = "ScreeningRoom")
-@Builder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScreeningRoom extends AuditedObject {

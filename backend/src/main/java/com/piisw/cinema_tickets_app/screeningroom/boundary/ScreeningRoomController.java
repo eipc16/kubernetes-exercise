@@ -12,16 +12,16 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,7 +33,7 @@ public class ScreeningRoomController {
 
     public static final String MAIN_PATH = "/screening-rooms";
     private static final String IDS = "ids";
-    private static final String IDS_PATH = "/{" + IDS + "}";
+    public static final String IDS_PATH = "/{" + IDS + "}";
     private static final String STATE = "objectState";
 
     @Autowired
@@ -45,11 +45,8 @@ public class ScreeningRoomController {
     @ApiOperation(value = "${api.screening.room.get.value}", notes = "${api.screening.room.get.notes}")
     @GetMapping(IDS_PATH)
     @HasAnyRole
-    public List<ScreeningRoomDTO> getScreeningRoomsByIds(
-            @ApiParam(value = "${api.screening.room.ids}")
-            @PathVariable(IDS) Set<Long> ids,
-            @ApiParam(value = "${api.screening.room.states}")
-            @RequestParam(name = STATE, defaultValue = "ACTIVE") Set<AuditedObjectState> objectStates) {
+    public List<ScreeningRoomDTO> getScreeningRoomsByIds(@ApiParam(value = "${api.screening.room.ids}") @PathVariable(IDS) Set<Long> ids,
+            @ApiParam(value = "${api.screening.room.states}") @RequestParam(name = STATE, defaultValue = "ACTIVE") Set<AuditedObjectState> objectStates) {
         return screeningRoomService.getAllScreeningRoomsByIdsAndObjectStates(ids, objectStates).stream()
                 .map(screeningRoomMapper::mapToScreeningRoomDTO)
                 .collect(Collectors.toList());
@@ -61,19 +58,25 @@ public class ScreeningRoomController {
     public ResourceDTO createScreeningRoom(@RequestBody @Validated ScreeningRoomDTO screeningRoomDTO) {
         ScreeningRoom screeningRoom = screeningRoomMapper.mapToScreeningRoom(screeningRoomDTO);
         ScreeningRoom createdScreeningRoom = screeningRoomService.createScreeningRoom(screeningRoom);
-        return ResourceDTO.builder()
-                .id(createdScreeningRoom.getId())
-                .identifier(screeningRoom.getNumber().toString())
-                .uri(buildScreeningRoomUri(Set.of(createdScreeningRoom.getId())))
-                .build();
+        return screeningRoomMapper.mapScreeningRoomToResourceDTO(createdScreeningRoom);
     }
 
-    private URI buildScreeningRoomUri(Set<Long> ids) {
-        return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(MAIN_PATH)
-                .path(IDS_PATH)
-                .buildAndExpand(ids)
-                .toUri();
+    @ApiOperation(value = "${api.screening.room.put.value}", notes = "${api.screening.room.put.notes}")
+    @PutMapping
+    @HasAdminRole
+    public ResourceDTO updateScreeningRoom(@Validated @RequestBody ScreeningRoomDTO screeningRoomDTO) {
+        ScreeningRoom screeningRoom = screeningRoomMapper.mapToScreeningRoom(screeningRoomDTO);
+        ScreeningRoom updatedScreeningRoom = screeningRoomService.updateScreeningRoom(screeningRoom);
+        return screeningRoomMapper.mapScreeningRoomToResourceDTO(updatedScreeningRoom);
+    }
+
+    @ApiOperation(value = "${api.screening.room.delete.value}", notes = "${api.screening.room.delete.notes}")
+    @DeleteMapping(IDS_PATH)
+    @HasAdminRole
+    public List<ResourceDTO> deleteScreeningRoomByIds(@ApiParam(value = "${api.screening.room.rm.ids}") @PathVariable(IDS) Set<Long> ids) {
+        return screeningRoomService.deleteScreeningRoomsByIds(ids).stream()
+                .map(screeningRoomMapper::mapScreeningRoomToResourceDTO)
+                .collect(Collectors.toList());
     }
 
 }
