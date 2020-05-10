@@ -60,9 +60,10 @@ public class ScreeningRoomController {
     }
 
     @ApiOperation(value = "${api.screening.room.put.value}", notes = "${api.screening.room.put.notes}")
-    @PutMapping
+    @PutMapping(ID_PATH)
     @HasAdminRole
-    public ResourceDTO updateScreeningRoom(@Validated @RequestBody ScreeningRoomDTO screeningRoomDTO) {
+    public ResourceDTO updateScreeningRoom(@PathVariable(ID) Long id, @Validated @RequestBody ScreeningRoomDTO screeningRoomDTO) {
+        screeningRoomDTO.handleIdConsistency(id);
         ScreeningRoom screeningRoom = screeningRoomMapper.mapToScreeningRoom(screeningRoomDTO);
         ScreeningRoom updatedScreeningRoom = screeningRoomService.updateScreeningRoom(screeningRoom);
         return screeningRoomMapper.mapScreeningRoomToResourceDTO(updatedScreeningRoom);

@@ -24,7 +24,6 @@ public class Movie extends AuditedObject {
     private Long id;
 
     @NotNull
-    @NaturalId
     String imdbId;
 
     public Long getId() {
