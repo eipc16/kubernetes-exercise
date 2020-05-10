@@ -52,8 +52,7 @@ public class ScreeningRoomService {
         List<ScreeningRoom> screeningRoomsToRemove = screeningRoomRepository
                 .findAll(ScreeningRoomSpecifications.hasIdInSetAndObjectStateInSet(ids, ObjectState.existingStates()));
         validateIfAllScreeningRoomsToRemoveExists(ids, screeningRoomsToRemove);
-        screeningRoomsToRemove.stream()
-                .forEach(screeningRoom -> screeningRoom.setObjectState(ObjectState.REMOVED));
+        screeningRoomsToRemove.forEach(screeningRoom -> screeningRoom.setObjectState(ObjectState.REMOVED));
         return screeningRoomRepository.saveAll(screeningRoomsToRemove);
     }
 
@@ -64,8 +63,8 @@ public class ScreeningRoomService {
         }
     }
 
-    private Set<Long> getIdsOfNonExistingScreenRooms(Set<Long> requestedToRemove, List<ScreeningRoom> found) {
-        return found.stream()
+    private Set<Long> getIdsOfNonExistingScreenRooms(Set<Long> requestedToRemove, List<ScreeningRoom> foundScreeningRooms) {
+        return foundScreeningRooms.stream()
                 .map(ScreeningRoom::getId)
                 .collect(Collectors.collectingAndThen(Collectors.toSet(), foundIds -> Sets.difference(requestedToRemove, foundIds)));
     }
