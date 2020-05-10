@@ -2,11 +2,6 @@ package com.piisw.cinema_tickets_app.client.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.piisw.cinema_tickets_app.api.RatingDTO;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -24,8 +19,9 @@ public class OpenApiMovieDTO {
     @JsonProperty("Rated")
     private String rated;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd MMM yyyy", locale = "en_US")
     @JsonProperty("Released")
-    private String released;
+    private LocalDate released;
 
     @JsonProperty("Runtime")
     private String runtime;

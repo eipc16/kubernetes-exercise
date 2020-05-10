@@ -24,7 +24,10 @@ public class MovieDetailsDTO {
     private String imdbId;
     private String title;
     private String maturityRate;
-    private String releaseDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd MMM yyyy", locale = "en_US")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate releaseDate;
     private String runtime;
     private String genre;
     private String director;
