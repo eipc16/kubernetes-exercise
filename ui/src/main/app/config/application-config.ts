@@ -3,5 +3,5 @@ interface Config {
 }
 
 export const appConfig: Config = {
-    apiUrl: 'http://localhost:4000/api'
-}
+    apiUrl: 'http://localhost:4000/cinema-tickets-app/api'
+};
