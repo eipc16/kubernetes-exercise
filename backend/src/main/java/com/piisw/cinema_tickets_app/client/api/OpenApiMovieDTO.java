@@ -58,7 +58,7 @@ public class OpenApiMovieDTO {
     private String poster;
 
     @JsonProperty("Ratings")
-    private Set<RatingDTO> ratings;
+    private Set<OpenApiRatingDTO> ratings;
 
     @JsonProperty("Metascore")
     private Integer metascore;

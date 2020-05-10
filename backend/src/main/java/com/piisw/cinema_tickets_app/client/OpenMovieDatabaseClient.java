@@ -1,7 +1,9 @@
 package com.piisw.cinema_tickets_app.client;
 
 import com.piisw.cinema_tickets_app.api.MovieDetailsDTO;
+import com.piisw.cinema_tickets_app.api.RatingDTO;
 import com.piisw.cinema_tickets_app.client.api.OpenApiMovieDTO;
+import com.piisw.cinema_tickets_app.client.api.OpenApiRatingDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -64,10 +66,23 @@ public class OpenMovieDatabaseClient {
                 .country(openApiMovieDTO.getCountry())
                 .awards(openApiMovieDTO.getAwards())
                 .posterLink(openApiMovieDTO.getPoster())
-                .ratings(openApiMovieDTO.getRatings())
+                .ratings(mapToRatingDTOs(openApiMovieDTO.getRatings()))
                 .metaScore(openApiMovieDTO.getMetascore())
                 .ibmRating(openApiMovieDTO.getImdbRating())
                 .producer(openApiMovieDTO.getProduction())
+                .build();
+    }
+
+    private Set<RatingDTO> mapToRatingDTOs(Set<OpenApiRatingDTO> openApiRatings) {
+        return openApiRatings.stream()
+                .map(this::mapToRatingDTO)
+                .collect(Collectors.toSet());
+    }
+
+    private RatingDTO mapToRatingDTO(OpenApiRatingDTO openApiRatingDTO) {
+        return RatingDTO.builder()
+                .source(openApiRatingDTO.getSource())
+                .rate(openApiRatingDTO.getRate())
                 .build();
     }
 }
