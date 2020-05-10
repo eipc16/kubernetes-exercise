@@ -7,6 +7,7 @@ import com.piisw.cinema_tickets_app.api.ResourceDTO;
 import com.piisw.cinema_tickets_app.api.ResponseDTO;
 import com.piisw.cinema_tickets_app.api.TokenDTO;
 import com.piisw.cinema_tickets_app.domain.authentication.control.AuthenticationService;
+import com.piisw.cinema_tickets_app.domain.user.boundary.UserMapper;
 import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import com.piisw.cinema_tickets_app.domain.user.control.UserService;
 import com.piisw.cinema_tickets_app.infrastructure.security.TokenHandler;
@@ -23,11 +24,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.net.URI;
 
 @Api(tags = "Authentication")
 @RestController
@@ -48,6 +47,9 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @ApiOperation(value = "${api.auth.signin.value}", notes = "${api.auth.signin.notes}")
     @PostMapping("/signin")
     public TokenDTO authenticateUser(@Valid @RequestBody LoginDataDTO loginData) {
@@ -61,15 +63,7 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResourceDTO registerUser(@Valid @RequestBody RegistrationDataDTO registrationData) {
         User newUser = authenticationService.createUserBasedOnRegistrationData(registrationData);
-        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/users/{userId}")
-                .buildAndExpand(newUser.getId())
-                .toUri();
-        return ResourceDTO.builder()
-                .id(newUser.getId())
-                .identifier(newUser.getUsername())
-                .uri(uri)
-                .build();
+        return userMapper.mapToResourceDTO(newUser);
     }
 
     @ApiOperation(value = "${api.auth.change.password.value}", notes = "${api.auth.change.password.notes}")

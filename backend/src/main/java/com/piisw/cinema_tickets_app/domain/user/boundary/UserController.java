@@ -26,6 +26,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserMapper userMapper;
+
     public static final String MAIN_PATH = "/users";
     private static final String USERNAME = "username";
     private static final String EMAIL = "email";
@@ -51,7 +54,7 @@ public class UserController {
     @HasAnyRole
     public UserDTO getUser(@PathVariable(ID) Long id) {
         User user = userService.getExistingUser(id);
-        return userService.mapToUserDTO(user);
+        return userMapper.mapToUserDTO(user);
     }
 
     @ApiOperation(value = "${api.users.current.value}", notes = "${api.users.current.notes}")
@@ -59,7 +62,7 @@ public class UserController {
     @HasAnyRole
     public UserDTO getCurrentUser(@ApiIgnore @LoggedUser UserInfo currentUserInfo) {
         User user = userService.getExistingUser(currentUserInfo.getId());
-        return userService.mapToUserDTO(user);
+        return userMapper.mapToUserDTO(user);
     }
 
 }

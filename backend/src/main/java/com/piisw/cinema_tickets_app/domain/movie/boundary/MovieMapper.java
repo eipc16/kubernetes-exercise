@@ -4,6 +4,7 @@ import com.piisw.cinema_tickets_app.api.MovieDTO;
 import com.piisw.cinema_tickets_app.api.MovieDetailsDTO;
 import com.piisw.cinema_tickets_app.api.ResourceDTO;
 import com.piisw.cinema_tickets_app.client.OpenMovieDatabaseClient;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.IDS_PATH;
+import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.OBJECT_STATE;
 
 @Component
 public class MovieMapper {
@@ -60,6 +62,7 @@ public class MovieMapper {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(MovieController.MAIN_PATH)
                 .path(IDS_PATH)
+                .queryParam(OBJECT_STATE, ObjectState.values())
                 .buildAndExpand(ids)
                 .toUri();
     }

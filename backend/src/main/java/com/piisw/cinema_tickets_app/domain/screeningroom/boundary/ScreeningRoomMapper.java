@@ -2,6 +2,7 @@ package com.piisw.cinema_tickets_app.domain.screeningroom.boundary;
 
 import com.piisw.cinema_tickets_app.api.ResourceDTO;
 import com.piisw.cinema_tickets_app.api.ScreeningRoomDTO;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -9,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.IDS_PATH;
+import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.OBJECT_STATE;
 
 @Component
 public class ScreeningRoomMapper {
@@ -45,6 +47,7 @@ public class ScreeningRoomMapper {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(ScreeningRoomController.MAIN_PATH)
                 .path(IDS_PATH)
+                .queryParam(OBJECT_STATE, ObjectState.values())
                 .buildAndExpand(ids)
                 .toUri();
     }
