@@ -19,9 +19,9 @@ export class LoginActionPublisherImpl implements LoginActionPublisher {
     authService: AuthenticationService;
     alertPublisher: AlertPublisher;
 
-    constructor(authService: AuthenticationService) {
+    constructor(authService: AuthenticationService, alertPublisher?: AlertPublisher) {
         this.authService = authService;
-        this.alertPublisher = AlertPublisherImpl.createInstance();
+        this.alertPublisher = alertPublisher ? alertPublisher : AlertPublisherImpl.createInstance();
     }
 
     login(loginData: LoginData, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void {

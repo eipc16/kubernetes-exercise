@@ -81,7 +81,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = (props: LoginFormProps) => 
                         }
                     ]}
                 >
-                    <Input.Password/>
+                    <Input.Password />
                 </Form.Item>
                 <Form.Item
                     className='checkbox'

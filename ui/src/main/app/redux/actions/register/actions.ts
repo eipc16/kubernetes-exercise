@@ -1,27 +1,30 @@
 import { registerConstants } from '../../constants';
 import { RegistrationData } from '../../../models/authorization';
-import { Resource } from '../../../models/infrastructure';
-import { Dispatch } from 'redux'
+import {Alert, Resource} from '../../../models/infrastructure';
+import {Action, Dispatch} from 'redux'
 import { AuthenticationService } from '../../../services';
 import {
-    RegisterAction, 
     RegisterFailureActionInterface,
     RegisterSuccessActionInterface,
     RegisterRequestActionInterface } from './types';
+import {AlertPublisher, AlertPublisherImpl} from "../alert";
+import {message} from "antd";
 
 export interface RegisterActionPublisher {
-    register(registrationData: RegistrationData): (dispatch: Dispatch<RegisterAction>) => void;
+    register(registrationData: RegistrationData, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void;
 }
 
 export class RegisterActionPublisherImpl implements RegisterActionPublisher {
-    authService: AuthenticationService;    
+    authService: AuthenticationService;
+    alertPublisher: AlertPublisher;
 
-    constructor(authService: AuthenticationService) {
+    constructor(authService: AuthenticationService, alertPublisher?: AlertPublisher) {
         this.authService = authService;
+        this.alertPublisher = alertPublisher ? alertPublisher : AlertPublisherImpl.createInstance();
     }
 
-    register(registrationData: RegistrationData): (dispatch: Dispatch<RegisterAction>) => void {
-        return (dispatch: Dispatch<RegisterAction>) => {
+    register(registrationData: RegistrationData, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void {
+        return (dispatch: Dispatch<Action>) => {
             dispatch(request(registrationData));
 
             this.authService.register(registrationData)
@@ -31,6 +34,10 @@ export class RegisterActionPublisherImpl implements RegisterActionPublisher {
                     },
                     (errorResponse: any) => {
                         dispatch(failure(errorResponse.message));
+                        if (errorAlertSupplier) {
+                            const alert = errorAlertSupplier(errorResponse.message);
+                            this.alertPublisher.pushAlert(alert)(dispatch);
+                        }
                     }
                 );
         };
