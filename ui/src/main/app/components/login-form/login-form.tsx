@@ -38,7 +38,8 @@ const LoginFormComponent: React.FC<LoginFormProps> = (props: LoginFormProps) => 
 
         const loginData = {
             usernameOrEmail: values['usernameOrEmail'],
-            password: values['password']
+            password: values['password'],
+            remember: values['remember']
         };
         dispatch(loginPublisher.login(loginData, alertSupplier));
     };

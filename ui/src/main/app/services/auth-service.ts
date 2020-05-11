@@ -10,6 +10,7 @@ export interface AuthenticationService {
     getTokenType(): string;
     getLocalToken(): Token;
     saveToken(token: Token): void;
+    clearToken(): void;
 
     // login / logout
     login(loginData: LoginData): Promise<Token>;
@@ -54,23 +55,29 @@ export class AuthenticationServiceImpl implements AuthenticationService {
         localStorage.setItem(this.tokenKey, JSON.stringify(token));
     }
 
+    clearToken() {
+        localStorage.removeItem(this.tokenKey);
+    }
+
     login(loginData: LoginData): Promise<Token> {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(loginData)
         };
-
+        this.clearToken();
         return fetch(`${appConfig.apiUrl}/auth/signin`, requestOptions)
             .then(handleResponse)
             .then((token: Token) => {
-                this.saveToken(token);
+                if(loginData.remember) {
+                    this.saveToken(token);
+                }
                 return token;
             })
     }
 
     logout() {
-        localStorage.removeItem(this.tokenKey);
+        this.clearToken();
     }
 
     register(registrationData: RegistrationData): Promise<Resource> {
