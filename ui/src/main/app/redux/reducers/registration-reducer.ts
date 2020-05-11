@@ -1,5 +1,5 @@
 import { registerConstants } from '../constants';
-import { RegisterAction } from "../actions/register";
+import {RegisterAction} from "../actions/register";
 
 const initialState = {};
 
