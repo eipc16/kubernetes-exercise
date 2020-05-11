@@ -3,7 +3,7 @@ import { AuthenticationServiceImpl } from '../../services';
 import {LoginAction, LoginSuccessActionInterface, LogoutAction} from '../actions/login';
 import { Token } from '../../models/authorization';
 
-let authService = new AuthenticationServiceImpl();
+let authService = AuthenticationServiceImpl.createInstance();
 let localToken = authService.getLocalToken();
 const initialState
     = localToken ? { loggedIn: true, token: localToken} : {};

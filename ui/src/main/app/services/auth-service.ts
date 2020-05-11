@@ -8,7 +8,8 @@ export interface AuthenticationService {
     // Token actions
     getTokenKey(): string;
     getTokenType(): string;
-    getLocalToken(): Token;
+    getLocalToken(): Token | null;
+    getCurrentToken(): Token | null;
     saveToken(token: Token): void;
     clearToken(): void;
 
@@ -24,8 +25,20 @@ export interface AuthenticationService {
 }
 
 export class AuthenticationServiceImpl implements AuthenticationService {
+    static authService: AuthenticationService;
+    currentToken?: Token | null;
     tokenKey: string = 'user';
     tokenType: string = 'Bearer';
+
+    private constructor() {
+    }
+
+    static createInstance() {
+        if (!AuthenticationServiceImpl.authService) {
+            AuthenticationServiceImpl.authService = new AuthenticationServiceImpl();
+        }
+        return AuthenticationServiceImpl.authService;
+    }
 
     getTokenKey(): string {
         return this.tokenKey;
@@ -35,7 +48,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
         return this.tokenType;
     }
 
-    getLocalToken(): Token {
+    getLocalToken(): Token | null {
         let user = localStorage.getItem(this.tokenKey);
         let userObject = user ? JSON.parse(user) : {};
 
@@ -45,10 +58,14 @@ export class AuthenticationServiceImpl implements AuthenticationService {
                 accessToken: userObject.token
             }
         }
-        return {
-            tokenType: null,
-            accessToken: null
+        return null;
+    }
+
+    getCurrentToken(): Token | null {
+        if(!this.currentToken) {
+            this.currentToken = this.getLocalToken();
         }
+        return this.currentToken;
     }
 
     saveToken(token: Token) {
@@ -56,6 +73,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     clearToken() {
+        this.currentToken = { tokenType: null, accessToken: null };
         localStorage.removeItem(this.tokenKey);
     }
 
@@ -69,6 +87,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
         return fetch(`${appConfig.apiUrl}/auth/signin`, requestOptions)
             .then(handleResponse)
             .then((token: Token) => {
+                this.currentToken = token;
                 if(loginData.remember) {
                     this.saveToken(token);
                 }

@@ -7,7 +7,7 @@ import './register-page.scss'
 import {RegisterActionPublisherImpl} from "../../redux/actions/register";
 
 export const RegisterPage = (props: any) => {
-    const [ authService, ] = useState(new AuthenticationServiceImpl());
+    const [ authService, ] = useState(AuthenticationServiceImpl.createInstance());
     const [ registerPublisher, ] = useState(new RegisterActionPublisherImpl(authService))
 
     return (

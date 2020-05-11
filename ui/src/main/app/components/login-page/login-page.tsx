@@ -7,7 +7,7 @@ import {LoginForm} from "../login-form/login-form";
 import './login-page.scss'
 
 export const LoginPage = (props: any) => {
-    const [ authService, ] = useState(new AuthenticationServiceImpl());
+    const [ authService, ] = useState(AuthenticationServiceImpl.createInstance());
     const [ loginPublisher, ] = useState(new LoginActionPublisherImpl(authService))
 
     return (
