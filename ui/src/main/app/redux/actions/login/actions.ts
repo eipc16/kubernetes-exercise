@@ -1,28 +1,31 @@
 import { loginConstants } from '../../constants';
 import { LoginData, Token } from '../../../models/authorization';
-import { Dispatch } from 'redux'
+import {Action, Dispatch} from 'redux'
 import { AuthenticationService } from '../../../services';
 import {
-    LoginAction, 
     LogoutAction,
     LoginRequestActionInterface,
     LoginSuccessActionInterface,
     LoginFailureActionInterface } from './types';
+import {AlertPublisher, AlertPublisherImpl} from "../alert";
+import {Alert} from "../../../models/infrastructure";
 
 export interface LoginActionPublisher {
-    login(loginData: LoginData): (dispatch: Dispatch<LoginAction>) => void;
+    login(loginData: LoginData, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void;
     logout(): LogoutAction;
 }
 
 export class LoginActionPublisherImpl implements LoginActionPublisher {
-    authService: AuthenticationService;    
+    authService: AuthenticationService;
+    alertPublisher: AlertPublisher;
 
     constructor(authService: AuthenticationService) {
         this.authService = authService;
+        this.alertPublisher = AlertPublisherImpl.createInstance();
     }
 
-    login(loginData: LoginData): (dispatch: Dispatch<LoginAction>) => void {
-        return (dispatch: Dispatch<LoginAction>) => {
+    login(loginData: LoginData, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void {
+        return (dispatch: Dispatch<Action>) => {
             dispatch(request(loginData));
 
             this.authService.login(loginData)
@@ -32,6 +35,10 @@ export class LoginActionPublisherImpl implements LoginActionPublisher {
                     },
                     (errorResponse: any) => {
                         dispatch(failure(errorResponse.message));
+                        if (errorAlertSupplier) {
+                            const alert = errorAlertSupplier(errorResponse.message);
+                            this.alertPublisher.pushAlert(alert)(dispatch);
+                        }
                     }
                 );
         };

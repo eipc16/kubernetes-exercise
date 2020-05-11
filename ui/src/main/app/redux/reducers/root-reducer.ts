@@ -6,10 +6,12 @@ import { connectRouter } from 'connected-react-router';
 import { authorizationReducer } from "./login-reducer";
 import { registrationReducer } from './registration-reducer';
 import { currentUserReducer } from "./user-reducer";
+import { alertReducer } from './alert-reducer';
 
 export const rootReducer = (history: History) => combineReducers({
     router: connectRouter(history),
     auth: authorizationReducer,
     registration: registrationReducer,
-    currentUser: currentUserReducer
+    currentUser: currentUserReducer,
+    alerts: alertReducer
 });

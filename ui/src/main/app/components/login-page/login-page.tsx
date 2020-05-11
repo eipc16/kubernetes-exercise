@@ -11,7 +11,7 @@ export const LoginPage = (props: any) => {
     const [ loginPublisher, ] = useState(new LoginActionPublisherImpl(authService))
 
     return (
-        <div className='Login'>
+        <div className='login--page'>
             <LoginForm loginPublisher={loginPublisher} {...props} />
         </div>
     )
