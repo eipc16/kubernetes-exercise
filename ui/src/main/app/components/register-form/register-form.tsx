@@ -5,9 +5,6 @@ import {Button, Form, Input} from "antd";
 import {AuthorizationState} from "../../redux/reducers/login-reducer";
 import {RegisterActionPublisher} from "../../redux/actions/register";
 import './register-form.scss'
-import {Alert} from "../../models/infrastructure";
-import {AlertTypes} from "../../models/infrastructure/Alert";
-import {AlertContainer} from "../alert/alert";
 
 interface OwnProps {
     registerPublisher: RegisterActionPublisher;
@@ -22,18 +19,7 @@ type RegisterFormProps = OwnProps & State;
 
 const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormProps) => {
     const dispatch = useDispatch();
-    const {registered, registering, registerPublisher} = props;
-
-    const alertSupplier = (message: string) => {
-        const alert: Alert = {
-            id: 'register-failure-alert',
-            component: 'register-form',
-            message: message,
-            type: AlertTypes.ERROR,
-            canDismiss: true
-        };
-        return alert;
-    };
+    const { registered , registering, registerPublisher } = props;
 
     const onFinish = (values: any) => {
         const registerData = {
@@ -44,7 +30,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             email: values['email'],
             phoneNumber: values['phoneNumber']
         };
-        dispatch(registerPublisher.register(registerData, alertSupplier));
+        dispatch(registerPublisher.register(registerData));
     };
 
     return (
@@ -59,7 +45,6 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             <div className="text-center">
                 Please fill in the fields below
             </div>
-            <AlertContainer component='register-form' />
             <label>Name</label>
             <Form.Item
                 name='name'
@@ -70,7 +55,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
                     }
                 ]}
             >
-                <Input/>
+                <Input />
             </Form.Item>
             <label>Surname</label>
             <Form.Item
@@ -82,7 +67,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
                     }
                 ]}
             >
-                <Input/>
+                <Input />
             </Form.Item>
             <label>Username</label>
             <Form.Item
@@ -94,15 +79,15 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
                     }
                 ]}
             >
-                <Input/>
+                <Input />
             </Form.Item>
-            <label htmlFor='password'>Password</label>
+            <label>Password</label>
             <Form.Item
                 name='password'
                 rules={[
                     {
                         required: true,
-                        message: 'Password is required!',
+                        message: 'Password is required!'
                     }
                 ]}
             >
@@ -118,7 +103,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
                     }
                 ]}
             >
-                <Input/>
+                <Input />
             </Form.Item>
             <label>Phone number</label>
             <Form.Item
@@ -130,7 +115,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
                     }
                 ]}
             >
-                <Input/>
+                <Input />
             </Form.Item>
             <Form.Item>
                 <Button
@@ -139,9 +124,9 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
                     htmlType='submit'
                     disabled={registered || registering}
                 >
-                    {registered && 'Registered'}
-                    {registering && 'Registering...'}
-                    {!registered && !registering && 'Register!'}
+                    { registered && 'Registered'}
+                    { registering && 'Registering...'}
+                    { !registered && !registering && 'Register!'}
                 </Button>
             </Form.Item>
         </Form>
