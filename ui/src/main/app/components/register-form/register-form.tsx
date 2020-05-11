@@ -45,7 +45,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             <div className="text-center">
                 Please fill in the fields below
             </div>
-            <label>Name</label>
+            <label htmlFor='name'>Name</label>
             <Form.Item
                 name='name'
                 rules={[
@@ -57,7 +57,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             >
                 <Input />
             </Form.Item>
-            <label>Surname</label>
+            <label htmlFor='surname'>Surname</label>
             <Form.Item
                 name='surname'
                 rules={[
@@ -69,7 +69,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             >
                 <Input />
             </Form.Item>
-            <label>Username</label>
+            <label htmlFor='username'>Username</label>
             <Form.Item
                 name='username'
                 rules={[
@@ -81,37 +81,49 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             >
                 <Input />
             </Form.Item>
-            <label>Password</label>
+            <label htmlFor='password'>Password</label>
             <Form.Item
                 name='password'
                 rules={[
                     {
                         required: true,
-                        message: 'Password is required!'
+                        message: 'Password is required!',
+                    },
+                    {
+                        type: 'string',
+                        pattern: new RegExp("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$"),
+                        message: 'Password must have len at least 8 and contains letter and number!'
                     }
                 ]}
             >
                 <Input.Password />
             </Form.Item>
-            <label>Email</label>
+            <label htmlFor='email'>Email</label>
             <Form.Item
                 name='email'
                 rules={[
                     {
                         required: true,
                         message: 'Email is required!'
+                    },
+                    {
+                        type: 'email'
                     }
                 ]}
             >
                 <Input />
             </Form.Item>
-            <label>Phone number</label>
+            <label htmlFor='phoneNumber'>Phone number</label>
             <Form.Item
                 name='phoneNumber'
                 rules={[
                     {
                         required: true,
                         message: 'Phone number is required!'
+                    },
+                    {
+                        pattern: new RegExp("[0-9]{9}"),
+                        message: 'Phone number contains 9 digits.'
                     }
                 ]}
             >
