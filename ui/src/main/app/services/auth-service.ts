@@ -73,7 +73,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     clearToken() {
-        this.currentToken = { tokenType: null, accessToken: null };
+        this.currentToken = null;
         localStorage.removeItem(this.tokenKey);
     }
 
