@@ -5,6 +5,9 @@ import {Button, Form, Input} from "antd";
 import {AuthorizationState} from "../../redux/reducers/login-reducer";
 import {RegisterActionPublisher} from "../../redux/actions/register";
 import './register-form.scss'
+import {Alert} from "../../models/infrastructure";
+import {AlertTypes} from "../../models/infrastructure/Alert";
+import {AlertContainer} from "../alert/alert";
 
 interface OwnProps {
     registerPublisher: RegisterActionPublisher;
@@ -21,6 +24,17 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
     const dispatch = useDispatch();
     const { registered , registering, registerPublisher } = props;
 
+    const alertSupplier = (message: string) => {
+        const alert: Alert = {
+            id: 'register-failure-alert',
+            component: 'register-form',
+            message: message,
+            type: AlertTypes.ERROR,
+            canDismiss: true
+        };
+        return alert;
+    };
+
     const onFinish = (values: any) => {
         const registerData = {
             name: values['name'],
@@ -30,7 +44,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             email: values['email'],
             phoneNumber: values['phoneNumber']
         };
-        dispatch(registerPublisher.register(registerData));
+        dispatch(registerPublisher.register(registerData, alertSupplier));
     };
 
     return (
@@ -45,6 +59,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             <div className="text-center">
                 Please fill in the fields below
             </div>
+            <AlertContainer component='register-form' />
             <label htmlFor='name'>Name</label>
             <Form.Item
                 name='name'
