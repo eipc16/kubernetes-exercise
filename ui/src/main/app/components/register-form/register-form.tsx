@@ -41,16 +41,12 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             }}
             onFinish={onFinish}
         >
-            <Form.Item>
-                <h1 className="text-center"> Welcome</h1>
-            </Form.Item>
-            <Form.Item>
-                <div className="text-center">
-                    Please fill in the fields below
-                </div>
-            </Form.Item>
+            <h1 className="text-center"> Welcome</h1>
+            <div className="text-center">
+                Please fill in the fields below
+            </div>
+            <label>Name</label>
             <Form.Item
-                label='Name'
                 name='name'
                 rules={[
                     {
@@ -61,8 +57,8 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             >
                 <Input />
             </Form.Item>
+            <label>Surname</label>
             <Form.Item
-                label='Surname'
                 name='surname'
                 rules={[
                     {
@@ -73,8 +69,8 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             >
                 <Input />
             </Form.Item>
+            <label>Username</label>
             <Form.Item
-                label='Username'
                 name='username'
                 rules={[
                     {
@@ -85,8 +81,8 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             >
                 <Input />
             </Form.Item>
+            <label>Password</label>
             <Form.Item
-                label='Password'
                 name='password'
                 rules={[
                     {
@@ -97,8 +93,8 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             >
                 <Input.Password />
             </Form.Item>
+            <label>Email</label>
             <Form.Item
-                label='Email'
                 name='email'
                 rules={[
                     {
@@ -109,8 +105,8 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
             >
                 <Input />
             </Form.Item>
+            <label>Phone number</label>
             <Form.Item
-                label='Phone number'
                 name='phoneNumber'
                 rules={[
                     {

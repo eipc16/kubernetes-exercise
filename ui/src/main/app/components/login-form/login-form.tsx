@@ -39,11 +39,12 @@ const LoginFormComponent: React.FC<LoginFormProps> = (props: LoginFormProps) => 
                 }}
                 onFinish={onFinish}
             >
+
                 <Form.Item>
                     <h1 className="text-center"> Welcome</h1>
                 </Form.Item>
+                <label>Username / Email</label>
                 <Form.Item
-                    label='Username / Email'
                     name='usernameOrEmail'
                     rules={[
                         {
@@ -54,15 +55,16 @@ const LoginFormComponent: React.FC<LoginFormProps> = (props: LoginFormProps) => 
                 >
                     <Input />
                 </Form.Item>
+                <label>Password</label>
                 <Form.Item
-                    label='Password'
+                    id="password"
                     name='password'
                     rules={[
                         {
                             required: true,
                             message: 'Password is required!'
-                        }
-                    ]}
+                        }]
+                    }
                 >
                     <Input.Password />
                 </Form.Item>
@@ -99,7 +101,6 @@ const LoginFormComponent: React.FC<LoginFormProps> = (props: LoginFormProps) => 
                 </Link>
             </div>
         </div>
-
     )
 };
 
