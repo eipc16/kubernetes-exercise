@@ -69,10 +69,4 @@ public class ReservationService {
         return currentTime.compareTo(screeningStartTime) > 0;
     }
 
-    private void validateIfSeatsAreNotAlreadyReserved(List<Seat> seats) {
-
-    }
-
-
-
 }

@@ -13,12 +13,20 @@ import java.util.Set;
 @Component
 public class ScreeningSpecification extends AuditedObjectSpecification<Screening> {
 
-    public Specification<Screening> hasScreeningRoomIdAndObjectStateInSet(Long screeningRoomId, Set<ObjectState> objectStates) {
-        return hasScreeningRoomId(screeningRoomId).and(hasObjectStateInSet(objectStates));
+    public Specification<Screening> whereScreeningRoomIdEqualsAndObjectStateEquals(Long screeningRoomId, ObjectState objectState) {
+        return whereScreeningRoomIdEquals(screeningRoomId).and(whereObjectStateEquals(objectState));
     }
 
-    private Specification<Screening> hasScreeningRoomId(Long screeningRoomId) {
-        return ((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get(Screening_.SCREENING_ROOM).get(AuditedObject_.ID), screeningRoomId));
+    private Specification<Screening> whereScreeningRoomIdEquals(Long screeningRoomId) {
+        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get(Screening_.SCREENING_ROOM).get(AuditedObject_.ID), screeningRoomId);
+    }
+
+    public Specification<Screening> whereMovieIdEqualsAndObjectStateIn(Long movieId, Set<ObjectState> objectStates) {
+        return whereMovieIdEquals(movieId).and(whereObjectStateIn(objectStates));
+    }
+
+    public Specification<Screening> whereMovieIdEquals(Long movieId) {
+        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get(Screening_.MOVIE).get(AuditedObject_.ID), movieId);
     }
 
 }

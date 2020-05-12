@@ -5,6 +5,7 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectSp
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import com.piisw.cinema_tickets_app.domain.seat.control.SeatService;
+import com.piisw.cinema_tickets_app.infrastructure.utils.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,13 @@ public class ScreeningRoomService {
     @Autowired
     private SeatService seatService;
 
-    public List<ScreeningRoom> getAllScreeningRoomsByIdsAndObjectStates(Set<Long> ids, Set<ObjectState> objectStates) {
-        return screeningRoomRepository.findAll(specification.hasIdInSetAndObjectStateInSet(ids, objectStates));
+    public ScreeningRoom getScreeningRoomById(Long id, ObjectState objectState) {
+        return screeningRoomRepository.findOne(specification.whereIdAndObjectStateEquals(id, objectState))
+                .orElseThrow(() -> ExceptionUtils.getObjectNotFoundException(ScreeningRoom.class, id, objectState));
+    }
+
+    public List<ScreeningRoom> getScreeningRoomsByIds(Set<Long> ids, Set<ObjectState> objectStates) {
+        return screeningRoomRepository.findAll(specification.whereIdAndObjectStateIn(ids, objectStates));
     }
 
     public ScreeningRoom createScreeningRoom(ScreeningRoom screeningRoom) {
@@ -45,20 +51,14 @@ public class ScreeningRoomService {
 
     public ScreeningRoom updateScreeningRoom(ScreeningRoom screeningRoom) {
         Objects.requireNonNull(screeningRoom.getId());
-        ScreeningRoom existingScreeningRoom = getExistingScreeningRoomById(screeningRoom.getId());
+        ScreeningRoom existingScreeningRoom = getScreeningRoomById(screeningRoom.getId(), ObjectState.ACTIVE);
         updateSeatsForScreeningRoomIfNecessary(existingScreeningRoom, screeningRoom);
         ScreeningRoom screeningRoomToUpdate = existingScreeningRoom.toBuilder()
                 .number(screeningRoom.getNumber())
                 .rowsNumber(screeningRoom.getRowsNumber())
                 .seatsInRowNumber(screeningRoom.getSeatsInRowNumber())
                 .build();
-        ScreeningRoom updatedScreeningRoom = screeningRoomRepository.save(screeningRoomToUpdate);
-        return updatedScreeningRoom;
-    }
-
-    private ScreeningRoom getExistingScreeningRoomById(Long id) {
-        return screeningRoomRepository.findByIdAndObjectState(id, ObjectState.ACTIVE)
-                .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(SCREENING_ROOM_NOT_FOUND, id)));
+        return screeningRoomRepository.save(screeningRoomToUpdate);
     }
 
     private void updateSeatsForScreeningRoomIfNecessary(ScreeningRoom oldScreeningROom, ScreeningRoom updatedScreeningRoom) {
@@ -74,12 +74,11 @@ public class ScreeningRoomService {
 
     public List<ScreeningRoom> deleteScreeningRoomsByIds(Set<Long> ids) {
         List<ScreeningRoom> screeningRoomsToRemove = screeningRoomRepository
-                .findAll(specification.hasIdInSetAndObjectStateInSet(ids, ObjectState.existingStates()));
+                .findAll(specification.whereIdAndObjectStateIn(ids, ObjectState.existingStates()));
         validateIfAllScreeningRoomsToRemoveExists(ids, screeningRoomsToRemove);
+        screeningRoomsToRemove.forEach(seatService::removeSeatsForScreeningRoom);
         screeningRoomsToRemove.forEach(screeningRoom -> screeningRoom.setObjectState(ObjectState.REMOVED));
-        List<ScreeningRoom> removedScreeningRooms = screeningRoomRepository.saveAll(screeningRoomsToRemove);
-        removedScreeningRooms.forEach(seatService::removeSeatsForScreeningRoom);
-        return removedScreeningRooms;
+        return screeningRoomRepository.saveAll(screeningRoomsToRemove);
     }
 
     private void validateIfAllScreeningRoomsToRemoveExists(Set<Long> requestedToRemove, List<ScreeningRoom> found) {

@@ -33,11 +33,7 @@ public class SeatService {
     private static final String THERE_ARE_EXISTING_SCREENINGS = "There are existing screenings {0} for screening room {1}";
 
     public List<Seat> getSeatsByIds(Set<Long> ids, ObjectState objectState) {
-        return getSeatsByIds(ids, Set.of(objectState));
-    }
-
-    public List<Seat> getSeatsByIds(Set<Long> ids, Set<ObjectState> objectStates) {
-        return seatRepository.findAll(specification.hasIdInSetAndObjectStateInSet(ids, objectStates));
+        return seatRepository.findAll(specification.whereIdInAndObjectStateEquals(ids, objectState));
     }
 
     public List<Seat> createSeatsForScreeningRoom(ScreeningRoom screeningRoom) {
@@ -82,7 +78,7 @@ public class SeatService {
     }
 
     private List<Seat> getActiveSeatsForScreeningRoom(ScreeningRoom screeningRoom) {
-        return seatRepository.findAll(specification.hasScreeningRoomIdAndObjectState(screeningRoom.getId(), Set.of(ObjectState.ACTIVE)));
+        return seatRepository.findAll(specification.whereScreeningRoomIdEqualsAndObjectStateEquals(screeningRoom.getId(), ObjectState.ACTIVE));
     }
 
     private void validateIfNoActiveScreeningForUpdatedScreeningRoomExists(ScreeningRoom screeningRoom) {
@@ -93,7 +89,7 @@ public class SeatService {
     }
 
     private Set<Long> getIdsOfActiveScreeningsForScreeningRoom(ScreeningRoom screeningRoom) {
-        return screeningService.getScreeningByScreeningRoomId(screeningRoom.getId(), Set.of(ObjectState.ACTIVE))
+        return screeningService.getScreeningByScreeningRoomId(screeningRoom.getId(), ObjectState.ACTIVE)
                 .stream()
                 .map(AuditedObject::getId)
                 .collect(Collectors.toSet());

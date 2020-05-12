@@ -45,7 +45,7 @@ public class ScreeningRoomController {
     @HasAnyRole
     public List<ScreeningRoomDTO> getScreeningRoomsByIds(@ApiParam(value = "${api.screening.room.ids}") @PathVariable(IDS) Set<Long> ids,
             @ApiParam(value = "${api.screening.room.states}") @RequestParam(name = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
-        return screeningRoomService.getAllScreeningRoomsByIdsAndObjectStates(ids, objectStates).stream()
+        return screeningRoomService.getScreeningRoomsByIds(ids, objectStates).stream()
                 .map(screeningRoomMapper::mapToScreeningRoomDTO)
                 .collect(Collectors.toList());
     }

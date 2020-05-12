@@ -1,12 +1,12 @@
 package com.piisw.cinema_tickets_app.domain.screening.control;
 
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
+import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
-import org.apache.commons.lang3.StringUtils;
+import com.piisw.cinema_tickets_app.infrastructure.utils.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Set;
 
@@ -19,23 +19,29 @@ public class ScreeningService {
     @Autowired
     private ScreeningSpecification specification;
 
-    private static final String SCREENING_NOT_FOUND = "Screening with id {0} and state {1} not found";
-
-    public List<Screening> getScreeningsByIds(Set<Long> ids, Set<ObjectState> objectStates) {
-        return screeningRepository.findAll(specification.hasIdInSetAndObjectStateInSet(ids, objectStates));
-    }
-
     public Screening getScreeningById(Long id, ObjectState objectState) {
         return getScreeningById(id, Set.of(objectState));
     }
 
     public Screening getScreeningById(Long id, Set<ObjectState> objectStates) {
-        return screeningRepository.findOne(specification.hasIdInSetAndObjectStateInSet(Set.of(id), objectStates))
-                .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(SCREENING_NOT_FOUND, id, StringUtils.join(objectStates, " or "))));
+        return screeningRepository.findOne(specification.whereIdEqualsAndObjectStateIn(id, objectStates))
+                .orElseThrow(() -> ExceptionUtils.getObjectNotFoundException(Screening.class, id, objectStates));
     }
 
-    public List<Screening> getScreeningByScreeningRoomId(Long screeningRoomId, Set<ObjectState> objectStates) {
-        return screeningRepository.findAll(specification.hasScreeningRoomIdAndObjectStateInSet(screeningRoomId, objectStates));
+    public List<Screening> getScreeningByScreeningRoomId(Long screeningRoomId, ObjectState objectState) {
+        return screeningRepository.findAll(specification.whereScreeningRoomIdEqualsAndObjectStateEquals(screeningRoomId, objectState));
+    }
+
+    public List<Screening> getScreeningsByMovieId(Movie movie, Set<ObjectState> objectStates) {
+        return screeningRepository.findAll(specification.whereMovieIdEqualsAndObjectStateIn(movie.getId(), objectStates));
+    }
+
+    public Screening createScreening(Screening screening) {
+        Screening screeningToCreate = screening.toBuilder()
+                .id(null)
+                .objectState(ObjectState.ACTIVE)
+                .build();
+        return screeningRepository.save(screeningToCreate);
     }
 
 }
