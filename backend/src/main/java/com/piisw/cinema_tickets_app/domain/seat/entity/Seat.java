@@ -2,25 +2,21 @@ package com.piisw.cinema_tickets_app.domain.seat.entity;
 
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Data
-@Builder
+@Table(name = "Seat")
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 public class Seat extends AuditedObject {
-
-    @Id
-    @GeneratedValue(generator = "ID_GENERATOR")
-    private Long id;
 
     @NotNull
     private Long row;

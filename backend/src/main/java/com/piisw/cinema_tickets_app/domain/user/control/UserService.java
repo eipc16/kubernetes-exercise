@@ -1,5 +1,6 @@
 package com.piisw.cinema_tickets_app.domain.user.control;
 
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -62,6 +63,10 @@ public class UserService {
     public User getExistingUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(NO_SUCH_USER, userId)));
+    }
+
+    public boolean isExistingAndActiveUser(Long id) {
+        return userRepository.existsByIdAndAndObjectState(id, ObjectState.ACTIVE);
     }
 
     public List<User> getUsersFromDatabase(List<Long> usersId){

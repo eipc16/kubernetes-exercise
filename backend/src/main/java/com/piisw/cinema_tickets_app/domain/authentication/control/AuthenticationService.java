@@ -6,9 +6,11 @@ import com.piisw.cinema_tickets_app.api.TokenDTO;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import com.piisw.cinema_tickets_app.domain.user.control.UserService;
+import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 
@@ -42,6 +44,12 @@ public class AuthenticationService {
                 .objectState(ObjectState.ACTIVE)
                 .build();
         return userService.registerUser(newUser);
+    }
+
+    public boolean hasRole(UserInfo userInfo, UserRole userRole) {
+        return userInfo.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(userRole.name()::equals);
     }
 
 }

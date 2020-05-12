@@ -14,6 +14,8 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
@@ -25,6 +27,10 @@ import java.time.Instant;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AuditedObject {
+
+    @Id
+    @GeneratedValue(generator = "ID_GENERATOR")
+    private Long id;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -45,6 +51,10 @@ public abstract class AuditedObject {
 
     @Enumerated(EnumType.STRING)
     private ObjectState objectState = ObjectState.ACTIVE;
+
+    public Long getId() {
+        return id;
+    }
 
     public Instant getCreatedAt() {
         return createdAt;

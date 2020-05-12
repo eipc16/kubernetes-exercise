@@ -1,6 +1,7 @@
 package com.piisw.cinema_tickets_app.domain.screeningroom.control;
 
 import com.google.common.collect.Sets;
+import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectSpecification;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import org.apache.commons.lang3.StringUtils;
@@ -21,8 +22,11 @@ public class ScreeningRoomService {
     @Autowired
     private ScreeningRoomRepository screeningRoomRepository;
 
+    @Autowired
+    private AuditedObjectSpecification<ScreeningRoom> specification;
+
     public List<ScreeningRoom> getAllScreeningRoomsByIdsAndObjectStates(Set<Long> ids, Set<ObjectState> objectStates) {
-        return screeningRoomRepository.findAll(ScreeningRoomSpecifications.hasIdInSetAndObjectStateInSet(ids, objectStates));
+        return screeningRoomRepository.findAll(specification.hasIdInSetAndObjectStateInSet(ids, objectStates));
     }
 
     public ScreeningRoom createScreeningRoom(ScreeningRoom screeningRoom) {
@@ -38,7 +42,8 @@ public class ScreeningRoomService {
         ScreeningRoom existingScreeningRoom = getExistingScreeningRoomById(screeningRoom.getId());
         ScreeningRoom updatedScreeningRoom = existingScreeningRoom.toBuilder()
                 .number(screeningRoom.getNumber())
-                .numberOfSeats(screeningRoom.getNumberOfSeats())
+                .rowsNumber(screeningRoom.getRowsNumber())
+                .seatsInRowNumber(screeningRoom.getSeatsInRowNumber())
                 .build();
         return screeningRoomRepository.save(updatedScreeningRoom);
     }
@@ -50,7 +55,7 @@ public class ScreeningRoomService {
 
     public List<ScreeningRoom> deleteScreeningRoomsByIds(Set<Long> ids) {
         List<ScreeningRoom> screeningRoomsToRemove = screeningRoomRepository
-                .findAll(ScreeningRoomSpecifications.hasIdInSetAndObjectStateInSet(ids, ObjectState.existingStates()));
+                .findAll(specification.hasIdInSetAndObjectStateInSet(ids, ObjectState.existingStates()));
         validateIfAllScreeningRoomsToRemoveExists(ids, screeningRoomsToRemove);
         screeningRoomsToRemove.forEach(screeningRoom -> screeningRoom.setObjectState(ObjectState.REMOVED));
         return screeningRoomRepository.saveAll(screeningRoomsToRemove);

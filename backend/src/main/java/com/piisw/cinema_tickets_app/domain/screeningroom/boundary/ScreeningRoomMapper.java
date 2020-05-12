@@ -19,7 +19,8 @@ public class ScreeningRoomMapper {
         return ScreeningRoomDTO.builder()
                 .id(screeningRoom.getId())
                 .number(screeningRoom.getNumber())
-                .numberOfSeats(screeningRoom.getNumberOfSeats())
+                .rowsNumber(screeningRoom.getRowsNumber())
+                .seatsInRowNumber(screeningRoom.getSeatsInRowNumber())
                 .objectState(screeningRoom.getObjectState())
                 .build();
     }
@@ -28,7 +29,8 @@ public class ScreeningRoomMapper {
         ScreeningRoom screeningRoom = ScreeningRoom.builder()
                 .id(screeningRoomDTO.getId())
                 .number(screeningRoomDTO.getNumber())
-                .numberOfSeats(screeningRoomDTO.getNumberOfSeats())
+                .rowsNumber(screeningRoomDTO.getRowsNumber())
+                .seatsInRowNumber(screeningRoomDTO.getSeatsInRowNumber())
                 .objectState(screeningRoomDTO.getObjectState())
                 .build();
         screeningRoomDTO.setObjectState(screeningRoomDTO.getObjectState());

@@ -23,8 +23,10 @@ public class ScreeningRoomDTO {
     private Long number;
 
     @NotNull
-    @Positive
-    private Long numberOfSeats;
+    private Long rowsNumber;
+
+    @NotNull
+    private Long seatsInRowNumber;
 
     @ApiModelProperty(readOnly = true)
     ObjectState objectState;

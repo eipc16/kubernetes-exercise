@@ -1,6 +1,7 @@
 package com.piisw.cinema_tickets_app.domain.movie.control;
 
 import com.google.common.collect.Sets;
+import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectSpecification;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import org.apache.commons.lang3.StringUtils;
@@ -20,8 +21,11 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Autowired
+    private AuditedObjectSpecification<Movie> specification;
+
     public List<Movie> getMoviesByIds(Set<Long> ids, Set<ObjectState> objectStates) {
-        return movieRepository.findAll(MovieSpecifications.hasIdInSetAndObjectStateInSet(ids, objectStates));
+        return movieRepository.findAll(specification.hasIdInSetAndObjectStateInSet(ids, objectStates));
     }
 
     public List<Movie> createMovies(Set<String> imdbIds) {
@@ -39,7 +43,7 @@ public class MovieService {
     }
 
     public List<Movie> deleteMoviesByIds(Set<Long> ids) {
-        List<Movie> moviesToRemove = movieRepository.findAll(MovieSpecifications.hasIdInSet(ids));
+        List<Movie> moviesToRemove = movieRepository.findAll(specification.hasIdInSet(ids));
         validateIfAllMoviesToRemoveExists(ids, moviesToRemove);
         moviesToRemove.forEach(movie -> movie.setObjectState(ObjectState.REMOVED));
         return movieRepository.saveAll(moviesToRemove);
