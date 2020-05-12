@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
-import java.util.Set;
 
 @Api(tags = "Reservations")
 @RestController

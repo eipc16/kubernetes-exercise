@@ -1,6 +1,5 @@
 package com.piisw.cinema_tickets_app.domain.screening.control;
 
-import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectSpecification;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +17,7 @@ public class ScreeningService {
     private ScreeningRepository screeningRepository;
 
     @Autowired
-    private AuditedObjectSpecification<Screening> specification;
+    private ScreeningSpecification specification;
 
     private static final String SCREENING_NOT_FOUND = "Screening with id {0} and state {1} not found";
 
@@ -33,6 +32,10 @@ public class ScreeningService {
     public Screening getScreeningById(Long id, Set<ObjectState> objectStates) {
         return screeningRepository.findOne(specification.hasIdInSetAndObjectStateInSet(Set.of(id), objectStates))
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(SCREENING_NOT_FOUND, id, StringUtils.join(objectStates, " or "))));
+    }
+
+    public List<Screening> getScreeningByScreeningRoomId(Long screeningRoomId, Set<ObjectState> objectStates) {
+        return screeningRepository.findAll(specification.hasScreeningRoomIdAndObjectStateInSet(screeningRoomId, objectStates));
     }
 
 }
