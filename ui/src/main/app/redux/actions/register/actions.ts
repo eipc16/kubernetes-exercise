@@ -8,7 +8,6 @@ import {
     RegisterSuccessActionInterface,
     RegisterRequestActionInterface } from './types';
 import {AlertPublisher, AlertPublisherImpl} from "../alert";
-import {message} from "antd";
 
 export interface RegisterActionPublisher {
     register(registrationData: RegistrationData, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void;

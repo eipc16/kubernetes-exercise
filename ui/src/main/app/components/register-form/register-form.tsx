@@ -106,7 +106,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
                     },
                     {
                         type: 'string',
-                        pattern: new RegExp("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$"),
+                        pattern: new RegExp("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$"),
                         message: 'Password must have len at least 8 and contains letter and number!'
                     }
                 ]}
