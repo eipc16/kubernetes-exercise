@@ -8,6 +8,7 @@ import com.piisw.cinema_tickets_app.domain.screening.entity.Screening_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Component
@@ -27,6 +28,10 @@ public class ScreeningSpecification extends AuditedObjectSpecification<Screening
 
     public Specification<Screening> whereMovieIdEquals(Long movieId) {
         return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get(Screening_.MOVIE).get(AuditedObject_.ID), movieId);
+    }
+
+    public Specification<Screening> whereStartTimeBetween(LocalDateTime begin, LocalDateTime end) {
+        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.between(root.get(Screening_.START_TIME), begin, end);
     }
 
 }

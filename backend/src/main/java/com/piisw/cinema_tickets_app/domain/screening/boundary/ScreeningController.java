@@ -9,6 +9,8 @@ import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.domain.screeningroom.control.ScreeningRoomService;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
+import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;
+import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,7 @@ public class ScreeningController {
 
     @ApiOperation(value = "${api.screenings.get.value}", notes = "${api.screenings.get.notes}")
     @GetMapping(MOVIE_PATH + ID_PATH)
+    @HasAnyRole
     public List<ScreeningDTO> getScreeningsForMovie(@PathVariable(ID) Long movieId,
                                                     @RequestParam(value = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         Movie movie = movieService.getMovieById(movieId, objectStates);
@@ -62,6 +65,7 @@ public class ScreeningController {
 
     @ApiOperation(value = "${api.screenings.post.value}", notes = "${api.screenings.post.notes}")
     @PostMapping
+    @HasAdminRole
     public ResourceDTO createScreeningForMovie(@Validated @RequestBody ScreeningDTO screeningDTO) {
         Movie movie = movieService.getMovieById(screeningDTO.getMovieId(), ObjectState.ACTIVE);
         ScreeningRoom screeningRoom = screeningRoomService.getScreeningRoomById(screeningDTO.getScreeningRoomId(), ObjectState.ACTIVE);
@@ -69,6 +73,5 @@ public class ScreeningController {
         Screening createdScreening = screeningService.createScreening(screening);
         return screeningMapper.mapToResourceDTO(createdScreening);
     }
-
 
 }

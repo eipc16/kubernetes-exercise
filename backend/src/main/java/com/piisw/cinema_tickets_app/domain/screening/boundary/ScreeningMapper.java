@@ -46,7 +46,6 @@ public class ScreeningMapper {
     private URI buildResourceDTO(Long id) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(ScreeningController.MAIN_PATH)
-                .path(ScreeningController.MOVIE_PATH)
                 .path(IDS_PATH)
                 .buildAndExpand(id)
                 .toUri();

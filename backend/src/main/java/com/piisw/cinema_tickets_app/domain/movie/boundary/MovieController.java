@@ -7,11 +7,14 @@ import com.piisw.cinema_tickets_app.api.ResourceDTO;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.movie.control.MovieService;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
+import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
+import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,12 +34,17 @@ import java.util.stream.Collectors;
 public class MovieController {
 
     public static final String MAIN_PATH = "/movies";
+    public static final String BEGIN_DATE = "beginDate";
+    public static final String END_DATE = "endDate";
 
     @Autowired
     private MovieService movieService;
 
     @Autowired
     private MovieMapper movieMapper;
+
+    @Autowired
+    private ScreeningService screeningService;
 
     @ApiOperation(value = "${api.movies.get.value}", notes = "${api.movies.get.notes}")
     @GetMapping(IDS_PATH)
@@ -64,6 +73,20 @@ public class MovieController {
         return removedMovies.stream()
                 .map(movieMapper::mapToResourceDTO)
                 .collect(Collectors.toList());
+    }
+
+    @ApiOperation(value = "${api.movies.current.value}", notes = "${api.movies.current.notes}")
+    @GetMapping("/played")
+    @HasAnyRole
+    public List<MovieDTO> getCurrentlyPlayedMovies(@RequestParam(BEGIN_DATE)
+                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime beginDateTime,
+                                                   @RequestParam(END_DATE)
+                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
+        List<Screening> screenings = screeningService.getScreeningsWhereStartTimeIsBetween(beginDateTime, endDateTime);
+        Set<Movie> movies = screenings.stream()
+                .map(Screening::getMovie)
+                .collect(Collectors.toSet());
+        return movieMapper.mapToMovieDTOs(movies);
     }
 
 }
