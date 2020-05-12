@@ -1,10 +1,14 @@
-import {registerConstants} from '../../constants';
-import {RegistrationData} from '../../../models/authorization';
+import { registerConstants } from '../../constants';
+import { RegistrationData } from '../../../models/authorization';
 import {Alert, Resource} from '../../../models/infrastructure';
 import {Action, Dispatch} from 'redux'
-import {AuthenticationService} from '../../../services';
-import {RegisterFailureActionInterface, RegisterRequestActionInterface, RegisterSuccessActionInterface} from './types';
+import { AuthenticationService } from '../../../services';
+import {
+    RegisterFailureActionInterface,
+    RegisterSuccessActionInterface,
+    RegisterRequestActionInterface } from './types';
 import {AlertPublisher, AlertPublisherImpl} from "../alert";
+import {message} from "antd";
 
 export interface RegisterActionPublisher {
     register(registrationData: RegistrationData, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void;
