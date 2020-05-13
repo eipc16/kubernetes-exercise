@@ -1,6 +1,6 @@
 import { loginConstants } from '../../constants';
 import { LoginData, Token } from '../../../models/authorization';
-import {Action, Dispatch} from 'redux'
+import { Action, Dispatch } from 'redux'
 import { AuthenticationService } from '../../../services';
 import {
     LogoutAction,
