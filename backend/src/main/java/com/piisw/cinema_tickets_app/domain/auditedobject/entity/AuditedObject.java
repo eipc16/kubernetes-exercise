@@ -1,6 +1,6 @@
-package com.piisw.cinema_tickets_app.domain.auditedobject;
+package com.piisw.cinema_tickets_app.domain.auditedobject.entity;
 
-import com.piisw.cinema_tickets_app.domain.user.User;
+import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -14,6 +14,8 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
@@ -25,6 +27,10 @@ import java.time.Instant;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AuditedObject {
+
+    @Id
+    @GeneratedValue(generator = "ID_GENERATOR")
+    private Long id;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -44,7 +50,11 @@ public abstract class AuditedObject {
     private User updatedBy;
 
     @Enumerated(EnumType.STRING)
-    private AuditedObjectState objectState = AuditedObjectState.ACTIVE;
+    private ObjectState objectState = ObjectState.ACTIVE;
+
+    public Long getId() {
+        return id;
+    }
 
     public Instant getCreatedAt() {
         return createdAt;
@@ -78,11 +88,11 @@ public abstract class AuditedObject {
         this.updatedBy = updatedBy;
     }
 
-    public AuditedObjectState getObjectState() {
+    public ObjectState getObjectState() {
         return objectState;
     }
 
-    public void setObjectState(AuditedObjectState objectState) {
+    public void setObjectState(ObjectState objectState) {
         this.objectState = objectState;
     }
 }

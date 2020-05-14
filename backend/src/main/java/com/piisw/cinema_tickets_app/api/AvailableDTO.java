@@ -8,4 +8,5 @@ import lombok.Data;
 public class AvailableDTO {
 
     private Boolean isAvailable;
+
 }

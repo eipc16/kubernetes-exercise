@@ -1,5 +1,6 @@
 package com.piisw.cinema_tickets_app.api;
 
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
@@ -42,6 +43,8 @@ public class UserDTO {
     private String phoneNumber;
 
     private String role;
+
+    private ObjectState objectState;
 
 }
 

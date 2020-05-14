@@ -1,10 +1,10 @@
 package com.piisw.cinema_tickets_app.authentication;
 
 import com.piisw.cinema_tickets_app.api.RegistrationDataDTO;
-import com.piisw.cinema_tickets_app.domain.auditedobject.AuditedObjectState;
-import com.piisw.cinema_tickets_app.domain.authentication.AuthenticationService;
-import com.piisw.cinema_tickets_app.domain.user.User;
-import com.piisw.cinema_tickets_app.domain.user.UserService;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
+import com.piisw.cinema_tickets_app.domain.authentication.control.AuthenticationService;
+import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.control.UserService;
 import com.piisw.cinema_tickets_app.infrastructure.configuration.AuditingConfig;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
 import org.junit.Rule;
@@ -46,7 +46,7 @@ public class AuthenticationTests {
         assertEquals(registrationData.getPhoneNumber(), createdUser.getPhoneNumber());
         assertEquals(registrationData.getEmail(), createdUser.getEmail());
         assertEquals(UserRole.ROLE_USER, createdUser.getUserRole());
-        assertEquals(AuditedObjectState.ACTIVE, createdUser.getObjectState());
+        assertEquals(ObjectState.ACTIVE, createdUser.getObjectState());
     }
 
     private RegistrationDataDTO getDummyRegistrationData() {

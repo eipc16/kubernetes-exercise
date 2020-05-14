@@ -1,12 +1,12 @@
 package com.piisw.cinema_tickets_app.infrastructure.configuration;
 
+import com.piisw.cinema_tickets_app.domain.authentication.boundary.AuthenticationController;
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationEntryPointImpl;
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationFilter;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,6 +27,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         prePostEnabled = true
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private static final String WILDCARD_PATH = "/**";
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -81,13 +83,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers("/api/auth/**")
+                .antMatchers(
+                        AuthenticationController.MAIN_PATH + WILDCARD_PATH)
                 .permitAll()
                 .antMatchers(
-                        "/api/user/check/username/**",
-                        "/api/user/check/email/**")
-                .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/users/**")
+                        "/v2/api-docs",
+                    "/configuration/ui",
+                    "/swagger-resources/**",
+                    "/configuration/security",
+                    "/swagger-ui.html",
+                    "/webjars/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();

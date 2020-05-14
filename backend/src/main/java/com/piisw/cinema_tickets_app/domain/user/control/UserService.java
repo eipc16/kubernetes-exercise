@@ -1,6 +1,7 @@
-package com.piisw.cinema_tickets_app.domain.user;
+package com.piisw.cinema_tickets_app.domain.user.control;
 
-import com.piisw.cinema_tickets_app.api.UserDTO;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
+import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,10 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(NO_SUCH_USER, userId)));
     }
 
+    public boolean isExistingAndActiveUser(Long id) {
+        return userRepository.existsByIdAndAndObjectState(id, ObjectState.ACTIVE);
+    }
+
     public List<User> getUsersFromDatabase(List<Long> usersId){
         return userRepository.findAllById(usersId);
     }
@@ -74,18 +79,6 @@ public class UserService {
 
     public boolean userExistsByEmail(String email) {
         return userRepository.existsByEmail(email);
-    }
-
-    public UserDTO mapToUserDTO(User user) {
-        return UserDTO.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .surname(user.getSurname())
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .phoneNumber(user.getPhoneNumber())
-                .role(user.getUserRole().name())
-                .build();
     }
 
     public void setNewPassword(User user, String newPassword) {
@@ -105,4 +98,5 @@ public class UserService {
         user.setPhoneNumber(phoneNumber);
         userRepository.save(user);
     }
+
 }

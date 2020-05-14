@@ -1,5 +1,7 @@
-package com.piisw.cinema_tickets_app.domain.user;
+package com.piisw.cinema_tickets_app.domain.user.control;
 
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
+import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,5 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
+
+    boolean existsByIdAndAndObjectState(Long id, ObjectState objectState);
 
 }
