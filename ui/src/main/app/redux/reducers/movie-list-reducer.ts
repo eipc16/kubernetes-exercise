@@ -1,5 +1,5 @@
 import { movieListConstants } from '../constants';
-import { MovieListSuccessActionInterface } from '../actions/movie-list';
+import {MovieListAction, MovieListSuccessActionInterface} from '../actions/movie-list';
 import { MovieList } from "../../models/movies-list";
 
 const initialState
@@ -11,13 +11,13 @@ export interface MovieListState {
     movieList?: MovieList;
 }
 
-export function movieListReducer(state: MovieListState = initialState, action: MovieListSuccessActionInterface ): MovieListState {
+export function movieListReducer(state: MovieListState = initialState, action: MovieListAction ): MovieListState {
     switch(action.type) {
         case movieListConstants.MOVIE_LIST_SUCCESS:
             return {
                 isFetched: true,
                 isFetching: false,
-                movieList: action.movieList
+                movieList: (action as MovieListSuccessActionInterface).movieList
             };
         case movieListConstants.MOVIE_LIST_REQUEST:
             return {

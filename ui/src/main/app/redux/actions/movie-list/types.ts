@@ -16,3 +16,5 @@ export interface MovieListSuccessActionInterface extends Action {
     type: typeof movieListConstants.MOVIE_LIST_SUCCESS,
     movieList: MovieList
 }
+
+export type MovieListAction = MovieListRequestActionInterface | MovieListFailureActionInterface | MovieListSuccessActionInterface
