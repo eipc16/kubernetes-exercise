@@ -20,7 +20,6 @@ export class MovieListServiceImpl implements MovieListService {
         return MovieListServiceImpl.movieListService;
     }
 
-
     getMovieList(dateRange: DateRange): Promise<MovieList> {
         const requestOptions = {
             method: 'POST',
@@ -29,6 +28,6 @@ export class MovieListServiceImpl implements MovieListService {
         };
         return fetch(`${appConfig.apiUrl}/played`, requestOptions)
             .then(handleResponse)
-            .then((moviesList: MovieList) => moviesList);
+            .then((movieList: MovieList) => movieList);
     }
 }
