@@ -21,8 +21,7 @@ public class GenreService {
     private GenreRepository genreRepository;
 
     public List<Genre> getGenresByName(String genreName, Set<ObjectState> objectStates) {
-        return Collections.emptyList();
-//        return genreRepository.findAllByNameLikeAndObjectStateIn("%" + genreName + "%", objectStates);
+        return genreRepository.findAllByNameLikeAndObjectStateIn("%" + genreName + "%", objectStates);
     }
 
     public Optional<Genre> createGenre(String genreName) {
@@ -31,8 +30,7 @@ public class GenreService {
     }
 
     public BulkOperationResult<Genre> createGenres(Collection<String> genreNames) {
-//        List<Genre> existingGenres = genreRepository.findAllByNameInAndObjectState(genreNames, ObjectState.ACTIVE);
-        List<Genre> existingGenres = Collections.emptyList();
+        List<Genre> existingGenres = genreRepository.findAllByNameInAndObjectState(genreNames, ObjectState.ACTIVE);
         List<String> existingGenreNames = existingGenres.stream()
                 .map(Genre::getName)
                 .collect(Collectors.toList());

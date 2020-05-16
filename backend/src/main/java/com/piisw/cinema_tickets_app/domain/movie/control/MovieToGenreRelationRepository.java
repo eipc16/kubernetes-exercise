@@ -6,6 +6,7 @@ import com.piisw.cinema_tickets_app.domain.movie.entity.MovieToGenreRelation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -16,4 +17,6 @@ public interface MovieToGenreRelationRepository extends JpaRepository<MovieToGen
     List<MovieToGenreRelation> findAllByGenre(Genre genre);
 
     List<MovieToGenreRelation> findAllByGenreIn(List<Genre> genre);
+
+    List<MovieToGenreRelation> findAllByMovieIn(Collection<Movie> movie);
 }

@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface GenreRepository extends JpaRepository<Genre, Long>, JpaSpecificationExecutor<Genre> {
-//    List<Genre> findAllByNameInAndObjectState(Collection<String> name, ObjectState objectState);
+    List<Genre> findAllByNameInAndObjectState(Collection<String> name, ObjectState objectState);
 
-//    List<Genre> findAllByNameLikeAndObjectStateIn(String searchText, Collection<ObjectState> objectState);
+    List<Genre> findAllByNameLikeAndObjectStateIn(String searchText, Collection<ObjectState> objectState);
 }

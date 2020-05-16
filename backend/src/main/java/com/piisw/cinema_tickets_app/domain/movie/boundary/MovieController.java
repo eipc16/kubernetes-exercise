@@ -10,6 +10,7 @@ import com.piisw.cinema_tickets_app.domain.movie.control.MovieService;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
+import com.piisw.cinema_tickets_app.infrastructure.bulk.BulkOperationResult;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import io.swagger.annotations.Api;
@@ -68,11 +69,9 @@ public class MovieController {
     @ApiOperation(value = "${api.movies.post.value}", notes = "${api.movies.post.notes}")
     @PostMapping(IDS_PATH)
     @HasAdminRole
-    public List<ResourceDTO> createMovies(@PathVariable(IDS) Set<String> imdbIds) {
-        List<Movie> createdMovies = movieService.createMovies(imdbIds);
-        return createdMovies.stream()
-                .map(movieMapper::mapToResourceDTO)
-                .collect(Collectors.toList());
+    public BulkOperationResult<ResourceDTO> createMovies(@PathVariable(IDS) Set<String> imdbIds) {
+        BulkOperationResult<Movie> resultMovies = movieService.createMovies(imdbIds);
+        return resultMovies.applyTransform(movieMapper::mapToResourceDTO);
     }
 
     @ApiOperation(value = "${api.movies.delete.value}", notes = "${api.movies.delete.notes}")
