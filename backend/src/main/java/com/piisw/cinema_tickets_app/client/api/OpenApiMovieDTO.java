@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -86,4 +88,7 @@ public class OpenApiMovieDTO {
     @JsonProperty("Response")
     private String response;
 
+    public List<String> getAllGenreNames() {
+        return Arrays.asList(genre.split(", "));
+    }
 }

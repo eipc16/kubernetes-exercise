@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,12 +33,20 @@ public class OpenMovieDatabaseClient {
     public List<MovieDetailsDTO> getMovieDetailsByImdbIds(Set<String> imdbIds) {
         return imdbIds.stream()
                 .map(this::getMovieDetailsByImdbId)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
-    public MovieDetailsDTO getMovieDetailsByImdbId(String imdbId) {
-       OpenApiMovieDTO openApiMovieDTO = restTemplate.getForEntity(getOpenApiUri(imdbId), OpenApiMovieDTO.class).getBody();
-       return mapToMovieDetailsDTO(openApiMovieDTO);
+    public Optional<MovieDetailsDTO> getMovieDetailsByImdbId(String imdbId) {
+        return getOpenApiMovieByImdbId(imdbId).map(this::mapToMovieDetailsDTO);
+    }
+
+    private Optional<OpenApiMovieDTO> getOpenApiMovieByImdbId(String imdbId) {
+        URI requestURI = getOpenApiUri(imdbId);
+        OpenApiMovieDTO openApiMovie = restTemplate.getForEntity(requestURI, OpenApiMovieDTO.class).getBody();
+        return Optional.ofNullable(openApiMovie)
+                .filter(openMovie -> "True".equals(openMovie.getResponse()) && "movie".equals(openMovie.getType()));
     }
 
     private URI getOpenApiUri(String id) {
@@ -54,22 +63,17 @@ public class OpenMovieDatabaseClient {
         return MovieDetailsDTO.builder()
                 .imdbId(openApiMovieDTO.getImdbId())
                 .title(openApiMovieDTO.getTitle())
+                .year(openApiMovieDTO.getYear())
                 .maturityRate(openApiMovieDTO.getRated())
                 .releaseDate(openApiMovieDTO.getReleased())
                 .runtime(openApiMovieDTO.getRuntime())
-                .genre(openApiMovieDTO.getGenre())
+                .genres(openApiMovieDTO.getAllGenreNames())
                 .director(openApiMovieDTO.getDirector())
-                .writer(openApiMovieDTO.getWriter())
                 .actors(openApiMovieDTO.getActors())
                 .plot(openApiMovieDTO.getPlot())
                 .language(openApiMovieDTO.getLanguage())
                 .country(openApiMovieDTO.getCountry())
-                .awards(openApiMovieDTO.getAwards())
                 .posterLink(openApiMovieDTO.getPoster())
-                .ratings(mapToRatingDTOs(openApiMovieDTO.getRatings()))
-                .metaScore(openApiMovieDTO.getMetascore())
-                .ibmRating(openApiMovieDTO.getImdbRating())
-                .producer(openApiMovieDTO.getProduction())
                 .build();
     }
 

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,24 +23,18 @@ public class MovieDetailsDTO {
     @NotNull
     private String imdbId;
     private String title;
+    private String year;
     private String maturityRate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd MMM yyyy", locale = "en_US")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate releaseDate;
     private String runtime;
-    private String genre;
+    private List<String> genres;
     private String director;
-    private String writer;
     private String actors;
     private String plot;
     private String language;
     private String country;
-    private String awards;
     private String posterLink;
-    private Set<RatingDTO> ratings;
-    private Integer metaScore;
-    private String ibmRating;
-    private String producer;
-
 }
