@@ -7,9 +7,9 @@ import {MovieList} from "../../models/movies-list";
 import {Button, PageHeader} from "antd";
 import './main-page.scss';
 import {MovieListServiceImpl} from "../../services";
+import {Action, Dispatch} from "redux";
 
 interface OwnProps {
-    movieListPublisher: MovieListActionPublisherImpl;
 }
 
 interface State {
@@ -26,16 +26,13 @@ const MainPageComponent : React.FC<MainPageProps> = (props: MainPageProps) => {
     const [movieListPublisher, ] = useState(new MovieListActionPublisherImpl(movieListService))
     const dispatch = useDispatch();
 
-    const useFetching = (actionCreator: any) => {
-        useEffect(() => {
-            dispatch(actionCreator);
-        }, [movieListPublisher])
-    }
-
-    useFetching(movieListPublisher.getMovieList({
-        beginDate: Date.now(),
-        endDate: Date.now()
-    }))
+    useEffect(() => {
+        const searchEvent = movieListPublisher.getMovieList({
+            beginDate: Date.now(),
+            endDate: Date.now()
+        });
+        dispatch(searchEvent);
+    }, [])
 
     return (
         <div>
