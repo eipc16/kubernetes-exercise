@@ -1,13 +1,21 @@
 package com.piisw.cinema_tickets_app.domain.movie.control;
 
 import com.google.common.collect.Sets;
+import com.piisw.cinema_tickets_app.api.MovieDetailsDTO;
+import com.piisw.cinema_tickets_app.client.OpenMovieDatabaseClient;
 import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectSpecification;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
+import com.piisw.cinema_tickets_app.domain.genre.control.GenreService;
+import com.piisw.cinema_tickets_app.domain.genre.entity.Genre;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import com.piisw.cinema_tickets_app.infrastructure.utils.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,6 +28,12 @@ public class MovieService {
 
     @Autowired
     private AuditedObjectSpecification<Movie> specification;
+
+    @Autowired
+    private OpenMovieDatabaseClient openMovieDatabaseClient;
+
+    @Autowired
+    private GenreService genreService;
 
     public Movie getMovieById(Long id, ObjectState objectState) {
         return movieRepository.findOne(specification.whereIdAndObjectStateEquals(id, objectState))
@@ -35,16 +49,30 @@ public class MovieService {
         return movieRepository.findAll(specification.whereIdAndObjectStateIn(ids, objectStates));
     }
 
+    @Transactional
     public List<Movie> createMovies(Set<String> imdbIds) {
-        List<Movie> moviesToCreate = imdbIds.stream()
+        List<Movie> moviesToCreate = openMovieDatabaseClient.getMovieDetailsByImdbIds(imdbIds).stream()
                 .map(this::buildNewMovie)
                 .collect(Collectors.toList());
         return movieRepository.saveAll(moviesToCreate);
     }
 
-    private Movie buildNewMovie(String imbdId) {
+    private Movie buildNewMovie(MovieDetailsDTO movieDetailsDTO) {
+        Set<Genre> genres = genreService.createGenres(movieDetailsDTO.getGenres()).getAll();
         return Movie.builder()
-                .imdbId(imbdId)
+                .imdbId(movieDetailsDTO.getImdbId())
+                .title(movieDetailsDTO.getTitle())
+                .year(movieDetailsDTO.getYear())
+                .maturityRating(movieDetailsDTO.getMaturityRate())
+                .releaseDate(movieDetailsDTO.getReleaseDate().atStartOfDay().toInstant(ZoneOffset.UTC))
+                .runTime(movieDetailsDTO.getRuntime())
+                .genres(genres)
+                .director(movieDetailsDTO.getDirector())
+                .actors(movieDetailsDTO.getActors())
+                .shortPlot(movieDetailsDTO.getPlot())
+                .language(movieDetailsDTO.getLanguage())
+                .posterUrl(movieDetailsDTO.getPosterLink())
+                .country(movieDetailsDTO.getCountry())
                 .objectState(ObjectState.ACTIVE)
                 .build();
     }

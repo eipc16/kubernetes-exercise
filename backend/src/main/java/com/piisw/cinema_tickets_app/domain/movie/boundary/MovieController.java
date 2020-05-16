@@ -3,6 +3,7 @@ package com.piisw.cinema_tickets_app.domain.movie.boundary;
 import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.*;
 
 import com.piisw.cinema_tickets_app.api.MovieDTO;
+import com.piisw.cinema_tickets_app.api.MovieDetailsDTO;
 import com.piisw.cinema_tickets_app.api.ResourceDTO;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.movie.control.MovieService;
@@ -53,6 +54,15 @@ public class MovieController {
                                          @RequestParam(name = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         List<Movie> foundMovies = movieService.getMoviesByIds(ids, objectStates);
         return movieMapper.mapToMovieDTOs(foundMovies);
+    }
+
+    @ApiOperation(value = "${api.moviedetails.get.value}", notes = "${api.moviedetails.get.notes}")
+    @GetMapping(IDS_PATH + "/details")
+    @HasAnyRole
+    public List<MovieDetailsDTO> getMoviesDetailsByIds(@PathVariable(IDS) Set<Long> ids,
+                                                       @RequestParam(name = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
+        List<Movie> foundMovies = movieService.getMoviesByIds(ids, objectStates);
+        return movieMapper.mapToMovieDetailsDTOs(foundMovies);
     }
 
     @ApiOperation(value = "${api.movies.post.value}", notes = "${api.movies.post.notes}")

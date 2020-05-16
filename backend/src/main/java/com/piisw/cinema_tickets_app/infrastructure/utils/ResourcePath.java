@@ -5,10 +5,10 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ResourcePath {
 
-    public static final String ID = "id";
-    public static final String ID_PATH = "/{" + ID + "}";
-    public static final String IDS = "ids";
-    public static final String IDS_PATH = "/{" + IDS + "}";
-    public static final String OBJECT_STATE = "objectState";
-
+    public final String ID = "id";
+    public final String ID_PATH = "/{" + ID + "}";
+    public final String IDS = "ids";
+    public final String IDS_PATH = "/{" + IDS + "}";
+    public final String OBJECT_STATE = "objectState";
+    public final String SEARCH_TEXT = "searchText";
 }
