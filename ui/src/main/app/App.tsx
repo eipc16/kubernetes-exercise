@@ -7,6 +7,7 @@ import {
 import './App.css';
 import {LoginPage} from "./components/login-page/login-page";
 import {RegisterPage} from"./components/register-page/register-page"
+import {MainPage} from "./components/main-page/main-page";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
       <Switch>
         <Route path='/login' component={LoginPage} />
         <Route path='/register' component={RegisterPage}/>
-        {/*<Route path="/" component={MainPage} exact />*/}
+        <Route path='/' component={MainPage} exact/>
       </Switch>
     </Router>
   );

@@ -23,10 +23,9 @@ export class MovieListServiceImpl implements MovieListService {
     getMovieList(dateRange: DateRange): Promise<MovieList> {
         const requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dateRange)
+            headers: { 'Content-Type': 'application/json' }
         };
-        return fetch(`${appConfig.apiUrl}/played`, requestOptions)
+        return fetch(`${appConfig.apiUrl}/played?beginDate=${dateRange.beginDate}&endDate=${dateRange.endDate}`, requestOptions)
             .then(handleResponse)
             .then((movieList: MovieList) => movieList);
     }
