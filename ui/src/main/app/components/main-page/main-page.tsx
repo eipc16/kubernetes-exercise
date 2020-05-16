@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 import {MovieListComponent} from "../movie-list/movie-list";
 import {MovieListActionPublisherImpl} from "../../redux/actions/movie-list";
-import {connect, useDispatch} from "react-redux";
+import {connect} from "react-redux";
 import {MovieList} from "../../models/movies-list";
 import {Button, PageHeader} from "antd";
 import './main-page.scss';
 import {MovieListServiceImpl} from "../../services";
-import {Action, Dispatch} from "redux";
+import {useFetching} from "../../utils/custom-fetch-hook";
 
 interface OwnProps {
 }
@@ -24,15 +24,11 @@ const MainPageComponent : React.FC<MainPageProps> = (props: MainPageProps) => {
     const {movieList} = props;
     const [movieListService, ] = useState(MovieListServiceImpl.createInstance())
     const [movieListPublisher, ] = useState(new MovieListActionPublisherImpl(movieListService))
-    const dispatch = useDispatch();
 
-    useEffect(() => {
-        const searchEvent = movieListPublisher.getMovieList({
-            beginDate: Date.now(),
-            endDate: Date.now()
-        });
-        dispatch(searchEvent);
-    }, [])
+    useFetching(movieListPublisher.getMovieList({
+        beginDate: Date.now(),
+        endDate: Date.now()
+    }))
 
     return (
         <div>
