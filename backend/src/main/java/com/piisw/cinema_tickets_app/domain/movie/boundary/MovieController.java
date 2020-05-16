@@ -11,6 +11,7 @@ import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.BulkOperationResult;
+import com.piisw.cinema_tickets_app.infrastructure.security.validation.AllowAll;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import io.swagger.annotations.Api;
@@ -50,7 +51,7 @@ public class MovieController {
 
     @ApiOperation(value = "${api.movies.get.value}", notes = "${api.movies.get.notes}")
     @GetMapping(IDS_PATH)
-    @HasAnyRole
+    @AllowAll
     public List<MovieDTO> getMoviesByIds(@PathVariable(IDS) Set<Long> ids,
                                          @RequestParam(name = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         List<Movie> foundMovies = movieService.getMoviesByIds(ids, objectStates);
@@ -59,7 +60,7 @@ public class MovieController {
 
     @ApiOperation(value = "${api.moviedetails.get.value}", notes = "${api.moviedetails.get.notes}")
     @GetMapping(IDS_PATH + "/details")
-    @HasAnyRole
+    @AllowAll
     public List<MovieDetailsDTO> getMoviesDetailsByIds(@PathVariable(IDS) Set<Long> ids,
                                                        @RequestParam(name = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         List<Movie> foundMovies = movieService.getMoviesByIds(ids, objectStates);
@@ -86,7 +87,7 @@ public class MovieController {
 
     @ApiOperation(value = "${api.movies.current.value}", notes = "${api.movies.current.notes}")
     @GetMapping("/played")
-    @HasAnyRole
+    @AllowAll
     public List<MovieDTO> getCurrentlyPlayedMovies(@RequestParam(BEGIN_DATE)
                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime beginDateTime,
                                                    @RequestParam(END_DATE)

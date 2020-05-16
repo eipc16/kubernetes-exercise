@@ -4,6 +4,6 @@ interface Config {
 }
 
 export const appConfig: Config = {
-    apiUrl: 'http://localhost:8080/api',
+    apiUrl: 'http://localhost:8080/cinema-tickets-app/api',
     omdbApiUrl: 'http://www.omdbapi.com/'
 };

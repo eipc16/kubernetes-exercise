@@ -46,6 +46,7 @@ public class MovieMapper {
     private MovieDTO mapToMovieDTO(Movie movie) {
         return MovieDTO.builder()
                 .id(movie.getId())
+                .imdbId(movie.getImdbId())
                 .objectState(movie.getObjectState())
                 .title(movie.getTitle())
                 .releaseDate(mapToLocalDate(movie.getReleaseDate()))

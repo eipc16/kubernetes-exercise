@@ -20,6 +20,7 @@ public class MovieDTO {
 
     @ApiModelProperty(readOnly = true)
     private Long id;
+    private String imdbId;
     private ObjectState objectState;
     private String title;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd MMM yyyy", locale = "en_US")
