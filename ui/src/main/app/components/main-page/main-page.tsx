@@ -29,7 +29,7 @@ const MainPageComponent : React.FC<MainPageProps> = (props: MainPageProps) => {
     const useFetching = (actionCreator: any) => {
         useEffect(() => {
             dispatch(actionCreator);
-        }, [])
+        }, [movieListPublisher])
     }
 
     useFetching(movieListPublisher.getMovieList({
