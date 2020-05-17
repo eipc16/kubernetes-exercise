@@ -3,6 +3,7 @@ package com.piisw.cinema_tickets_app.movie;
 import com.piisw.cinema_tickets_app.api.MovieDetailsDTO;
 import com.piisw.cinema_tickets_app.client.OpenMovieDatabaseClient;
 import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectSpecification;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.genre.control.GenreService;
 import com.piisw.cinema_tickets_app.domain.movie.control.MovieService;
 import com.piisw.cinema_tickets_app.domain.movie.control.MovieToGenreRelationService;
@@ -24,7 +25,9 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.junit.Assert.assertEquals;
@@ -88,6 +91,26 @@ public class MovieTests {
                 .country("USA, UK")
                 .genres(List.of("Action", "Adventure", "Sci-Fi", "Thriller"))
                 .build();
+    }
+
+    @Test
+    public void shouldDeleteMovie() {
+        MovieDetailsDTO movieDetails = getDummyMovieDetails();
+        whenPerformingClientCallReturn(movieDetails);
+        Set<Movie> createdMovies = movieService.createMovies(Set.of("dummy"))
+                .getByOperationResult(OperationResultEnum.CREATED);
+        Set<Long> createdMoviesIds = createdMovies.stream()
+                .map(Movie::getId)
+                .collect(Collectors.toSet());
+        List<Movie> removedMovies = movieService.deleteMoviesByIds(createdMoviesIds);
+        boolean allMoviesRemovedObjectState = removedMovies.stream()
+                .map(Movie::getObjectState)
+                .allMatch(ObjectState.REMOVED::equals);
+        boolean allWereRemoved = removedMovies.stream()
+                .map(Movie::getId)
+                .collect(Collectors.toSet())
+                .equals(createdMoviesIds);
+        assertTrue(allMoviesRemovedObjectState && allWereRemoved);
     }
 
 
