@@ -1,5 +1,5 @@
 import { Movie } from './index'
-import {Pageable} from "../infrastructure";
+import { Pageable } from "../infrastructure";
 
 export interface PlayedMoviesInterface {
     content: Movie[];

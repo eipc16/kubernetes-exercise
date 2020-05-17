@@ -1,9 +1,9 @@
 import {Genre} from "../../models/genre";
-import {GenreAction, GenreSuccessActionInterface} from "../actions/genre/types";
+import {GenreAction, GenreSuccessActionInterface} from '../actions/genre'
 import {genreConstants} from "../constants";
 
 const initialState: GenreState = {
-    isFetching: true,
+    isFetching: false,
     isFetched: false,
     genreList: [],
     totalGenres: 0

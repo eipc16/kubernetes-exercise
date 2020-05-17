@@ -19,6 +19,7 @@ export function authorizationReducer (state: AuthorizationState = initialState, 
     case loginConstants.LOGIN_SUCCESS:
       return {
         loggedIn: true,
+        loggingIn: false,
         token: (action as LoginSuccessActionInterface).token
       }
     case loginConstants.LOGIN_REQUEST:
@@ -26,9 +27,13 @@ export function authorizationReducer (state: AuthorizationState = initialState, 
         loggingIn: true
       }
     case loginConstants.LOGIN_FAILURE:
-      return {}
+      return {
+        loggingIn: false
+      }
     case loginConstants.LOGOUT:
-      return {}
+      return {
+        loggedIn: false
+      }
     default:
       return state
   }
