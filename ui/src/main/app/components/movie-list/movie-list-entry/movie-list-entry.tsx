@@ -18,7 +18,7 @@ export const MovieListEntry = (props: MovieListEntryProps) => {
             <Meta className='meta' title={movie.title} description={'Release Date: '+ movie.releaseDate} />
             <div className='thumbnail--overlay'>
                 <h1>{movie.title}</h1>
-                <a href="#" className="btn">
+                <a href="/" className="btn">
                     Reserve&nbsp;
                 </a>
             </div>

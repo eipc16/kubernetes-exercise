@@ -52,7 +52,7 @@ export class LoginActionPublisherImpl implements LoginActionPublisher {
       }
 
       function success (token: Token): LoginSuccessActionInterface {
-        return {
+          return {
           type: loginConstants.LOGIN_SUCCESS,
           token: token
         }

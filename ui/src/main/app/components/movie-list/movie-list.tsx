@@ -20,7 +20,7 @@ interface State {
 type MovieListProps = State & OwnProps
 
 const MovieListComponent = (props: MovieListProps) => {
-  const { isFetched, isFetching, movieList } = props
+  const { isFetching, movieList } = props
 
   if(isFetching) {
     return <div>Fetching..</div>
