@@ -57,7 +57,7 @@ public class ScreeningController {
     public List<ScreeningDTO> getScreeningsForMovie(@PathVariable(ID) Long movieId,
                                                     @RequestParam(value = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         Movie movie = movieService.getMovieById(movieId, objectStates);
-        List<Screening> screenings = screeningService.getScreeningsByMovieId(movie, objectStates);
+        List<Screening> screenings = screeningService.getScreeningsByMovie(movie, objectStates);
         return screenings.stream()
                 .map(screeningMapper::mapToScreeningDTO)
                 .collect(Collectors.toList());

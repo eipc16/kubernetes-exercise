@@ -33,7 +33,7 @@ public class ScreeningService {
         return screeningRepository.findAll(specification.whereScreeningRoomIdEqualsAndObjectStateEquals(screeningRoomId, objectState));
     }
 
-    public List<Screening> getScreeningsByMovieId(Movie movie, Set<ObjectState> objectStates) {
+    public List<Screening> getScreeningsByMovie(Movie movie, Set<ObjectState> objectStates) {
         return screeningRepository.findAll(specification.whereMovieIdEqualsAndObjectStateIn(movie.getId(), objectStates));
     }
 
