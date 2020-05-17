@@ -1,4 +1,4 @@
-import { UserInterface } from './User';
+import { UserInterface } from './User'
 
 export type User = UserInterface;
 

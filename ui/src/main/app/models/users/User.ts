@@ -10,6 +10,6 @@ export interface UserInterface {
 }
 
 export enum UserIdentifiers {
-    EMAIL = "email",
-    USERNAME = "username"
+    EMAIL = 'email',
+    USERNAME = 'username'
 }

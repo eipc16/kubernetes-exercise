@@ -1,15 +1,15 @@
-import React from 'react';
+import React from 'react'
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-} from "react-router-dom";
-import './App.css';
-import {LoginPage} from "./components/login-page/login-page";
-import {RegisterPage} from"./components/register-page/register-page"
-import {MainPage} from "./components/main-page/main-page";
+  Route
+} from 'react-router-dom'
+import './App.css'
+import { LoginPage } from './components/login-page/login-page'
+import { RegisterPage } from './components/register-page/register-page'
+import { MainPage } from './components/main-page/main-page'
 
-function App() {
+function App () {
   return (
     <Router>
       <Switch>
@@ -18,7 +18,7 @@ function App() {
         <Route path='/' component={MainPage} exact/>
       </Switch>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

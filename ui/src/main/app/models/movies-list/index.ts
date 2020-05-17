@@ -1,6 +1,6 @@
-import { MovieInterface } from './Movie';
-import { DateRangeInterface } from "./DateRange";
-import { MovieListInterface} from "./MovieList";
+import { MovieInterface } from './Movie'
+import { DateRangeInterface } from './DateRange'
+import { MovieListInterface } from './MovieList'
 
 export type Movie = MovieInterface;
 export type DateRange = DateRangeInterface;

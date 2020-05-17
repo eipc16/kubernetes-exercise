@@ -1,6 +1,6 @@
-import { Action } from 'redux';
-import { movieListConstants } from '../../constants';
-import { DateRange, MovieList } from '../../../models/movies-list';
+import { Action } from 'redux'
+import { movieListConstants } from '../../constants'
+import { DateRange, MovieList } from '../../../models/movies-list'
 
 export interface MovieListRequestActionInterface extends Action {
     type: typeof movieListConstants.MOVIE_LIST_REQUEST,

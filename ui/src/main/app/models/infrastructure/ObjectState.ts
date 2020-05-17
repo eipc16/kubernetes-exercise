@@ -1,5 +1,5 @@
 export enum ObjectState {
-    ACTIVE = "ACTIVE",
-    REMOVED = "REMOVED",
-    INACTIVE = "INACTIVE"
+    ACTIVE = 'ACTIVE',
+    REMOVED = 'REMOVED',
+    INACTIVE = 'INACTIVE'
 }

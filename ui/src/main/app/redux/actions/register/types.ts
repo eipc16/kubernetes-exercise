@@ -1,7 +1,7 @@
-import { Action } from 'redux';
-import { registerConstants } from '../../constants';
-import { RegistrationData } from '../../../models/authorization';
-import { Resource } from '../../../models/infrastructure';
+import { Action } from 'redux'
+import { registerConstants } from '../../constants'
+import { RegistrationData } from '../../../models/authorization'
+import { Resource } from '../../../models/infrastructure'
 
 export interface RegisterRequestActionInterface extends Action {
     type: typeof registerConstants.REGISTER_REQUEST,
@@ -18,6 +18,6 @@ export interface RegisterSuccessActionInterface extends Action {
     resource: Resource;
 }
 
-export type RegisterAction = RegisterRequestActionInterface | 
-                             RegisterSuccessActionInterface | 
+export type RegisterAction = RegisterRequestActionInterface |
+                             RegisterSuccessActionInterface |
                              RegisterFailureActionInterface;

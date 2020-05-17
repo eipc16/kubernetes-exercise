@@ -1,8 +1,8 @@
 export enum AlertTypes {
-    SUCCESS = "success",
-    WARNING = "warning",
-    INFO = "info",
-    ERROR = "error"
+    SUCCESS = 'success',
+    WARNING = 'warning',
+    INFO = 'info',
+    ERROR = 'error'
 }
 
 export interface AlertInterface {

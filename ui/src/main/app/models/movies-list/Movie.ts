@@ -1,4 +1,4 @@
-import {ObjectState} from "../infrastructure";
+import { ObjectState } from '../infrastructure'
 
 export interface MovieInterface {
     id: number;

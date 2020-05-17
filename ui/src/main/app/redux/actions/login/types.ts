@@ -1,6 +1,6 @@
-import { Action } from 'redux';
-import { loginConstants } from '../../constants';
-import { LoginData, Token } from '../../../models/authorization';
+import { Action } from 'redux'
+import { loginConstants } from '../../constants'
+import { LoginData, Token } from '../../../models/authorization'
 
 export interface LoginRequestActionInterface extends Action {
     type: typeof loginConstants.LOGIN_REQUEST,

@@ -1,6 +1,6 @@
-import {Action} from "redux";
-import {userConstants} from "../../constants";
-import {User} from "../../../models/users";
+import { Action } from 'redux'
+import { userConstants } from '../../constants'
+import { User } from '../../../models/users'
 
 export interface CurrentUserRequestActionInterface extends Action {
     type: typeof userConstants.CURRENT_USER_REQUEST
