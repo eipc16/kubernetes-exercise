@@ -33,7 +33,7 @@ const MovieListComponent = (props: MovieListProps) => {
 
     return (
         <div className='main--list--container'>
-            <MovieListFiltersContainer movieListActionPublisher={movieListPublisher} totalPages={movieList ? movieList.totalPages : 1}>
+            <MovieListFiltersContainer movieListActionPublisher={movieListPublisher}>
                 { isFetching ? (
                     <div className='fetching--message'>Fetching..</div>
                 ) : (

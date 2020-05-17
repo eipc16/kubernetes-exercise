@@ -7,18 +7,26 @@
 
 @media all and (max-width: 600px) {
   .main--list--container {
-    width: 100%;
     padding: 0;
   }
 
   .list--row {
-    width: 100%;
-    margin-right: 0 !important;
-    margin-left: 0 !important;
-    text-align: center;
+    display: flex;
+    justify-content: center;
     & > .ant-col {
-      width: 100%;
       padding: 0;
     }
   }
+}
+
+.main--list-container {
+  display: flex;
+  justify-content: center;
+}
+
+.list--row {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  display: flex;
+  justify-content: center;
 }

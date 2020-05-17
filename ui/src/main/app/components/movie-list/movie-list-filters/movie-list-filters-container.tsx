@@ -17,16 +17,17 @@ const {RangePicker} = DatePicker;
 
 interface OwnProps {
     movieListActionPublisher: MovieListActionPublisher;
-    totalPages: number;
     children?: React.ReactNode;
 }
 
 interface State {
-    genreFetched: boolean,
-    genreFetching: boolean,
-    genres: Genre[],
-    totalGenres: number,
-    filters: MovieListFilters
+    genreFetched: boolean;
+    genreFetching: boolean;
+    genres: Genre[];
+    totalGenres: number;
+    filters: MovieListFilters;
+    totalMovies: number;
+    pageSize: number;
 }
 
 enum FiltersEnum {
@@ -39,7 +40,7 @@ enum FiltersEnum {
 export type MovieListFiltersProps = OwnProps & State;
 
 export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
-    const {genres, totalGenres, genreFetching, movieListActionPublisher, filters, totalPages, children} = props;
+    const {genres, totalGenres, genreFetching, movieListActionPublisher, filters, totalMovies, children, pageSize} = props;
     const dispatch = useDispatch()
 
     // State holders
@@ -83,7 +84,7 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
             dateRange: dateRange,
             searchText: searchText,
             genres: selectedGenres,
-            currentPage: 0,
+            currentPage: currentPage,
             [lastUpdated.toString()]: value
         }))
     }
@@ -124,7 +125,7 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
                         showTime
                     />
                 </div>
-                <div className='input--container'>
+                <div className='input--container genre--container'>
                     <label className='input--label' htmlFor='genre--picker'>Genre:</label>
                     <Select
                         id='genre--picker'
@@ -141,7 +142,14 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
                 </div>
             </div>
             {children}
-            <Pagination className='pagination--selector' defaultCurrent={1} total={totalPages} onChange={handlePage}/>
+            <Pagination className='pagination--selector'
+                        defaultCurrent={1}
+                        pageSize={pageSize}
+                        total={totalMovies}
+                        onChange={handlePage}
+                        responsive={true}
+                        hideOnSinglePage={true}
+            />
         </div>
     )
 }
@@ -152,6 +160,8 @@ const mapStateToProps = (state: any, ownProps: OwnProps) => ({
     genres: state.genres.genreList,
     totalGenres: state.genres.totalGenres,
     filters: state.movieList.filters,
+    totalMovies: state.movieList.playedMovies ? state.movieList.playedMovies.totalElements : 1,
+    pageSize: state.movieList.playedMovies ? state.movieList.playedMovies.size : 10,
     ...ownProps
 })
 

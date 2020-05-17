@@ -3,7 +3,7 @@
 
     & > .top--filters--controls {
       display: flex;
-      //justify-content: space-between;
+      justify-content: center;
       flex-wrap: wrap;
 
       & > .input--container {
@@ -23,26 +23,12 @@
           flex-grow: 3;
         }
 
-        & > .genre--picker--input {
-          width: 100%;
-          height: 100%;
-          display: -ms-flexbox;
-          display: -webkit-flex;
-          display: flex;
-
-          -ms-flex-align: center;
-          -webkit-align-items: center;
-          -webkit-box-align: center;
-
-          align-items: center;
-
-          & > div {
-            width: 99%;
-          }
-        }
-
         & > .input--label {
           padding: 10px;
+        }
+
+        & > .date--picker--input {
+          width: 100%;
         }
       }
     }
@@ -60,29 +46,11 @@
 
     & > .top--filters--controls {
       display: block;
-
+      justify-content: center;
+      padding: 10px;
       & > .input--container {
-        //margin-left: 10px;
-        //margin-right: 10px;
         display: inline-grid;
-
-        & > .genre--picker--input {
-          width: 100%;
-          height: 100%;
-          display: -ms-flexbox;
-          display: -webkit-flex;
-          display: flex;
-
-          -ms-flex-align: center;
-          -webkit-align-items: center;
-          -webkit-box-align: center;
-
-          align-items: center;
-
-          & > div {
-            width: 99%;
-          }
-        }
+        width: 100%;
 
         & > .input--label {
           font-size: 1.2rem;
@@ -96,4 +64,58 @@
       padding-bottom: 25px;
     }
   }
+}
+
+@media all and (max-width: 480px){
+  .ant-picker-panels, .ant-picker-date-panel {
+    width: 100vw !important;
+  }
+
+  .ant-picker-content {
+    width: 100vw !important;
+  }
+
+  .ant-picker-body {
+    padding: 8px 0 !important;
+  }
+
+  .ant-picker-panel-container {
+    width: 100vw;
+
+    & .ant-picker-panel {
+      width: 100vw;
+    }
+
+    & .ant-picker-datetime-panel {
+      display: block;
+    }
+  }
+}
+
+.movie--list-filters {
+  & > .top--filters--controls {
+    align-content: center;
+  }
+}
+
+.genre--picker--input {
+  width: 100%;
+  height: 100%;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+
+  align-items: center;
+
+  & > div {
+    width: 99%;
+  }
+}
+
+.genre--container {
+  display: none !important;
 }

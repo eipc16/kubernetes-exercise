@@ -27,7 +27,7 @@ export class MovieListServiceImpl implements MovieListService {
       }
       const beginDate = new Date(dateRange.beginDate).toISOString()
       const endDate = new Date(dateRange.endDate).toISOString()
-        let queryParams = `beginDate=${beginDate}&endDate=${endDate}`;
+        let queryParams = `beginDate=${beginDate}&endDate=${endDate}&size=${5}`;
         if(searchText) {
             queryParams += `&searchText=${searchText}`
         }
