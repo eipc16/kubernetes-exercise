@@ -32,10 +32,10 @@ export class RegisterActionPublisherImpl implements RegisterActionPublisher {
             (resource: Resource) => {
               dispatch(success(resource))
             },
-            (errorResponse: any) => {
-              dispatch(failure(errorResponse.message))
+            (errorResponse: string) => {
+              dispatch(failure(errorResponse))
               if (errorAlertSupplier) {
-                const alert = errorAlertSupplier(errorResponse.message)
+                const alert = errorAlertSupplier(errorResponse)
                 this.alertPublisher.pushAlert(alert)(dispatch)
               }
             }

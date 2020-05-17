@@ -6,9 +6,8 @@ import {connect, useDispatch} from 'react-redux'
 import {Button, PageHeader} from 'antd'
 import './main-page.scss'
 import {AuthenticationServiceImpl, MovieListServiceImpl} from '../../services'
-import {useFetching} from '../../utils/custom-fetch-hook'
 import {LoginActionPublisherImpl} from '../../redux/actions/login'
-import { useHistory } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 
 interface OwnProps {
 }
@@ -16,8 +15,6 @@ interface OwnProps {
 interface State {
     loggedIn?: boolean
 }
-
-const WEEK_IN_MS = 604800000
 
 type MainPageProps = State & OwnProps;
 
@@ -29,14 +26,9 @@ const MainPageComponent: React.FC<MainPageProps> = (props: MainPageProps) => {
     const [loginPublisher] = useState(new LoginActionPublisherImpl(authService))
     const dispatch = useDispatch()
 
-    useFetching(movieListPublisher.getMovieList({
-        beginDate: Date.now(),
-        endDate: Date.now() + WEEK_IN_MS
-    }))
-
     let history = useHistory();
     const onClick = () => {
-        if(loggedIn)
+        if (loggedIn)
             dispatch(loginPublisher.logout())
         history.push('/login')
     }

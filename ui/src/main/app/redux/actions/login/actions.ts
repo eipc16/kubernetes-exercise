@@ -34,10 +34,10 @@ export class LoginActionPublisherImpl implements LoginActionPublisher {
             (token: Token) => {
               dispatch(success(token))
             },
-            (errorResponse: any) => {
-              dispatch(failure(errorResponse.message))
+            (errorResponse: string) => {
+              dispatch(failure(errorResponse))
               if (errorAlertSupplier) {
-                const alert = errorAlertSupplier(errorResponse.message)
+                const alert = errorAlertSupplier(errorResponse)
                 this.alertPublisher.pushAlert(alert)(dispatch)
               }
             }

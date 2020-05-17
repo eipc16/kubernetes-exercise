@@ -3,17 +3,22 @@ package com.piisw.cinema_tickets_app.domain.movie.boundary;
 import com.piisw.cinema_tickets_app.api.MovieDTO;
 import com.piisw.cinema_tickets_app.api.MovieDetailsDTO;
 import com.piisw.cinema_tickets_app.api.ResourceDTO;
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.movie.control.MovieService;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
+import com.piisw.cinema_tickets_app.domain.movie.entity.MovieScreeningSearchParams;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.BulkOperationResult;
-import com.piisw.cinema_tickets_app.infrastructure.security.validation.AllowAll;
+import com.piisw.cinema_tickets_app.infrastructure.configuration.annotations.ApiPageable;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,9 +28,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,6 +48,7 @@ public class MovieController {
     public static final String MAIN_PATH = "/movies";
     public static final String BEGIN_DATE = "beginDate";
     public static final String END_DATE = "endDate";
+    public static final String GENRES = "genres";
 
     @Autowired
     private MovieService movieService;
@@ -87,16 +97,35 @@ public class MovieController {
 
     @ApiOperation(value = "${api.movies.current.value}", notes = "${api.movies.current.notes}")
     @GetMapping("/played")
-    @PreAuthorize("permitAll()")
-    public List<MovieDTO> getCurrentlyPlayedMovies(@RequestParam(BEGIN_DATE)
+    @ApiPageable
+    public Page<MovieDTO> getCurrentlyPlayedMovies(@RequestParam(value = SEARCH_TEXT, required = false) String searchText,
+                                                   @RequestParam(value = GENRES, required = false) String genres,
+                                                   @RequestParam(BEGIN_DATE)
                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime beginDateTime,
                                                    @RequestParam(END_DATE)
-                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
-        List<Screening> screenings = screeningService.getScreeningsWhereStartTimeIsBetween(beginDateTime, endDateTime);
-        Set<Movie> movies = screenings.stream()
+                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime,
+                                                   @ApiIgnore @PageableDefault Pageable pageable) {
+        MovieScreeningSearchParams searchParams = buildSearchParams(searchText, genres, beginDateTime, endDateTime, pageable);
+        Set<Long> currentMovies = screeningService.getScreeingsBySearchParams(searchParams).stream()
                 .map(Screening::getMovie)
+                .map(AuditedObject::getId)
                 .collect(Collectors.toSet());
-        return movieMapper.mapToMovieDTOs(movies);
+        return movieService.getPagedMoviesByIds(currentMovies, Collections.singleton(ObjectState.ACTIVE), searchParams.getPageable())
+                .map(movieMapper::mapToMovieDTO);
     }
 
+    private MovieScreeningSearchParams buildSearchParams(String searchText, String genres, LocalDateTime beginDate,
+                                                         LocalDateTime endDate, Pageable pageable) {
+        MovieScreeningSearchParams.MovieScreeningSearchParamsBuilder builder = MovieScreeningSearchParams.builder()
+                .beginDateTime(beginDate)
+                .endDateTime(endDate)
+                .pageable(pageable);
+        if (Objects.nonNull(searchText)) {
+            builder.searchText('%' + searchText + '%');
+        }
+        if (Objects.nonNull(genres)) {
+            builder.genres(Arrays.asList(genres.split(",")));
+        }
+        return builder.build();
+    }
 }

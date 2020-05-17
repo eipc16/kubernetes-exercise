@@ -1,6 +1,24 @@
-@media all and (min-width: 480px) {
+@media all and (min-width: 600px) {
 
   .main--list--container {
     padding: 2rem;
+  }
+}
+
+@media all and (max-width: 600px) {
+  .main--list--container {
+    width: 100%;
+    padding: 0;
+  }
+
+  .list--row {
+    width: 100%;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    text-align: center;
+    & > .ant-col {
+      width: 100%;
+      padding: 0;
+    }
   }
 }

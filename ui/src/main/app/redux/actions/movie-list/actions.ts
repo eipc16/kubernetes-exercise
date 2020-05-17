@@ -1,57 +1,86 @@
-import { movieListConstants } from '../../constants'
-import { MovieList, DateRange } from '../../../models/movies-list'
-import { Action, Dispatch } from 'redux'
-import { MovieListService } from '../../../services'
+import {movieListConstants} from '../../constants'
+import {DateRange, MovieListFilters, PlayerMovies} from '../../../models/movies-list'
+import {Action, Dispatch} from 'redux'
+import {MovieListService} from '../../../services'
 import {
-  MovieListFailureActionInterface,
-  MovieListRequestActionInterface,
-  MovieListSuccessActionInterface
+    MovieListFailureActionInterface,
+    MovieListFiltersClearInterface,
+    MovieListFiltersUpdateInterface,
+    MovieListRequestActionInterface,
+    MovieListSuccessActionInterface
 } from './types'
+
 export interface MovieListActionPublisher {
-    getMovieList(dateRange: DateRange): (dispatch: Dispatch<Action>) => void;
+    getMovieListByFilters(filters: MovieListFilters): (dispatch: Dispatch<Action>) => void;
+
+    getMovieList(dateRange: DateRange, searchText?: string, genres?: string[], page?: number): (dispatch: Dispatch<Action>) => void;
+
+    updateFilters(filters: MovieListFilters): MovieListFiltersUpdateInterface;
+
+    clearFilters(): MovieListFiltersClearInterface;
 }
 
 export class MovieListActionPublisherImpl implements MovieListActionPublisher {
     movieListService: MovieListService;
 
-    constructor (movieListService: MovieListService) {
-      this.movieListService = movieListService
+    constructor(movieListService: MovieListService) {
+        this.movieListService = movieListService
     }
 
-    getMovieList (dateRange: DateRange): (dispatch: Dispatch<Action>) => void {
-      return (dispatch: Dispatch<Action>) => {
-        dispatch(request(dateRange))
+    getMovieListByFilters(filters: MovieListFilters): (dispatch: Dispatch<Action>) => void {
+        return this.getMovieList({
+            beginDate: filters.dateRange.beginDate,
+            endDate: filters.dateRange.endDate
+        }, filters.searchText, filters.genres, filters.currentPage)
+    }
 
-        this.movieListService.getMovieList(dateRange)
-          .then(
-            (moviesList: MovieList) => {
-              dispatch(success(moviesList))
-            },
-            (errorResponse: any) => {
-              dispatch(failure(errorResponse.message))
+    getMovieList(dateRange: DateRange, searchText?: string, genres?: string[], page?: number): (dispatch: Dispatch<Action>) => void {
+        return (dispatch: Dispatch<Action>) => {
+            dispatch(request(dateRange))
+
+            this.movieListService.getMovieList(dateRange, searchText, genres, page)
+                .then(
+                    (moviesList: PlayerMovies) => {
+                        dispatch(success(moviesList))
+                    },
+                    (errorResponse: string) => {
+                        dispatch(failure(errorResponse))
+                    }
+                )
+        }
+
+        function request(dateRange: DateRange): MovieListRequestActionInterface {
+            return {
+                type: movieListConstants.MOVIE_LIST_REQUEST,
+                dateRange: dateRange
             }
-          )
-      }
-
-      function request (dateRange: DateRange): MovieListRequestActionInterface {
-        return {
-          type: movieListConstants.MOVIE_LIST_REQUEST,
-          dateRange: dateRange
         }
-      }
 
-      function success (movieList: MovieList): MovieListSuccessActionInterface {
-        return {
-          type: movieListConstants.MOVIE_LIST_SUCCESS,
-          movieList: movieList
+        function success(movieList: PlayerMovies): MovieListSuccessActionInterface {
+            return {
+                type: movieListConstants.MOVIE_LIST_SUCCESS,
+                playedMovies: movieList
+            }
         }
-      }
 
-      function failure (error: string): MovieListFailureActionInterface {
-        return {
-          type: movieListConstants.MOVIE_LIST_FAILURE,
-          error: error
+        function failure(error: string): MovieListFailureActionInterface {
+            return {
+                type: movieListConstants.MOVIE_LIST_FAILURE,
+                error: error
+            }
         }
-      }
+    }
+
+    clearFilters(): MovieListFiltersClearInterface {
+        return {
+            type: movieListConstants.MOVIE_LIST_FILTERS_CLEAR
+        };
+    }
+
+    updateFilters(filters: MovieListFilters): MovieListFiltersUpdateInterface {
+        return {
+            type: movieListConstants.MOVIE_LIST_FILTERS_UPDATE,
+            filters: filters
+        };
     }
 }

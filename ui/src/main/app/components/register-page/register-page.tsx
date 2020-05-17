@@ -23,7 +23,7 @@ export const RegisterPage = (props: any) => {
             onBack={() => onClick()}
             title="Register page"
         />
-        <div className="Register">
+        <div className="register--page">
           <RegisterForm registerPublisher={registerPublisher} {...props} />
         </div>
       </div>

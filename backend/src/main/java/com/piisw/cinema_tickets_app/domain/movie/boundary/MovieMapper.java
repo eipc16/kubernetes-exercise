@@ -39,7 +39,7 @@ public class MovieMapper {
                 .collect(Collectors.toList());
     }
 
-    private MovieDTO mapToMovieDTO(Movie movie) {
+    public MovieDTO mapToMovieDTO(Movie movie) {
         return MovieDTO.builder()
                 .id(movie.getId())
                 .imdbId(movie.getImdbId())

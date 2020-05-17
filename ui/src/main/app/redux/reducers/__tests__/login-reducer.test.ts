@@ -1,6 +1,6 @@
-import { authorizationReducer } from "../main/app/redux/reducers/login-reducer";
-import {AuthenticationServiceImpl} from "../main/app/services"
-import { loginConstants} from "../main/app/redux/constants";
+import { authorizationReducer } from "../login-reducer";
+import {AuthenticationServiceImpl} from "../../../services"
+import { loginConstants} from "../../constants";
 
 const authService = AuthenticationServiceImpl.createInstance()
 const localToken = authService.getLocalToken()

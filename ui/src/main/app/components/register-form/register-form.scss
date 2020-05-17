@@ -7,3 +7,9 @@
   text-align: center;
   margin: 10px auto;
 }
+
+@media all and (max-width: 600px) {
+  .main--form--container {
+    padding: 50px;
+  }
+}

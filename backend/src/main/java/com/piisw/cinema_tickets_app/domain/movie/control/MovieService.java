@@ -12,12 +12,12 @@ import com.piisw.cinema_tickets_app.infrastructure.bulk.BulkOperationResult;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.OperationResultEnum;
 import com.piisw.cinema_tickets_app.infrastructure.utils.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,6 +52,10 @@ public class MovieService {
 
     public List<Movie> getMoviesByIds(Set<Long> ids, Set<ObjectState> objectStates) {
         return movieRepository.findAll(specification.whereIdAndObjectStateIn(ids, objectStates));
+    }
+
+    public Page<Movie> getPagedMoviesByIds(Set<Long> ids, Set<ObjectState> objectStates, Pageable pageable) {
+        return movieRepository.findAll(specification.whereIdAndObjectStateIn(ids, objectStates), pageable);
     }
 
     @Transactional

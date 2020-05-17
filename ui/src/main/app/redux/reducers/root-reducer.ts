@@ -8,6 +8,7 @@ import { registrationReducer } from './registration-reducer'
 import { currentUserReducer } from './user-reducer'
 import { alertReducer } from './alert-reducer'
 import { movieListReducer } from './movie-list-reducer'
+import { genreReducer } from "./genre-reducer";
 
 export const rootReducer = (history: History) => combineReducers({
   router: connectRouter(history),
@@ -15,5 +16,6 @@ export const rootReducer = (history: History) => combineReducers({
   registration: registrationReducer,
   currentUser: currentUserReducer,
   alerts: alertReducer,
-  movieList: movieListReducer
+  movieList: movieListReducer,
+  genres: genreReducer
 })

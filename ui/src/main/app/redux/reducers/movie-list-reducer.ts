@@ -1,33 +1,64 @@
-import { movieListConstants } from '../constants'
-import { MovieListAction, MovieListSuccessActionInterface } from '../actions/movie-list'
-import { MovieList } from '../../models/movies-list'
+import {movieListConstants} from '../constants'
+import {MovieListAction, MovieListFiltersUpdateInterface, MovieListSuccessActionInterface} from '../actions/movie-list'
+import {MovieListFilters, PlayerMovies} from '../../models/movies-list'
 
-const initialState =
-    { isFetched: false, isFetching: false, moviesList: null }
+const WEEK_IN_MS = 604800000
+
+const initialState = {
+    isFetched: false,
+    isFetching: false,
+    playedMovies: null,
+    filters: {
+        dateRange: {
+            beginDate: Date.now(),
+            endDate: Date.now() + WEEK_IN_MS
+        }
+    }
+}
 
 export interface MovieListState {
     isFetching?: boolean;
     isFetched?: boolean;
-    movieList?: MovieList;
+    filters: MovieListFilters;
+    playedMovies?: PlayerMovies | null;
 }
 
-export function movieListReducer (state: MovieListState = initialState, action: MovieListAction): MovieListState {
-  switch (action.type) {
-    case movieListConstants.MOVIE_LIST_SUCCESS:
-      return {
-        isFetched: true,
-        isFetching: false,
-        movieList: (action as MovieListSuccessActionInterface).movieList
-      }
-    case movieListConstants.MOVIE_LIST_REQUEST:
-      return {
-        isFetching: true
-      }
-    case movieListConstants.MOVIE_LIST_FAILURE:
-      return {
-        isFetching: false
-      }
-    default:
-      return state
-  }
+export function movieListReducer(state: MovieListState = initialState, action: MovieListAction): MovieListState {
+    switch (action.type) {
+        case movieListConstants.MOVIE_LIST_SUCCESS:
+            return {
+                ...state,
+                isFetched: true,
+                isFetching: false,
+                playedMovies: (action as MovieListSuccessActionInterface).playedMovies
+            }
+        case movieListConstants.MOVIE_LIST_REQUEST:
+            return {
+                ...state,
+                isFetching: true
+            }
+        case movieListConstants.MOVIE_LIST_FAILURE:
+            return {
+                ...state,
+                isFetching: false
+            }
+        case movieListConstants.MOVIE_LIST_FILTERS_UPDATE:
+            console.log(action)
+            return {
+                ...state,
+                filters: (action as MovieListFiltersUpdateInterface).filters
+            }
+        case movieListConstants.MOVIE_LIST_FILTERS_CLEAR:
+            return {
+                ...state,
+                filters: {
+                    dateRange: {
+                        beginDate: Date.now(),
+                        endDate: Date.now() + WEEK_IN_MS
+                    }
+                }
+            }
+        default:
+            return state
+    }
 }
