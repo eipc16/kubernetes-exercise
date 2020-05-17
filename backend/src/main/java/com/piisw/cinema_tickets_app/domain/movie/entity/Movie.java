@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -36,7 +36,7 @@ public class Movie extends AuditedObject {
     String maturityRating;
 
     @NotNull
-    Instant releaseDate;
+    LocalDate releaseDate;
 
     @NotNull
     String runTime;

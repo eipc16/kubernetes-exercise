@@ -76,7 +76,7 @@ public class MovieService {
                 .title(movieDetailsDTO.getTitle())
                 .year(movieDetailsDTO.getYear())
                 .maturityRating(movieDetailsDTO.getMaturityRate())
-                .releaseDate(movieDetailsDTO.getReleaseDate().atStartOfDay().toInstant(ZoneOffset.UTC))
+                .releaseDate(movieDetailsDTO.getReleaseDate())
                 .runTime(movieDetailsDTO.getRuntime())
                 .director(movieDetailsDTO.getDirector())
                 .actors(movieDetailsDTO.getActors())

@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -86,7 +87,7 @@ public class ScreeningTests {
                 .title("Inception")
                 .year("2010")
                 .maturityRating("PG-13")
-                .releaseDate(Instant.now())
+                .releaseDate(LocalDate.now())
                 .runTime("148 min")
                 .director("Christopher Nolan")
                 .shortPlot("A thief who steals corporate secrets through the use of dream-sharing technology"

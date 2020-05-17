@@ -13,10 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,13 +40,9 @@ public class MovieMapper {
                 .id(movie.getId())
                 .objectState(movie.getObjectState())
                 .title(movie.getTitle())
-                .releaseDate(mapToLocalDate(movie.getReleaseDate()))
+                .releaseDate(movie.getReleaseDate())
                 .posterUrl(movie.getPosterUrl())
                 .build();
-    }
-
-    private LocalDate mapToLocalDate(Instant instant) {
-        return LocalDateTime.ofInstant(instant, ZoneOffset.UTC).toLocalDate();
     }
 
     public List<MovieDetailsDTO> mapToMovieDetailsDTOs(Collection<Movie> movies) {
@@ -66,7 +58,7 @@ public class MovieMapper {
                 .title(movie.getTitle())
                 .year(movie.getYear())
                 .maturityRate(movie.getMaturityRating())
-                .releaseDate(mapToLocalDate(movie.getReleaseDate()))
+                .releaseDate(movie.getReleaseDate())
                 .runtime(movie.getRunTime())
                 .genres(genreMapper.mapToGenreNames(genres))
                 .director(movie.getDirector())
