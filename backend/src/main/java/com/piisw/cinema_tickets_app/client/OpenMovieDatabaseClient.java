@@ -33,8 +33,7 @@ public class OpenMovieDatabaseClient {
     public List<MovieDetailsDTO> getMovieDetailsByImdbIds(Set<String> imdbIds) {
         return imdbIds.stream()
                 .map(this::getMovieDetailsByImdbId)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+                .flatMap(Optional::stream)
                 .collect(Collectors.toList());
     }
 

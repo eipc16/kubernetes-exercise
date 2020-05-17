@@ -6,11 +6,9 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import com.piisw.cinema_tickets_app.domain.seat.control.SeatService;
 import com.piisw.cinema_tickets_app.infrastructure.utils.ExceptionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -18,8 +16,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class ScreeningRoomService {
-
-    private static final String SCREENING_ROOM_NOT_FOUND = "Screening room with id {0} doesn''t exists";
 
     @Autowired
     private ScreeningRoomRepository screeningRoomRepository;
@@ -84,7 +80,7 @@ public class ScreeningRoomService {
     private void validateIfAllScreeningRoomsToRemoveExists(Set<Long> requestedToRemove, List<ScreeningRoom> found) {
         Set<Long> nonExistingIds = getIdsOfNonExistingScreenRooms(requestedToRemove, found);
         if (!nonExistingIds.isEmpty()) {
-            throw new IllegalArgumentException(MessageFormat.format(SCREENING_ROOM_NOT_FOUND, StringUtils.join(nonExistingIds)));
+            throw ExceptionUtils.getObjectNotFoundException(ScreeningRoom.class, nonExistingIds, ObjectState.ACTIVE);
         }
     }
 

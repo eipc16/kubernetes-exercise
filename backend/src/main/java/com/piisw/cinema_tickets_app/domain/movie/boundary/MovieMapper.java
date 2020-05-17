@@ -3,7 +3,6 @@ package com.piisw.cinema_tickets_app.domain.movie.boundary;
 import com.piisw.cinema_tickets_app.api.MovieDTO;
 import com.piisw.cinema_tickets_app.api.MovieDetailsDTO;
 import com.piisw.cinema_tickets_app.api.ResourceDTO;
-import com.piisw.cinema_tickets_app.client.OpenMovieDatabaseClient;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.genre.boundary.GenreMapper;
 import com.piisw.cinema_tickets_app.domain.genre.entity.Genre;
@@ -20,9 +19,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.IDS_PATH;

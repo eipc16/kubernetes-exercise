@@ -4,7 +4,6 @@ import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.*;
 import com.piisw.cinema_tickets_app.api.ResourceDTO;
 import com.piisw.cinema_tickets_app.api.ScreeningRoomDTO;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
-import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import com.piisw.cinema_tickets_app.domain.screeningroom.control.ScreeningRoomService;
@@ -40,9 +39,6 @@ public class ScreeningRoomController {
 
     @Autowired
     private ScreeningRoomMapper screeningRoomMapper;
-
-    @Autowired
-    private ScreeningService screeningService;
 
     @ApiOperation(value = "${api.screening.room.get.value}", notes = "${api.screening.room.get.notes}")
     @GetMapping(IDS_PATH)

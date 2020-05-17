@@ -21,7 +21,7 @@ public class ExceptionUtils {
     }
 
     public IllegalArgumentException getObjectNotFoundException(Class<?> objectType, Set<Long> ids, ObjectState objectState) {
-        return new IllegalArgumentException(MessageFormat.format(OBJECT_NOT_FOUND_MSG, objectType.getSimpleName(), StringUtils.join(ids), StringUtils.join(objectState, " or ")));
+        return new IllegalArgumentException(MessageFormat.format(OBJECT_NOT_FOUND_MSG, objectType.getSimpleName(), StringUtils.join(ids), objectState));
     }
 
     public IllegalArgumentException getObjectNotFoundException(Class<?> objectType, Set<Long> ids, Set<ObjectState> objectStates) {
