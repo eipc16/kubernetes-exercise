@@ -1,0 +1,73 @@
+.movie--entry--card {
+  img {
+    object-fit: cover;
+  }
+
+  .meta {
+    padding: 10px;
+  }
+
+  .thumbnail--overlay {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 0;
+    background: rgba(0,0,0,0.8);
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: 0.35s;
+
+    & > h1 {
+      color: white;
+      text-align: center;
+      z-index: 101;
+    }
+
+    & .btn-overlay {
+      background: rgba(1, 1, 0, 1);
+    }
+
+    & > .btn {
+      outline: none;
+      border: none;
+      text-decoration: none;
+      overflow: hidden;
+      border-radius: 5px;
+      position: relative;
+      margin: 0;
+      padding: 0.5rem 1rem;
+      background: #428bca;
+      color: #f9f9f9;
+      z-index: 200;
+      font-size: 0.9rem;
+      transition: 0.3s transform cubic-bezier(.55, -0.87, .44, 1.91);
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+
+      &:hover {
+        transform: scale(1.2);
+        background: #428bca;
+      }
+
+      //&:before {
+      //  content: '';
+      //  top: 0;
+      //  left: 0;
+      //  z-index: -1;
+      //  height: 100%;
+      //  width: 100%;
+      //  position: absolute;
+      //  background: rgba(1, 1, 1, 1);
+      //}
+    }
+  }
+  &:hover .thumbnail--overlay {
+    top: 0;
+    opacity: 0.8;
+    height: 100%;
+  }
+}

@@ -1,7 +1,5 @@
 package com.piisw.cinema_tickets_app.domain.movie.boundary;
 
-import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.*;
-
 import com.piisw.cinema_tickets_app.api.MovieDTO;
 import com.piisw.cinema_tickets_app.api.MovieDetailsDTO;
 import com.piisw.cinema_tickets_app.api.ResourceDTO;
@@ -13,11 +11,11 @@ import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.BulkOperationResult;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.AllowAll;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;
-import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +28,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.*;
 
 @Api(tags = "Movies")
 @RestController
@@ -51,7 +51,7 @@ public class MovieController {
 
     @ApiOperation(value = "${api.movies.get.value}", notes = "${api.movies.get.notes}")
     @GetMapping(IDS_PATH)
-    @AllowAll
+    @PreAuthorize("permitAll()")
     public List<MovieDTO> getMoviesByIds(@PathVariable(IDS) Set<Long> ids,
                                          @RequestParam(name = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         List<Movie> foundMovies = movieService.getMoviesByIds(ids, objectStates);
@@ -60,7 +60,7 @@ public class MovieController {
 
     @ApiOperation(value = "${api.moviedetails.get.value}", notes = "${api.moviedetails.get.notes}")
     @GetMapping(IDS_PATH + "/details")
-    @AllowAll
+    @PreAuthorize("permitAll()")
     public List<MovieDetailsDTO> getMoviesDetailsByIds(@PathVariable(IDS) Set<Long> ids,
                                                        @RequestParam(name = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         List<Movie> foundMovies = movieService.getMoviesByIds(ids, objectStates);
@@ -87,7 +87,7 @@ public class MovieController {
 
     @ApiOperation(value = "${api.movies.current.value}", notes = "${api.movies.current.notes}")
     @GetMapping("/played")
-    @AllowAll
+    @PreAuthorize("permitAll()")
     public List<MovieDTO> getCurrentlyPlayedMovies(@RequestParam(BEGIN_DATE)
                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime beginDateTime,
                                                    @RequestParam(END_DATE)

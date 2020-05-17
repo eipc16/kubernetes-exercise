@@ -22,10 +22,13 @@ export class MovieListServiceImpl implements MovieListService {
 
     getMovieList (dateRange: DateRange): Promise<MovieList> {
       const requestOptions = {
-        method: 'POST',
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       }
-      return fetch(`${appConfig.apiUrl}/played?beginDate=${dateRange.beginDate}&endDate=${dateRange.endDate}`, requestOptions)
+      const beginDate = new Date(dateRange.beginDate).toISOString()
+      const endDate = new Date(dateRange.endDate).toISOString()
+
+      return fetch(`${appConfig.apiUrl}/movies/played?beginDate=${beginDate}&endDate=${endDate}`, requestOptions)
         .then(handleResponse)
         .then((movieList: MovieList) => movieList)
     }

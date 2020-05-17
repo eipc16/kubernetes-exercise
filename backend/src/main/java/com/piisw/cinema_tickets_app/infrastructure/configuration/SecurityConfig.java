@@ -1,6 +1,8 @@
 package com.piisw.cinema_tickets_app.infrastructure.configuration;
 
 import com.piisw.cinema_tickets_app.domain.authentication.boundary.AuthenticationController;
+import com.piisw.cinema_tickets_app.domain.genre.boundary.GenreController;
+import com.piisw.cinema_tickets_app.domain.movie.boundary.MovieController;
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationEntryPointImpl;
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationFilter;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserDetailsServiceImpl;
@@ -85,6 +87,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(
                         AuthenticationController.MAIN_PATH + WILDCARD_PATH)
+                .permitAll()
+                .antMatchers(
+                        MovieController.MAIN_PATH + WILDCARD_PATH)
+                .permitAll()
+                .antMatchers(
+                        GenreController.MAIN_PATH + WILDCARD_PATH)
                 .permitAll()
                 .antMatchers(
                         "/v2/api-docs",

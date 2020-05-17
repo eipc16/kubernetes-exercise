@@ -51,11 +51,11 @@ export class AuthenticationServiceImpl implements AuthenticationService {
     getLocalToken (): Token | null {
       const user = localStorage.getItem(this.tokenKey)
       const userObject = user ? JSON.parse(user) : {}
-
-      if (userObject && userObject.token) {
+      console.log('User Object: ', userObject)
+      if (userObject && userObject.accessToken) {
         return {
           tokenType: this.tokenType,
-          accessToken: userObject.token
+          accessToken: userObject.accessToken
         }
       }
       return null
