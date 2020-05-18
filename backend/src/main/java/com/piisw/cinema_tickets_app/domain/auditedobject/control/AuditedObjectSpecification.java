@@ -6,20 +6,20 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
+import java.util.Collection;
 
 @Component
 public class AuditedObjectSpecification<T extends AuditedObject> {
 
-    public Specification<T> whereIdAndObjectStateIn(Set<Long> ids, Set<ObjectState> objectStates) {
+    public Specification<T> whereIdAndObjectStateIn(Collection<Long> ids, Collection<ObjectState> objectStates) {
         return whereIdIn(ids).and(whereObjectStateIn(objectStates));
     }
 
-    public Specification<T> whereIdEqualsAndObjectStateIn(Long id, Set<ObjectState> objectStates) {
+    public Specification<T> whereIdEqualsAndObjectStateIn(Long id, Collection<ObjectState> objectStates) {
         return whereIdEquals(id).and(whereObjectStateIn(objectStates));
     }
 
-    public Specification<T> whereIdInAndObjectStateEquals(Set<Long> ids, ObjectState objectState) {
+    public Specification<T> whereIdInAndObjectStateEquals(Collection<Long> ids, ObjectState objectState) {
         return whereIdIn(ids).and(whereObjectStateEquals(objectState));
     }
 
@@ -27,7 +27,7 @@ public class AuditedObjectSpecification<T extends AuditedObject> {
         return whereIdEquals(id).and(whereObjectStateEquals(objectState));
     }
 
-    public Specification<T> whereIdIn(Set<Long> ids) {
+    public Specification<T> whereIdIn(Collection<Long> ids) {
         return (root, criteriaQuery, criteriaBuilder) -> root.get(AuditedObject_.id).in(ids);
     }
 
@@ -35,7 +35,7 @@ public class AuditedObjectSpecification<T extends AuditedObject> {
         return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get(AuditedObject_.ID), id);
     }
 
-    public Specification<T> whereObjectStateIn(Set<ObjectState> objectStates) {
+    public Specification<T> whereObjectStateIn(Collection<ObjectState> objectStates) {
         return (root, criteriaQuery, criteriaBuilder) -> root.get(AuditedObject_.objectState).in(objectStates);
     }
 

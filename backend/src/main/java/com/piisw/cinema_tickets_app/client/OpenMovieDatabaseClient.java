@@ -1,9 +1,7 @@
 package com.piisw.cinema_tickets_app.client;
 
 import com.piisw.cinema_tickets_app.api.MovieDetailsDTO;
-import com.piisw.cinema_tickets_app.api.RatingDTO;
 import com.piisw.cinema_tickets_app.client.api.OpenApiMovieDTO;
-import com.piisw.cinema_tickets_app.client.api.OpenApiRatingDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,9 +9,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -30,10 +28,11 @@ public class OpenMovieDatabaseClient {
     @Autowired
     private RestTemplate restTemplate;
 
-    public List<MovieDetailsDTO> getMovieDetailsByImdbIds(Set<String> imdbIds) {
+    public List<MovieDetailsDTO> getMovieDetailsByImdbIds(Collection<String> imdbIds) {
         return imdbIds.stream()
                 .map(this::getMovieDetailsByImdbId)
                 .flatMap(Optional::stream)
+                .distinct()
                 .collect(Collectors.toList());
     }
 

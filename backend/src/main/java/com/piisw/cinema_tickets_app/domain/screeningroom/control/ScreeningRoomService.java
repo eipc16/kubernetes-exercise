@@ -70,7 +70,7 @@ public class ScreeningRoomService {
 
     public List<ScreeningRoom> deleteScreeningRoomsByIds(Set<Long> ids) {
         List<ScreeningRoom> screeningRoomsToRemove = screeningRoomRepository
-                .findAll(specification.whereIdAndObjectStateIn(ids, ObjectState.existingStates()));
+                .findAll(specification.whereIdInAndObjectStateEquals(ids, ObjectState.ACTIVE));
         validateIfAllScreeningRoomsToRemoveExists(ids, screeningRoomsToRemove);
         screeningRoomsToRemove.forEach(seatService::removeSeatsForScreeningRoom);
         screeningRoomsToRemove.forEach(screeningRoom -> screeningRoom.setObjectState(ObjectState.REMOVED));
