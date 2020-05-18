@@ -1,9 +1,16 @@
 package com.piisw.cinema_tickets_app.domain.seat.control;
 
+import com.piisw.cinema_tickets_app.api.SeatDTO;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
+import com.piisw.cinema_tickets_app.domain.reservation.control.ReservationService;
+import com.piisw.cinema_tickets_app.domain.reservation.control.ReservationToSeatRelationService;
+import com.piisw.cinema_tickets_app.domain.reservation.entity.Reservation;
+import com.piisw.cinema_tickets_app.domain.reservation.entity.ReservationToSeatRelation;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
+import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
+import com.piisw.cinema_tickets_app.domain.seat.boundary.SeatMapper;
 import com.piisw.cinema_tickets_app.domain.seat.entity.Seat;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +35,15 @@ public class SeatService {
     @Autowired
     private ScreeningService screeningService;
 
+    @Autowired
+    private ReservationService reservationService;
+
+    @Autowired
+    private ReservationToSeatRelationService reservationToSeatRelationService;
+
+    @Autowired
+    private SeatMapper seatMapper;
+
     private static final long FIRST_SEAT_IN_ROW_NUMBER = 1;
     private static final long FIRST_ROW_IN_SCREENING_ROOM = 1;
     private static final String THERE_ARE_EXISTING_SCREENINGS = "There are existing screenings {0} for screening room {1}";
@@ -44,12 +60,12 @@ public class SeatService {
     private List<Seat> buildSeatsForScreeningRoom(ScreeningRoom screeningRoom) {
         return LongStream.rangeClosed(FIRST_ROW_IN_SCREENING_ROOM, screeningRoom.getRowsNumber())
                 .boxed()
-                .map(rowNumber -> buildSeatsInRow(rowNumber, screeningRoom))
+                .map(rowNumber -> buildRowOfSeats(rowNumber, screeningRoom))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
-    private List<Seat> buildSeatsInRow(Long rowNumber, ScreeningRoom screeningRoom) {
+    private List<Seat> buildRowOfSeats(Long rowNumber, ScreeningRoom screeningRoom) {
         return LongStream.rangeClosed(FIRST_SEAT_IN_ROW_NUMBER, screeningRoom.getSeatsInRowNumber())
                 .boxed()
                 .map(seatNumberInRow -> buildNewSeat(seatNumberInRow, rowNumber, screeningRoom))
@@ -72,13 +88,13 @@ public class SeatService {
     }
 
     public void removeSeatsForScreeningRoom(ScreeningRoom screeningRoom) {
-        List<Seat> seats = getActiveSeatsForScreeningRoom(screeningRoom);
+        List<Seat> seats = getSeatsForScreeningRoom(screeningRoom, Set.of(ObjectState.ACTIVE));
         seats.forEach(seat -> seat.setObjectState(ObjectState.REMOVED));
         seatRepository.saveAll(seats);
     }
 
-    private List<Seat> getActiveSeatsForScreeningRoom(ScreeningRoom screeningRoom) {
-        return seatRepository.findAll(specification.whereScreeningRoomIdEqualsAndObjectStateEquals(screeningRoom.getId(), ObjectState.ACTIVE));
+    private List<Seat> getSeatsForScreeningRoom(ScreeningRoom screeningRoom, Set<ObjectState> objectStates) {
+        return seatRepository.findAll(specification.whereScreeningRoomIdEqualsAndObjectStateIn(screeningRoom.getId(), objectStates));
     }
 
     private void validateIfNoActiveScreeningForUpdatedScreeningRoomExists(ScreeningRoom screeningRoom) {
@@ -95,4 +111,20 @@ public class SeatService {
                 .collect(Collectors.toSet());
     }
 
+    public List<SeatDTO> getSeatsDetailsForScreening(Screening screening, Set<ObjectState> objectStates) {
+        List<Reservation> reservations = reservationService.getReservationsForScreening(screening, objectStates);
+        List<ReservationToSeatRelation> relations = reservationToSeatRelationService.getReservationToSeatRelationsReservations(reservations, objectStates);
+        List<Seat> reservedSeats = getReservedSeatsFormReservationToSeatRelations(relations);
+        ScreeningRoom screeningRoom = screening.getScreeningRoom();
+        List<Seat> allSeatsInRoom = getSeatsForScreeningRoom(screeningRoom, objectStates);
+        return allSeatsInRoom.stream()
+                .map(seat -> seatMapper.mapToSeatDTO(seat, !reservedSeats.contains(seat)))
+                .collect(Collectors.toList());
+    }
+
+    private List<Seat> getReservedSeatsFormReservationToSeatRelations(List<ReservationToSeatRelation> relations) {
+        return relations.stream()
+                .map(ReservationToSeatRelation::getSeat)
+                .collect(Collectors.toList());
+    }
 }

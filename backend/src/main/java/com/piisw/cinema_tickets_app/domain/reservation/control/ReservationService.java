@@ -1,5 +1,6 @@
 package com.piisw.cinema_tickets_app.domain.reservation.control;
 
+import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.authentication.control.AuthenticationService;
 import com.piisw.cinema_tickets_app.domain.reservation.entity.Reservation;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ReservationService {
@@ -22,6 +24,12 @@ public class ReservationService {
 
     @Autowired
     private AuthenticationService authenticationService;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+    @Autowired
+    private ReservationSpecification specification;
 
     private static final String CANNOT_MAKE_RESERVATION_FOR_USER = "Cannot make reservation for user with id {0}. User doesn't exist or has inactive account.";
     private static final String NO_PERMISSION_TO_MAKE_RESERVATION = "You don't have sufficient privileges to make reservation for different user than currently logged!";
@@ -67,6 +75,10 @@ public class ReservationService {
     private boolean isReservedAfterScreeningStartTime(LocalDateTime screeningStartTime) {
         LocalDateTime currentTime = LocalDateTime.now();
         return currentTime.compareTo(screeningStartTime) > 0;
+    }
+
+    public List<Reservation> getReservationsForScreening(Screening screening, Set<ObjectState> objectStates) {
+        return reservationRepository.findAll(specification.whereScreeningIdEqualsAndObjectStateIn(screening.getId(), objectStates));
     }
 
 }

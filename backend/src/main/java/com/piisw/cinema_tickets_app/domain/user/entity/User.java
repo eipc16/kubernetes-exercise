@@ -2,6 +2,7 @@ package com.piisw.cinema_tickets_app.domain.user.entity;
 
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "User")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder(toBuilder = true)
 public class User extends AuditedObject {
 

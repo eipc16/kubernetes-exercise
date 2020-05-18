@@ -1,7 +1,9 @@
 package com.piisw.cinema_tickets_app.domain.auditedobject.entity;
 
 import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
@@ -20,11 +22,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import java.time.Instant;
+import java.util.Objects;
 
 @MappedSuperclass
+@Getter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AuditedObject {
 
@@ -52,47 +56,20 @@ public abstract class AuditedObject {
     @Enumerated(EnumType.STRING)
     private ObjectState objectState = ObjectState.ACTIVE;
 
-    public Long getId() {
-        return id;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public User getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(User updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public ObjectState getObjectState() {
-        return objectState;
-    }
-
     public void setObjectState(ObjectState objectState) {
         this.objectState = objectState;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AuditedObject)) return false;
+        AuditedObject that = (AuditedObject) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(id);
     }
 }

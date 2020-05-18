@@ -3,6 +3,7 @@ package com.piisw.cinema_tickets_app.domain.screening.entity;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "Screening")
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder(toBuilder = true)
 public class Screening extends AuditedObject {
 

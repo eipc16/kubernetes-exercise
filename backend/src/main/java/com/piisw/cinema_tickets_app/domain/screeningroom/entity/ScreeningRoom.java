@@ -1,6 +1,7 @@
 package com.piisw.cinema_tickets_app.domain.screeningroom.entity;
 
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import javax.validation.constraints.Positive;
 @Table(name = "ScreeningRoom")
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder(toBuilder = true)
 public class ScreeningRoom extends AuditedObject {
 

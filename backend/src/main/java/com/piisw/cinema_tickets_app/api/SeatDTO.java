@@ -1,6 +1,7 @@
 package com.piisw.cinema_tickets_app.api;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SeatDTO {
 
     @ApiModelProperty(readOnly = true)

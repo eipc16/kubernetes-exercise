@@ -75,17 +75,4 @@ public class OpenMovieDatabaseClient {
                 .posterLink(openApiMovieDTO.getPoster())
                 .build();
     }
-
-    private Set<RatingDTO> mapToRatingDTOs(Set<OpenApiRatingDTO> openApiRatings) {
-        return openApiRatings.stream()
-                .map(this::mapToRatingDTO)
-                .collect(Collectors.toSet());
-    }
-
-    private RatingDTO mapToRatingDTO(OpenApiRatingDTO openApiRatingDTO) {
-        return RatingDTO.builder()
-                .source(openApiRatingDTO.getSource())
-                .rate(openApiRatingDTO.getRate())
-                .build();
-    }
 }

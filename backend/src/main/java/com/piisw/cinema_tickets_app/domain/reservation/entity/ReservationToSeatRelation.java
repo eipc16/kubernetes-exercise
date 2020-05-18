@@ -2,6 +2,7 @@ package com.piisw.cinema_tickets_app.domain.reservation.entity;
 
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 import com.piisw.cinema_tickets_app.domain.seat.entity.Seat;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 @Table(name = "Reservation_X_Seat")
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReservationToSeatRelation extends AuditedObject {
 
     @OneToOne

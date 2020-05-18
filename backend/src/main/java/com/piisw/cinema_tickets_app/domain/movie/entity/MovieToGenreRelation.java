@@ -2,6 +2,7 @@ package com.piisw.cinema_tickets_app.domain.movie.entity;
 
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 import com.piisw.cinema_tickets_app.domain.genre.entity.Genre;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,7 @@ import javax.persistence.Table;
 @SuperBuilder
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MovieToGenreRelation extends AuditedObject {
 
     @OneToOne

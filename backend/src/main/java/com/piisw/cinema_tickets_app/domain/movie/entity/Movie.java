@@ -2,6 +2,7 @@ package com.piisw.cinema_tickets_app.domain.movie.entity;
 
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 import com.piisw.cinema_tickets_app.domain.genre.entity.Genre;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,46 +21,46 @@ import java.util.Set;
 @Getter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Movie extends AuditedObject {
 
     @NotNull
-    String imdbId;
+    private String imdbId;
 
     @NotNull
-    String title;
+    private String title;
 
     @NotNull
-    String year;
+    private String year;
 
     @NotNull
-    String maturityRating;
+    private String maturityRating;
 
     @NotNull
-    LocalDate releaseDate;
+    private LocalDate releaseDate;
 
     @NotNull
-    String runTime;
+    private String runTime;
 
     @NotNull
-    String director;
+    private String director;
 
     @NotNull
-    String actors;
+    private String actors;
 
     @NotNull
-    String shortPlot;
+    private String shortPlot;
 
     @NotNull
-    String language;
+    private String language;
 
     @NotNull
-    String posterUrl;
+    private String posterUrl;
 
     @NotNull
-    String country;
+    private String country;
 
     @Transient
     @OneToMany
-    Set<Genre> genres;
+    private Set<Genre> genres;
 }
