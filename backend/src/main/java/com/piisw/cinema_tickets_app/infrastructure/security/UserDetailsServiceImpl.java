@@ -1,7 +1,7 @@
 package com.piisw.cinema_tickets_app.infrastructure.security;
 
-import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import com.piisw.cinema_tickets_app.domain.user.control.UserRepository;
+import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

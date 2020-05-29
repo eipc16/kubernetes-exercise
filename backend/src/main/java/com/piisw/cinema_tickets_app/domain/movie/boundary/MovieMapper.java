@@ -33,10 +33,39 @@ public class MovieMapper {
                 .collect(Collectors.toList());
     }
 
-    private MovieDTO mapToMovieDTO(Movie movie) {
+    public MovieDTO mapToMovieDTO(Movie movie) {
         return MovieDTO.builder()
                 .id(movie.getId())
+                .imdbId(movie.getImdbId())
                 .objectState(movie.getObjectState())
+                .title(movie.getTitle())
+                .releaseDate(movie.getReleaseDate())
+                .posterUrl(movie.getPosterUrl())
+                .build();
+    }
+
+    public List<MovieDetailsDTO> mapToMovieDetailsDTOs(Collection<Movie> movies) {
+        return movies.stream()
+                .map(this::mapToMovieDetailsDTO)
+                .collect(Collectors.toList());
+    }
+
+    private MovieDetailsDTO mapToMovieDetailsDTO(Movie movie) {
+        List<Genre> genres = movieToGenreRelationService.getGenresByMovie(movie);
+        return MovieDetailsDTO.builder()
+                .imdbId(movie.getImdbId())
+                .title(movie.getTitle())
+                .year(movie.getYear())
+                .maturityRate(movie.getMaturityRating())
+                .releaseDate(movie.getReleaseDate())
+                .runtime(movie.getRunTime())
+                .genres(genreMapper.mapToGenreNames(genres))
+                .director(movie.getDirector())
+                .actors(movie.getActors())
+                .plot(movie.getShortPlot())
+                .language(movie.getLanguage())
+                .country(movie.getCountry())
+                .posterLink(movie.getPosterUrl())
                 .title(movie.getTitle())
                 .releaseDate(movie.getReleaseDate())
                 .posterUrl(movie.getPosterUrl())

@@ -1,7 +1,7 @@
 package com.piisw.cinema_tickets_app.api;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.Builder;
 import org.hibernate.annotations.NaturalId;
 
 import javax.validation.constraints.Email;

@@ -12,9 +12,12 @@ import com.piisw.cinema_tickets_app.infrastructure.bulk.BulkOperationResult;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.OperationResultEnum;
 import com.piisw.cinema_tickets_app.infrastructure.utils.ExceptionUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,7 +47,10 @@ public class MovieService {
         return movieRepository.findAll(specification.whereIdAndObjectStateIn(ids, objectStates));
     }
 
-    @Transactional
+    public Page<Movie> getPagedMoviesByIds(Set<Long> ids, Set<ObjectState> objectStates, Pageable pageable) {
+        return movieRepository.findAll(specification.whereIdAndObjectStateIn(ids, objectStates), pageable);
+    }
+
     public BulkOperationResult<Movie> createMovies(Set<String> imdbIds) {
         List<Movie> existingMovies = movieRepository.findAllByImdbIdInAndObjectState(imdbIds, ObjectState.ACTIVE);
         List<String> existingMoviesImdbIds = existingMovies.stream()
@@ -68,7 +74,7 @@ public class MovieService {
                 .title(movieDetailsDTO.getTitle())
                 .year(movieDetailsDTO.getYear())
                 .maturityRating(movieDetailsDTO.getMaturityRate())
-                .releaseDate(movieDetailsDTO.getReleaseDate())
+                .releaseDate(movieDetailsDTO.getReleaseDate().atStartOfDay().toInstant(ZoneOffset.UTC))
                 .runTime(movieDetailsDTO.getRuntime())
                 .director(movieDetailsDTO.getDirector())
                 .actors(movieDetailsDTO.getActors())
@@ -81,7 +87,6 @@ public class MovieService {
                 .build();
     }
 
-    @Transactional
     public List<Movie> deleteMoviesByIds(Set<Long> ids) {
         List<Movie> moviesToRemove = movieRepository.findAll(specification.whereIdIn(ids));
         validateIfAllMoviesToRemoveExists(ids, moviesToRemove);

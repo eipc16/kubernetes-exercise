@@ -51,7 +51,7 @@ public class MovieToGenreRelationService {
     }
 
     private List<MovieToGenreRelation> createRelationEntities(Movie movie) {
-        if(movie.getGenres() == null) {
+        if (movie.getGenres() == null) {
             return Collections.emptyList();
         }
         return movie.getGenres().stream()
