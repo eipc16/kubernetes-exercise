@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,6 +24,7 @@ import javax.validation.constraints.NotNull;
 public class Seat extends AuditedObject {
 
     @NotNull
+    @Column(name = "row_number")
     private Long row;
 
     @NotNull
