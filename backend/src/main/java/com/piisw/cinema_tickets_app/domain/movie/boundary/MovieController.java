@@ -15,7 +15,7 @@ import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminR
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,16 +33,16 @@ import java.util.stream.Collectors;
 @Api(tags = "Movies")
 @RestController
 @RequestMapping(MovieController.MAIN_PATH)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MovieController {
 
     public static final String MAIN_PATH = "/movies";
     public static final String BEGIN_DATE = "beginDate";
     public static final String END_DATE = "endDate";
 
-    private MovieService movieService;
-    private MovieMapper movieMapper;
-    private ScreeningService screeningService;
+    private final MovieService movieService;
+    private final MovieMapper movieMapper;
+    private final ScreeningService screeningService;
 
     @ApiOperation(value = "${api.movies.get.value}", notes = "${api.movies.get.notes}")
     @GetMapping(IDS_PATH)

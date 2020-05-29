@@ -4,7 +4,7 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.genre.entity.Genre;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.BulkOperationResult;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.OperationResultEnum;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -15,10 +15,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GenreService {
 
-    private GenreRepository genreRepository;
+    private final GenreRepository genreRepository;
 
     public List<Genre> getGenresByName(String genreName, Set<ObjectState> objectStates) {
         return genreRepository.findAllByNameLikeAndObjectStateIn("%" + genreName + "%", objectStates);

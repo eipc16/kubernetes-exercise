@@ -2,7 +2,7 @@ package com.piisw.cinema_tickets_app.client;
 
 import com.piisw.cinema_tickets_app.api.MovieDetailsDTO;
 import com.piisw.cinema_tickets_app.client.api.OpenApiMovieDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -15,18 +15,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class OpenMovieDatabaseClient {
-
-    @Value("${omdb.api.key}")
-    private String apiKey;
 
     public static final String HTTP_SCHEME = "http";
     private static final String OMDB_API_ADDRESS = "www.omdbapi.com";
     private static final String ID_PARAM = "i";
     private static final String API_KEY_PARAM = "apiKey";
 
-    @Autowired
-    private RestTemplate restTemplate;
+    @Value("${omdb.api.key}")
+    private String apiKey;
+    private final RestTemplate restTemplate;
 
     public List<MovieDetailsDTO> getMovieDetailsByImdbIds(Collection<String> imdbIds) {
         return imdbIds.stream()

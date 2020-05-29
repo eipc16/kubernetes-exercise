@@ -13,7 +13,7 @@ import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminR
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,16 +34,16 @@ import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.OBJ
 @Api(tags = "Screenings")
 @RestController
 @RequestMapping(ScreeningController.MAIN_PATH)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ScreeningController {
 
     public static final String MAIN_PATH = "/screening";
     public static final String MOVIE_PATH = "/movie";
 
-    private ScreeningService screeningService;
-    private MovieService movieService;
-    private ScreeningRoomService screeningRoomService;
-    private ScreeningMapper screeningMapper;
+    private final ScreeningService screeningService;
+    private final MovieService movieService;
+    private final ScreeningRoomService screeningRoomService;
+    private final ScreeningMapper screeningMapper;
 
     @ApiOperation(value = "${api.screenings.get.value}", notes = "${api.screenings.get.notes}")
     @GetMapping(MOVIE_PATH + ID_PATH)

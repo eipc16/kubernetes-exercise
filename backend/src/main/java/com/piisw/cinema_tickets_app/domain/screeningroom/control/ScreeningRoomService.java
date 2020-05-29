@@ -6,7 +6,7 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import com.piisw.cinema_tickets_app.domain.seat.control.SeatService;
 import com.piisw.cinema_tickets_app.infrastructure.utils.ExceptionUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,12 +15,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ScreeningRoomService {
 
-    private ScreeningRoomRepository screeningRoomRepository;
-    private AuditedObjectSpecification<ScreeningRoom> specification;
-    private SeatService seatService;
+    private final ScreeningRoomRepository screeningRoomRepository;
+    private final AuditedObjectSpecification<ScreeningRoom> specification;
+    private final SeatService seatService;
 
     public ScreeningRoom getScreeningRoomById(Long id, ObjectState objectState) {
         return screeningRoomRepository.findOne(specification.whereIdAndObjectStateEquals(id, objectState))

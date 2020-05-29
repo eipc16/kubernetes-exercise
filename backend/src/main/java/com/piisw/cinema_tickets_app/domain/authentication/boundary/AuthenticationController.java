@@ -16,7 +16,7 @@ import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRol
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.LoggedUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,16 +31,16 @@ import javax.validation.Valid;
 @Api(tags = "Authentication")
 @RestController
 @RequestMapping(AuthenticationController.MAIN_PATH)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthenticationController {
 
     public static final String MAIN_PATH = "/auth";
 
-    private AuthenticationManager authenticationManager;
-    private TokenHandler tokenHandler;
-    private AuthenticationService authenticationService;
-    private UserService userService;
-    private UserMapper userMapper;
+    private final AuthenticationManager authenticationManager;
+    private final TokenHandler tokenHandler;
+    private final AuthenticationService authenticationService;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
     @ApiOperation(value = "${api.auth.signin.value}", notes = "${api.auth.signin.notes}")
     @PostMapping("/signin")

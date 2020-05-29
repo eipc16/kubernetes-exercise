@@ -9,7 +9,7 @@ import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import com.piisw.cinema_tickets_app.domain.seat.entity.Seat;
 import com.piisw.cinema_tickets_app.domain.seat.entity.SeatAvailabilityDetails;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +21,17 @@ import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SeatService {
 
     private static final long FIRST_SEAT_IN_ROW_NUMBER = 1;
     private static final long FIRST_ROW_IN_SCREENING_ROOM = 1;
     private static final String THERE_ARE_EXISTING_SCREENINGS = "There are existing screenings {0} for screening room {1}";
 
-    private SeatRepository seatRepository;
-    private SeatSpecification specification;
-    private ScreeningService screeningService;
-    private ReservationService reservationService;
+    private final SeatRepository seatRepository;
+    private final SeatSpecification specification;
+    private final ScreeningService screeningService;
+    private final ReservationService reservationService;
 
     public List<Seat> getSeatsByIds(Set<Long> ids, ObjectState objectState) {
         return seatRepository.findAll(specification.whereIdInAndObjectStateEquals(ids, objectState));

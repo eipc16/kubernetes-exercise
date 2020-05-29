@@ -11,7 +11,7 @@ import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,13 +30,13 @@ import java.util.stream.Collectors;
 @Api(tags = "Screening Rooms")
 @RestController
 @RequestMapping(ScreeningRoomController.MAIN_PATH)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ScreeningRoomController {
 
     public static final String MAIN_PATH = "/screening-rooms";
 
-    private ScreeningRoomService screeningRoomService;
-    private ScreeningRoomMapper screeningRoomMapper;
+    private final ScreeningRoomService screeningRoomService;
+    private final ScreeningRoomMapper screeningRoomMapper;
 
     @ApiOperation(value = "${api.screening.room.get.value}", notes = "${api.screening.room.get.notes}")
     @GetMapping(IDS_PATH)

@@ -11,7 +11,7 @@ import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.BulkOperationResult;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.OperationResultEnum;
 import com.piisw.cinema_tickets_app.infrastructure.utils.ExceptionUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,14 +20,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MovieService {
 
-    private MovieRepository movieRepository;
-    private AuditedObjectSpecification<Movie> specification;
-    private OpenMovieDatabaseClient openMovieDatabaseClient;
-    private GenreService genreService;
-    private MovieToGenreRelationService movieToGenreRelationService;
+    private final MovieRepository movieRepository;
+    private final AuditedObjectSpecification<Movie> specification;
+    private final OpenMovieDatabaseClient openMovieDatabaseClient;
+    private final GenreService genreService;
+    private final MovieToGenreRelationService movieToGenreRelationService;
 
     public Movie getMovieById(Long id, ObjectState objectState) {
         return movieRepository.findOne(specification.whereIdAndObjectStateEquals(id, objectState))

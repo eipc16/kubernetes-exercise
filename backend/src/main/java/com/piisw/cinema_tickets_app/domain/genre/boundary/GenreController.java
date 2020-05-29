@@ -7,7 +7,7 @@ import com.piisw.cinema_tickets_app.domain.genre.entity.Genre;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,13 +22,13 @@ import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.SEA
 @Api(tags = "Genres")
 @RestController
 @RequestMapping(GenreController.MAIN_PATH)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GenreController {
 
     public static final String MAIN_PATH = "/genres";
 
-    private GenreService genreService;
-    private GenreMapper genreMapper;
+    private final GenreService genreService;
+    private final GenreMapper genreMapper;
 
     @ApiOperation(value = "${api.genres.get.value}", notes = "${api.genres.get.notes}")
     @GetMapping

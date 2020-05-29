@@ -4,7 +4,7 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.infrastructure.utils.ExceptionUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ScreeningService {
 
-    private ScreeningRepository screeningRepository;
-    private ScreeningSpecification specification;
+    private final ScreeningRepository screeningRepository;
+    private final ScreeningSpecification specification;
 
     public Screening getScreeningById(Long id, ObjectState objectState) {
         return getScreeningById(id, Set.of(objectState));

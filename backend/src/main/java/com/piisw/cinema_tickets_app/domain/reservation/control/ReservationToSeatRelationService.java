@@ -5,7 +5,7 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.reservation.entity.Reservation;
 import com.piisw.cinema_tickets_app.domain.reservation.entity.ReservationToSeatRelation;
 import com.piisw.cinema_tickets_app.domain.seat.entity.Seat;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReservationToSeatRelationService {
 
-    private ReservationToSeatRelationRepository reservationToSeatRelationRepository;
-    private ReservationToRelationSpecification specification;
-    private AuditedObjectService auditedObjectService;
+    private final ReservationToSeatRelationRepository reservationToSeatRelationRepository;
+    private final ReservationToRelationSpecification specification;
+    private final AuditedObjectService auditedObjectService;
 
     List<Seat> getReservedSeats(List<Reservation> reservations, Set<ObjectState> objectStates) {
         List<ReservationToSeatRelation> relations = getReservationToSeatRelationsForReservations(reservations, objectStates);
