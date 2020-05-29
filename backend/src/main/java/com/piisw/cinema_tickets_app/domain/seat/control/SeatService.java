@@ -12,6 +12,7 @@ import com.piisw.cinema_tickets_app.domain.seat.entity.SeatAvailabilityDetails;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class SeatService {
 

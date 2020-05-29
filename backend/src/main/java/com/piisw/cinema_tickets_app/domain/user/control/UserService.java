@@ -5,12 +5,14 @@ import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
 
