@@ -5,7 +5,7 @@ import lombok.Data;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -54,7 +54,7 @@ public class BulkOperationResult<T> {
         Map<OperationResultEnum, Set<T>> objectsByOperationResult;
 
         private Builder() {
-            objectsByOperationResult = new HashMap<>();
+            objectsByOperationResult = new EnumMap<>(OperationResultEnum.class);
         }
 
         public Builder<T> addResult(OperationResultEnum operationResult, T object) {
