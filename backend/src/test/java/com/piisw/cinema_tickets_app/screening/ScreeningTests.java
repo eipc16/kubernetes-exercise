@@ -64,7 +64,7 @@ public class ScreeningTests {
         assertNotNull(createdScreening.getId());
     }
 
-    private Screening getDummyScreening(ScreeningRoom screeningRoom, Movie movie) {
+    public static Screening getDummyScreening(ScreeningRoom screeningRoom, Movie movie) {
         return Screening.builder()
                 .screeningRoom(screeningRoom)
                 .movie(movie)
@@ -73,7 +73,7 @@ public class ScreeningTests {
                 .build();
     }
 
-    private ScreeningRoom getDummyScreeningRoom() {
+    public static ScreeningRoom getDummyScreeningRoom() {
         return ScreeningRoom.builder()
                 .number(23L)
                 .rowsNumber(10L)
@@ -81,7 +81,7 @@ public class ScreeningTests {
                 .build();
     }
 
-    private Movie getDummyMovie() {
+    public static Movie getDummyMovie() {
         return Movie.builder()
                 .imdbId("tt1375666")
                 .title("Inception")
