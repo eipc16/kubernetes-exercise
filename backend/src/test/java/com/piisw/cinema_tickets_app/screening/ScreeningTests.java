@@ -4,6 +4,7 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectSp
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.movie.control.MovieRepository;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
+import com.piisw.cinema_tickets_app.domain.movie.entity.MovieScreeningSearchParams;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningSpecification;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
@@ -18,13 +19,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -143,7 +145,8 @@ public class ScreeningTests {
         screening3 = screeningService.createScreening(screening3);
         LocalDateTime startTime = LocalDateTime.now().minusDays(1);
         LocalDateTime endTime = LocalDateTime.now().plusDays(2);
-        List<Screening> screeningsForTimePeriod = screeningService.getScreeningsWhereStartTimeIsBetween(startTime, endTime);
+        MovieScreeningSearchParams dummySearchParams = getDummySearchParamsWithDateRange(startTime, endTime);
+        List<Screening> screeningsForTimePeriod = screeningService.getScreeningsBySearchParams(dummySearchParams);
         Set<Long> foundScreeningIds = screeningsForTimePeriod.stream()
                 .map(Screening::getId)
                 .collect(Collectors.toSet());
@@ -153,4 +156,13 @@ public class ScreeningTests {
         assertTrue("Not found corrected screenings for time period", foundCorrectScreenings);
     }
 
+    private MovieScreeningSearchParams getDummySearchParamsWithDateRange(LocalDateTime startTime, LocalDateTime endTime) {
+        return MovieScreeningSearchParams.builder()
+                .searchText("")
+                .beginDateTime(startTime)
+                .endDateTime(endTime)
+                .genres(Collections.emptyList())
+                .pageable(Pageable.unpaged())
+                .build();
+    }
 }

@@ -37,5 +37,5 @@ public class MovieDetailsDTO {
     private String plot;
     private String language;
     private String country;
-    private String posterLink;
+    private String posterUrl;
 }

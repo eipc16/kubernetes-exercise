@@ -2,7 +2,6 @@ package com.piisw.cinema_tickets_app.domain.movie.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Pageable;

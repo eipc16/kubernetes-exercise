@@ -102,7 +102,7 @@ public class MovieController {
                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime,
                                                    @ApiIgnore @PageableDefault Pageable pageable) {
         MovieScreeningSearchParams searchParams = buildSearchParams(searchText, genres, beginDateTime, endDateTime, pageable);
-        Set<Long> currentMovies = screeningService.getScreeingsBySearchParams(searchParams).stream()
+        Set<Long> currentMovies = screeningService.getScreeningsBySearchParams(searchParams).stream()
                 .map(Screening::getMovie)
                 .map(AuditedObject::getId)
                 .collect(Collectors.toSet());

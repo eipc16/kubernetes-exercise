@@ -64,7 +64,7 @@ public class MovieTests {
         assertEquals(movieDetails.getDirector(), createdMovie.getDirector());
         assertEquals(movieDetails.getPlot(), createdMovie.getShortPlot());
         assertEquals(movieDetails.getLanguage(), createdMovie.getLanguage());
-        assertEquals(movieDetails.getPosterLink(), createdMovie.getPosterUrl());
+        assertEquals(movieDetails.getPosterUrl(), createdMovie.getPosterUrl());
         assertEquals(movieDetails.getActors(), createdMovie.getActors());
         assertEquals(movieDetails.getCountry(), createdMovie.getCountry());
     }
@@ -85,7 +85,7 @@ public class MovieTests {
                 .plot("A thief who steals corporate secrets through the use of dream-sharing technology"
                         + "is given the inverse task of planting an idea into the mind of a C.E.O.")
                 .language("English, Japanese, French")
-                .posterLink("https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg")
+                .posterUrl("https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg")
                 .actors("Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page, Tom Hardy")
                 .country("USA, UK")
                 .genres(List.of("Action", "Adventure", "Sci-Fi", "Thriller"))

@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -74,13 +73,13 @@ public class MovieService {
                 .title(movieDetailsDTO.getTitle())
                 .year(movieDetailsDTO.getYear())
                 .maturityRating(movieDetailsDTO.getMaturityRate())
-                .releaseDate(movieDetailsDTO.getReleaseDate().atStartOfDay().toInstant(ZoneOffset.UTC))
+                .releaseDate(movieDetailsDTO.getReleaseDate())
                 .runTime(movieDetailsDTO.getRuntime())
                 .director(movieDetailsDTO.getDirector())
                 .actors(movieDetailsDTO.getActors())
                 .shortPlot(movieDetailsDTO.getPlot())
                 .language(movieDetailsDTO.getLanguage())
-                .posterUrl(movieDetailsDTO.getPosterLink())
+                .posterUrl(movieDetailsDTO.getPosterUrl())
                 .country(movieDetailsDTO.getCountry())
                 .objectState(ObjectState.ACTIVE)
                 .genres(genres)

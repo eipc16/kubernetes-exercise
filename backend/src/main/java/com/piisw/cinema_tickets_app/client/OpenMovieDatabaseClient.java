@@ -70,7 +70,7 @@ public class OpenMovieDatabaseClient {
                 .plot(openApiMovieDTO.getPlot())
                 .language(openApiMovieDTO.getLanguage())
                 .country(openApiMovieDTO.getCountry())
-                .posterLink(openApiMovieDTO.getPoster())
+                .posterUrl(openApiMovieDTO.getPoster())
                 .build();
     }
 }
