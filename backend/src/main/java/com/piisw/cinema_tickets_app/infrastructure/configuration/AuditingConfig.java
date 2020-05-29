@@ -4,7 +4,7 @@ package com.piisw.cinema_tickets_app.infrastructure.configuration;
 import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import com.piisw.cinema_tickets_app.domain.user.control.UserService;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -17,10 +17,10 @@ import java.util.Optional;
 
 @Configuration
 @EnableJpaAuditing
+@RequiredArgsConstructor
 public class AuditingConfig {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Bean
     public AuditorAware<User> auditorProvider() {

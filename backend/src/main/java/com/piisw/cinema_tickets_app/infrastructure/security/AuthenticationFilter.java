@@ -1,6 +1,6 @@
 package com.piisw.cinema_tickets_app.infrastructure.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,13 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@RequiredArgsConstructor
 public class AuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private TokenHandler tokenHandler;
-
-    @Autowired
-    private UserDetailsServiceImpl userDetailsServiceImpl;
+    private final TokenHandler tokenHandler;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

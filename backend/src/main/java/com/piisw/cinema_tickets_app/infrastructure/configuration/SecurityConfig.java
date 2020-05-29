@@ -3,8 +3,9 @@ package com.piisw.cinema_tickets_app.infrastructure.configuration;
 import com.piisw.cinema_tickets_app.domain.authentication.boundary.AuthenticationController;
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationEntryPointImpl;
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationFilter;
+import com.piisw.cinema_tickets_app.infrastructure.security.TokenHandler;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,19 +27,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         jsr250Enabled = true,
         prePostEnabled = true
 )
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String WILDCARD_PATH = "/**";
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private AuthenticationEntryPointImpl unauthorizedHandler;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final AuthenticationEntryPointImpl unauthorizedHandler;
+    private final TokenHandler tokenHandler;
 
     @Bean
     public AuthenticationFilter authenticationFilter() {
-        return new AuthenticationFilter();
+        return new AuthenticationFilter(tokenHandler, userDetailsService);
     }
 
     @Override
