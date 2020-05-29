@@ -9,7 +9,7 @@ import com.piisw.cinema_tickets_app.domain.seat.entity.SeatAvailabilityDetails;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,15 +27,11 @@ import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.OBJ
 @Api(tags = "Seats")
 @RestController
 @RequestMapping("/seats")
+@AllArgsConstructor
 public class SeatController {
 
-    @Autowired
     private ScreeningService screeningService;
-
-    @Autowired
     private SeatService seatService;
-
-    @Autowired
     private SeatMapper seatMapper;
 
     @ApiOperation(value = "${api.seats.get.value}", notes = "${api.seats.get.notes}")

@@ -16,7 +16,7 @@ import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRol
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.LoggedUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,23 +31,15 @@ import javax.validation.Valid;
 @Api(tags = "Authentication")
 @RestController
 @RequestMapping(AuthenticationController.MAIN_PATH)
+@AllArgsConstructor
 public class AuthenticationController {
 
     public static final String MAIN_PATH = "/auth";
 
-    @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
     private TokenHandler tokenHandler;
-
-    @Autowired
     private AuthenticationService authenticationService;
-
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private UserMapper userMapper;
 
     @ApiOperation(value = "${api.auth.signin.value}", notes = "${api.auth.signin.notes}")

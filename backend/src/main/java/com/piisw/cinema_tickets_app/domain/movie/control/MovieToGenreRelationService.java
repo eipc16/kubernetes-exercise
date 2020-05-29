@@ -4,7 +4,7 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.genre.entity.Genre;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import com.piisw.cinema_tickets_app.domain.movie.entity.MovieToGenreRelation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class MovieToGenreRelationService {
 
-    @Autowired
     private MovieToGenreRelationRepository movieToGenreRelationRepository;
 
     public List<Genre> getGenresByMovie(Movie movie) {

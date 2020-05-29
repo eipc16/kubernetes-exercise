@@ -2,7 +2,7 @@ package com.piisw.cinema_tickets_app.domain.user.control;
 
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.user.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
+@AllArgsConstructor
 public class UserService {
 
     public static final String USERNAME_ALREADY_TAKEN_MSG = "User with username {0} already exists!";
@@ -20,10 +21,7 @@ public class UserService {
     private static final Pattern EMAIL_REGEX = Pattern.compile("[^@ ]+@[^@ ]+\\.[^@ ]+");
     public static final String EMAIL_INCORRECT = "Supplied email is incorrect";
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private UserRepository userRepository;
 
     public User registerUser(User newUser) {

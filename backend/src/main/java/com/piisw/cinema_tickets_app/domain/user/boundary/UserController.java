@@ -10,7 +10,7 @@ import com.piisw.cinema_tickets_app.infrastructure.security.validation.LoggedUse
 import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,19 +21,17 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(tags = "Users")
 @RestController
 @RequestMapping(UserController.MAIN_PATH)
+@AllArgsConstructor
 public class UserController {
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserMapper userMapper;
 
     public static final String MAIN_PATH = "/users";
     private static final String USERNAME = "username";
     private static final String EMAIL = "email";
     private static final String CHECK_USERNAME_PATH = "/check/username/{" + USERNAME + "}";
     private static final String CHECK_EMAIL_PATH = "/check/email/{" + EMAIL + "}";
+
+    private UserService userService;
+    private UserMapper userMapper;
 
     @ApiOperation(value = "${api.users.check.username.value}", notes = "${api.users.check.username.notes}")
     @GetMapping(CHECK_USERNAME_PATH)

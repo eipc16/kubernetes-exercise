@@ -11,8 +11,8 @@ import com.piisw.cinema_tickets_app.domain.seat.entity.Seat;
 import com.piisw.cinema_tickets_app.domain.user.control.UserService;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -22,32 +22,20 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@AllArgsConstructor
 public class ReservationService {
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private AuthenticationService authenticationService;
-
-    @Autowired
-    private ReservationRepository reservationRepository;
-
-    @Autowired
-    private ReservationSpecification specification;
-
-    @Autowired
-    private ReservationToSeatRelationService reservationToSeatRelationService;
-
-    @Autowired
-    private AuditedObjectService auditedObjectService;
-
-    @Autowired
-    private ScreeningService screeningService;
 
     private static final String CANNOT_MAKE_RESERVATION_FOR_USER = "Cannot make reservation for user with id {0}. User doesn't exist or has inactive account.";
     private static final String NO_PERMISSION_TO_MAKE_RESERVATION = "You don't have sufficient privileges to make reservation for different user than currently logged!";
     private static final String SEATS_ALREADY_RESERVED = "Cannot make reservation for seats {0}. They are already reserved.";
+
+    private UserService userService;
+    private AuthenticationService authenticationService;
+    private ReservationRepository reservationRepository;
+    private ReservationSpecification specification;
+    private ReservationToSeatRelationService reservationToSeatRelationService;
+    private AuditedObjectService auditedObjectService;
+    private ScreeningService screeningService;
 
     public List<Reservation> getReservationsByIds(Set<Long> ids, Set<ObjectState> objectStates) {
         return reservationRepository.findAll(specification.whereIdAndObjectStateIn(ids, objectStates));

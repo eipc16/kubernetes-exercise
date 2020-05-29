@@ -11,7 +11,7 @@ import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.BulkOperationResult;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.OperationResultEnum;
 import com.piisw.cinema_tickets_app.infrastructure.utils.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,21 +20,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class MovieService {
 
-    @Autowired
     private MovieRepository movieRepository;
-
-    @Autowired
     private AuditedObjectSpecification<Movie> specification;
-
-    @Autowired
     private OpenMovieDatabaseClient openMovieDatabaseClient;
-
-    @Autowired
     private GenreService genreService;
-
-    @Autowired
     private MovieToGenreRelationService movieToGenreRelationService;
 
     public Movie getMovieById(Long id, ObjectState objectState) {

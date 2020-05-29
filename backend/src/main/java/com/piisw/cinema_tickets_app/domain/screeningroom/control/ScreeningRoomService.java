@@ -6,7 +6,7 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import com.piisw.cinema_tickets_app.domain.seat.control.SeatService;
 import com.piisw.cinema_tickets_app.infrastructure.utils.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,15 +15,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ScreeningRoomService {
 
-    @Autowired
     private ScreeningRoomRepository screeningRoomRepository;
-
-    @Autowired
     private AuditedObjectSpecification<ScreeningRoom> specification;
-
-    @Autowired
     private SeatService seatService;
 
     public ScreeningRoom getScreeningRoomById(Long id, ObjectState objectState) {

@@ -8,7 +8,7 @@ import com.piisw.cinema_tickets_app.domain.genre.boundary.GenreMapper;
 import com.piisw.cinema_tickets_app.domain.genre.entity.Genre;
 import com.piisw.cinema_tickets_app.domain.movie.control.MovieToGenreRelationService;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -21,12 +21,10 @@ import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.IDS
 import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.OBJECT_STATE;
 
 @Component
+@AllArgsConstructor
 public class MovieMapper {
 
-    @Autowired
     private GenreMapper genreMapper;
-
-    @Autowired
     private MovieToGenreRelationService movieToGenreRelationService;
 
     public List<MovieDTO> mapToMovieDTOs(Collection<Movie> movies) {

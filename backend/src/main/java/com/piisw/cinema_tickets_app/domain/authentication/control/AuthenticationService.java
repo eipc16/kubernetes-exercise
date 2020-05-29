@@ -8,16 +8,16 @@ import com.piisw.cinema_tickets_app.domain.user.entity.User;
 import com.piisw.cinema_tickets_app.domain.user.control.UserService;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@AllArgsConstructor
 public class AuthenticationService {
 
-    @Autowired
     private UserService userService;
 
     public UsernamePasswordAuthenticationToken getAuthenticationToken(LoginDataDTO loginDTO) {

@@ -13,7 +13,7 @@ import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRol
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.LoggedUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,20 +36,14 @@ import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.IDS
 @Api(tags = "Reservations")
 @RestController
 @RequestMapping(ReservationController.MAIN_PATH)
+@AllArgsConstructor
 public class ReservationController {
 
     public static final String MAIN_PATH = "/reservation";
 
-    @Autowired
     private ReservationMapper reservationMapper;
-
-    @Autowired
     private ReservationService reservationService;
-
-    @Autowired
     private SeatService seatService;
-
-    @Autowired
     private AuditedObjectService auditedObjectService;
 
     @ApiOperation(value = "${api.reservations.get.value}", notes = "${api.reservations.get.notes}")

@@ -9,8 +9,8 @@ import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import com.piisw.cinema_tickets_app.domain.seat.entity.Seat;
 import com.piisw.cinema_tickets_app.domain.seat.entity.SeatAvailabilityDetails;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -21,23 +21,17 @@ import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 @Service
+@AllArgsConstructor
 public class SeatService {
-
-    @Autowired
-    private SeatRepository seatRepository;
-
-    @Autowired
-    private SeatSpecification specification;
-
-    @Autowired
-    private ScreeningService screeningService;
-
-    @Autowired
-    private ReservationService reservationService;
 
     private static final long FIRST_SEAT_IN_ROW_NUMBER = 1;
     private static final long FIRST_ROW_IN_SCREENING_ROOM = 1;
     private static final String THERE_ARE_EXISTING_SCREENINGS = "There are existing screenings {0} for screening room {1}";
+
+    private SeatRepository seatRepository;
+    private SeatSpecification specification;
+    private ScreeningService screeningService;
+    private ReservationService reservationService;
 
     public List<Seat> getSeatsByIds(Set<Long> ids, ObjectState objectState) {
         return seatRepository.findAll(specification.whereIdInAndObjectStateEquals(ids, objectState));
