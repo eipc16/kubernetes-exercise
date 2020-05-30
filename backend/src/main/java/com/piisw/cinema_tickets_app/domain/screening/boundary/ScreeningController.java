@@ -49,12 +49,12 @@ public class ScreeningController {
     @GetMapping(ID_PATH)
     @HasAnyRole
     public ScreeningDTO getScreeningById(@PathVariable(ID) Long id,
-                                                    @RequestParam(value = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
+                                         @RequestParam(value = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         Screening screening = screeningService.getScreeningById(id, objectStates);
         return screeningMapper.mapToScreeningDTO(screening);
     }
 
-    @ApiOperation(value = "${api.screenings.get.value}", notes = "${api.screenings.get.notes}")
+    @ApiOperation(value = "${api.screenings.for.movie.value}", notes = "${api.screenings.for.movie.get.notes}")
     @GetMapping(MOVIE_PATH + ID_PATH)
     @HasAnyRole
     public List<ScreeningDTO> getScreeningsForMovie(@PathVariable(ID) Long movieId,
