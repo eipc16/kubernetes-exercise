@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
 public class Seat extends AuditedObject {
 
     @NotNull
-    @Column(name = "row_number")
+    @Column(name = "rownumber")
     private Long row;
 
     @NotNull
