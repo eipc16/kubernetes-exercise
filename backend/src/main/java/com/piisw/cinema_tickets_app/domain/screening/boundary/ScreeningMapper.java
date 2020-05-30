@@ -21,6 +21,7 @@ public class ScreeningMapper {
                 .movieId(screening.getMovie().getId())
                 .screeningRoomId(screening.getScreeningRoom().getId())
                 .startTime(screening.getStartTime())
+                .endTime(screening.getEndTime())
                 .objectState(screening.getObjectState())
                 .build();
     }
@@ -30,6 +31,7 @@ public class ScreeningMapper {
                 .movie(movie)
                 .screeningRoom(screeningRoom)
                 .startTime(screeningDTO.getStartTime())
+                .endTime(screeningDTO.getEndTime())
                 .objectState(screeningRoom.getObjectState())
                 .build();
     }

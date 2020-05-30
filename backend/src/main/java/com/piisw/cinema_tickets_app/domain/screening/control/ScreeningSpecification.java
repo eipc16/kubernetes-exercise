@@ -9,6 +9,7 @@ import com.piisw.cinema_tickets_app.domain.screening.entity.Screening_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,6 +55,19 @@ public class ScreeningSpecification extends AuditedObjectSpecification<Screening
 
     public Specification<Screening> whereStartTimeBetween(LocalDateTime begin, LocalDateTime end) {
         return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.between(root.get(Screening_.START_TIME), begin, end);
+    }
+
+    public Specification<Screening> whereOverlapsWith(Screening screening) {
+        Long screeningRoomId = screening.getScreeningRoom().getId();
+        return whereScreeningRoomIdEquals(screeningRoomId).and(whereScreeningTimeOverlaps(screening.getStartTime(), screening.getEndTime()));
+    }
+
+    private Specification<Screening> whereScreeningTimeOverlaps(LocalDateTime startTime, LocalDateTime endTime) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            Predicate beginsBeforeOrAtEndTime = criteriaBuilder.lessThanOrEqualTo(root.get(Screening_.startTime), endTime);
+            Predicate endsAfterOrAtStartTime = criteriaBuilder.greaterThanOrEqualTo(root.get(Screening_.endTime), startTime);
+            return criteriaBuilder.and(beginsBeforeOrAtEndTime, endsAfterOrAtStartTime);
+        };
     }
 
     public Specification<Screening> mergeSpecifications(@NotEmpty List<Specification<Screening>> specifications) {

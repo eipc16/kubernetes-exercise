@@ -29,6 +29,9 @@ public class ScreeningDTO {
     @NotNull
     private LocalDateTime startTime;
 
+    @NotNull
+    private LocalDateTime endTime;
+
     @ApiModelProperty(readOnly = true)
     ObjectState objectState;
 

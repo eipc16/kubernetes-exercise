@@ -63,4 +63,5 @@ public class Movie extends AuditedObject {
     @Transient
     @OneToMany
     private Set<Genre> genres;
+
 }

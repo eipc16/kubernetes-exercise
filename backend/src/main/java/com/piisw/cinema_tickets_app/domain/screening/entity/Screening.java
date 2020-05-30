@@ -31,6 +31,8 @@ public class Screening extends AuditedObject {
 
     private LocalDateTime startTime;
 
+    private LocalDateTime endTime;
+
     private BigDecimal price;
 
 }

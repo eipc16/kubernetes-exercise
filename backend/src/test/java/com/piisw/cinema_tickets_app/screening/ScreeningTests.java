@@ -1,5 +1,6 @@
 package com.piisw.cinema_tickets_app.screening;
 
+import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectService;
 import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectSpecification;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.movie.control.MovieRepository;
@@ -38,7 +39,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @Import({ScreeningService.class, AuditedObjectSpecification.class, AuditingConfig.class, UserService.class,
-        BCryptPasswordEncoder.class, ScreeningSpecification.class})
+        BCryptPasswordEncoder.class, ScreeningSpecification.class, AuditedObjectService.class})
 public class ScreeningTests {
 
     @Autowired
@@ -71,6 +72,7 @@ public class ScreeningTests {
                 .screeningRoom(screeningRoom)
                 .movie(movie)
                 .startTime(LocalDateTime.now())
+                .endTime(LocalDateTime.now().plusHours(3))
                 .price(BigDecimal.TEN)
                 .build();
     }
@@ -135,10 +137,12 @@ public class ScreeningTests {
         Screening screening2 = getDummyScreening(screeningRoom, movie)
                 .toBuilder()
                 .startTime(LocalDateTime.now().plusDays(2))
+                .endTime(LocalDateTime.now().plusDays(2).plusHours(3))
                 .build();
         Screening screening3 = getDummyScreening(screeningRoom, movie)
                 .toBuilder()
                 .startTime(LocalDateTime.now().plusDays(3))
+                .endTime(LocalDateTime.now().plusDays(3).plusHours(3))
                 .build();
         screening1 = screeningService.createScreening(screening1);
         screening2 = screeningService.createScreening(screening2);
@@ -165,4 +169,65 @@ public class ScreeningTests {
                 .pageable(Pageable.unpaged())
                 .build();
     }
+
+    @Test
+    public void shouldThrowExceptionOnLeftOverlappingScreening() {
+        ScreeningRoom screeningRoom = screeningRoomRepository.save(getDummyScreeningRoom());
+        Movie movie = movieRepository.save(getDummyMovie());
+        Screening screening = getDummyScreening(screeningRoom, movie);
+        Screening leftOverlappingScreening = getDummyScreening(screeningRoom, movie)
+                .toBuilder()
+                .startTime(LocalDateTime.now().minusHours(1))
+                .endTime(LocalDateTime.now().plusHours(2))
+                .build();
+        screeningService.createScreening(screening);
+        exceptionRule.expect(IllegalArgumentException.class);
+        screeningService.createScreening(leftOverlappingScreening);
+    }
+
+    @Test
+    public void shouldThrowExceptionOnRightOverlappingScreening() {
+        ScreeningRoom screeningRoom = screeningRoomRepository.save(getDummyScreeningRoom());
+        Movie movie = movieRepository.save(getDummyMovie());
+        Screening screening = getDummyScreening(screeningRoom, movie);
+        Screening rightOverlappingScreening = getDummyScreening(screeningRoom, movie)
+                .toBuilder()
+                .startTime(LocalDateTime.now().plusHours(2))
+                .endTime(LocalDateTime.now().plusHours(5))
+                .build();
+        screeningService.createScreening(screening);
+        exceptionRule.expect(IllegalArgumentException.class);
+        screeningService.createScreening(rightOverlappingScreening);
+    }
+
+    @Test
+    public void shouldThrowExceptionOnMiddleOverlappingScreening() {
+        ScreeningRoom screeningRoom = screeningRoomRepository.save(getDummyScreeningRoom());
+        Movie movie = movieRepository.save(getDummyMovie());
+        Screening screening = getDummyScreening(screeningRoom, movie);
+        Screening middleOverlappingScreening = getDummyScreening(screeningRoom, movie)
+                .toBuilder()
+                .startTime(LocalDateTime.now().plusHours(1))
+                .endTime(LocalDateTime.now().plusHours(2))
+                .build();
+        screeningService.createScreening(screening);
+        exceptionRule.expect(IllegalArgumentException.class);
+        screeningService.createScreening(middleOverlappingScreening);
+    }
+
+    @Test
+    public void shouldThrowExceptionOnOutsideOverlappingScreening() {
+        ScreeningRoom screeningRoom = screeningRoomRepository.save(getDummyScreeningRoom());
+        Movie movie = movieRepository.save(getDummyMovie());
+        Screening screening = getDummyScreening(screeningRoom, movie);
+        Screening outsideOverlappingScreening = getDummyScreening(screeningRoom, movie)
+                .toBuilder()
+                .startTime(LocalDateTime.now().minusHours(1))
+                .endTime(LocalDateTime.now().plusHours(4))
+                .build();
+        screeningService.createScreening(screening);
+        exceptionRule.expect(IllegalArgumentException.class);
+        screeningService.createScreening(outsideOverlappingScreening);
+    }
+
 }
