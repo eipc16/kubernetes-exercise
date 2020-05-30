@@ -8,6 +8,7 @@ import {MovieListFilters, PlayerMovies} from '../../models/movies-list';
 import './movie-list.scss';
 import {MovieListFiltersContainer} from "./movie-list-filters/movie-list-filters-container";
 import {useFetching} from "../../utils/custom-fetch-hook";
+import {PlayedMoviesInterface} from "../../models/movies-list/PlayedMovies";
 
 interface OwnProps {
     movieListPublisher: MovieListActionPublisher
@@ -31,17 +32,28 @@ const MovieListComponent = (props: MovieListProps) => {
     //     return <div>Fetching..</div>
     // }
 
+    const areMoviesAvailable = (movieList: PlayedMoviesInterface) => {
+        return movieList && movieList.content && movieList.content.length > 0
+    }
+
     return (
         <div className='main--list--container'>
             <MovieListFiltersContainer movieListActionPublisher={movieListPublisher}>
                 { isFetching ? (
-                    <div className='fetching--message'>Fetching..</div>
+                    <div className='info--message fetching--message'>Fetching..</div>
                 ) : (
                     <Row className='list--row' gutter={[16, 16]}>
-                        {movieList && movieList.content && movieList.content.map(movie =>
-                            <Col key={movie.imdbId}>
-                                <MovieListEntry movie={movie}/>
-                            </Col>
+                        {areMoviesAvailable(movieList) ? (
+                            areMoviesAvailable(movieList) && movieList.content.map(movie =>
+                                <Col key={movie.imdbId}>
+                                    <MovieListEntry movie={movie}/>
+                                </Col>
+                            )
+                        ) : (
+                            <div className='info--message'>
+                                <span className='message--content'>Could not find any movies</span>
+                                <span className='span--icon'>&#9785;</span>
+                            </div>
                         )}
                     </Row>
                 )}

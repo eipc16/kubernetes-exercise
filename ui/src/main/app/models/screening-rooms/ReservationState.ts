@@ -1,0 +1,6 @@
+export enum ReservationState {
+    AVAILABLE = "AVAILABLE",
+    RESERVED = "RESERVED",
+    RESERVED_BY_YOU = "RESERVED_BY_YOU",
+    SELECTED = "SELECTED"
+}

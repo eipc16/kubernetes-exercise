@@ -37,7 +37,7 @@ export class MovieListActionPublisherImpl implements MovieListActionPublisher {
 
     getMovieList(dateRange: DateRange, searchText?: string, genres?: string[], pageOptions?: Pageable): (dispatch: Dispatch<Action>) => void {
         return (dispatch: Dispatch<Action>) => {
-            dispatch(request(dateRange))
+            dispatch(request(dateRange));
 
             this.movieListService.getMovieList(dateRange, searchText, genres, pageOptions)
                 .then(
@@ -79,6 +79,7 @@ export class MovieListActionPublisherImpl implements MovieListActionPublisher {
     }
 
     updateFilters(filters: MovieListFilters): MovieListFiltersUpdateInterface {
+        console.log(filters)
         return {
             type: movieListConstants.MOVIE_LIST_FILTERS_UPDATE,
             filters: filters

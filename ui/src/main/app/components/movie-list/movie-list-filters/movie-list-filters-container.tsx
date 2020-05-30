@@ -74,17 +74,18 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
 
     const handlePage = (page: number, moviesPerPage?: number) => {
         updateFilters(FiltersEnum.PAGE, {
-            pageNumber: page,
+            pageNumber: page - 1,
             pageSize: moviesPerPage
         });
     }
 
     const updateFilters = (lastUpdated: FiltersEnum, value: any) => {
+        console.log(lastUpdated, value)
         dispatch(movieListActionPublisher.updateFilters({
             dateRange: dateRange,
             searchText: searchText,
             genres: selectedGenres,
-            pageOptions: lastUpdated === FiltersEnum.PAGE ? value : {pageNumber: 0, ...pageOptions},
+            pageOptions: { ...pageOptions, pageNumber: 0},
             [lastUpdated.toString()]: value
         }))
     }
@@ -147,6 +148,8 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
                         pageSize={pageOptions.pageSize}
                         total={totalMovies}
                         onChange={handlePage}
+                        onShowSizeChange={handlePage}
+                        showSizeChanger={true}
                         responsive={true}
                         hideOnSinglePage={true}
             />

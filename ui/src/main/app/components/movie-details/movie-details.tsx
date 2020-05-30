@@ -3,15 +3,16 @@ import React from "react";
 import './movie-details.scss';
 
 interface MovieDetailsProps {
-    id: number
+    movieId: number;
+    className?: string;
 }
 
 export const MovieDetailsComponent = (props: MovieDetailsProps) => {
-    const { id } = props
+    const { movieId, className } = props
 
     return (
-        <div>
-            {id}
+        <div className={className}>
+            Details for: {movieId}
         </div>
     )
 }

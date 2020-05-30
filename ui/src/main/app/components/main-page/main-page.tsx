@@ -34,7 +34,7 @@ const MainPageComponent: React.FC<MainPageProps> = (props: MainPageProps) => {
     }
 
     return (
-        <div>
+        <React.Fragment>
             <PageHeader className='site-page-header'
                         title='Cinema tickets sale system'
                         extra={[<Button
@@ -49,7 +49,7 @@ const MainPageComponent: React.FC<MainPageProps> = (props: MainPageProps) => {
             <React.Fragment>
                 {<MovieList movieListPublisher={movieListPublisher}/>}
             </React.Fragment>
-        </div>
+        </React.Fragment>
     )
 }
 

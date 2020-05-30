@@ -1,4 +1,6 @@
 .movie--entry--card {
+  overflow: hidden;
+
   & .ant-card-body {
     display: flex;
     flex-direction: column;
@@ -36,8 +38,10 @@
     transition: 0.35s;
 
     & > h1 {
+      padding: 10px;
       color: white;
       text-align: center;
+      word-break: break-word;
       z-index: 101;
     }
 
@@ -45,7 +49,7 @@
       background: rgba(1, 1, 0, 1);
     }
 
-    & > .btn {
+    & .btn {
       outline: none;
       border: none;
       text-decoration: none;
@@ -54,15 +58,17 @@
       position: relative;
       margin: 0;
       padding: 0.5rem 1rem;
+      opacity: 1;
+      z-index: 9999;
+      //background: rebeccapurple;
       background: #428bca;
       color: #f9f9f9;
-      z-index: 200;
       font-size: 0.9rem;
       transition: 0.3s transform cubic-bezier(.55, -0.87, .44, 1.91);
       box-shadow: 0 0 10px rgba(0,0,0,0.4);
 
       &:hover {
-        transform: scale(1.2);
+        transform: scale(1.4);
         background: #428bca;
       }
 

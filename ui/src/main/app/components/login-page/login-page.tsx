@@ -17,7 +17,7 @@ export const LoginPage = (props: any) => {
   }
 
   return (
-      <div>
+      <React.Fragment>
         <PageHeader
           className="site-page-header"
           onBack={() => onClick()}
@@ -26,6 +26,6 @@ export const LoginPage = (props: any) => {
         <div className='login--page'>
           <LoginForm loginPublisher={loginPublisher} {...props} />
         </div>
-      </div>
+      </React.Fragment>
   )
 }

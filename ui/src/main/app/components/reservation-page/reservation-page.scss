@@ -1,3 +1,52 @@
-.site-page-header {
-  border: 1px solid rgb(235, 237, 240);
+@media all and (min-width: 900px) {
+  .page--content {
+    grid-template:
+            "details date-selector" 0.15fr
+            "details seats" 0.70fr
+            "details actions" 0.15fr
+                / 0.2fr 1fr;
+  }
+}
+
+@media all and (max-width: 900px) {
+  .page--content {
+    grid-template:
+            "details"
+            "date-selector"
+            "seats"
+            "actions";
+  }
+}
+
+.page--content {
+  height: 100%;
+  display: grid;
+
+  & > div {
+    display: flex;
+    font-size: 2.5em;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  & > .reservation--movie--details {
+    background: rebeccapurple;
+    grid-area: details;
+  }
+
+  & > .reservation--date--selector {
+    background: cornflowerblue;
+    grid-area: date-selector;
+  }
+
+  & > .reservation--seats--grid {
+    grid-area: seats;
+  }
+
+  & > .reservation--actions {
+    background: firebrick;
+    grid-area: actions;
+  }
 }

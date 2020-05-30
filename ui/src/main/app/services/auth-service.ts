@@ -10,6 +10,7 @@ export interface AuthenticationService {
     getTokenType(): string;
     getLocalToken(): Token | null;
     getCurrentToken(): Token | null;
+    getCurrentTokenAsString(): string;
     saveToken(token: Token): void;
     clearToken(): void;
 
@@ -66,6 +67,11 @@ export class AuthenticationServiceImpl implements AuthenticationService {
         this.currentToken = this.getLocalToken()
       }
       return this.currentToken
+    }
+
+    getCurrentTokenAsString(): string {
+        const token = this.getCurrentToken();
+        return token ? `${token.tokenType} ${token.accessToken}` : '';
     }
 
     saveToken (token: Token) {

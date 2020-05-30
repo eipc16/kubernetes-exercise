@@ -17,7 +17,7 @@ export const RegisterPage = (props: any) => {
   }
 
   return (
-      <div>
+      <React.Fragment>
         <PageHeader
             className="site-page-header"
             onBack={() => onClick()}
@@ -26,6 +26,6 @@ export const RegisterPage = (props: any) => {
         <div className="register--page">
           <RegisterForm registerPublisher={registerPublisher} {...props} />
         </div>
-      </div>
+      </React.Fragment>
   )
 }
