@@ -3,13 +3,19 @@ package com.piisw.cinema_tickets_app.domain.screening.control;
 import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectSpecification;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject_;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
+import com.piisw.cinema_tickets_app.domain.genre.entity.Genre;
+import com.piisw.cinema_tickets_app.domain.genre.entity.Genre_;
+import com.piisw.cinema_tickets_app.domain.movie.entity.MovieToGenreRelation;
+import com.piisw.cinema_tickets_app.domain.movie.entity.MovieToGenreRelation_;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie_;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,8 +47,9 @@ public class ScreeningSpecification extends AuditedObjectSpecification<Screening
 
     public Specification<Screening> whereMovieGenreIn(List<String> genres) {
         return (root, criteriaQuery, criteriaBuilder) -> {
-            // TODO: Add filtering by genre name
-            return criteriaBuilder.conjunction();
+            Root<MovieToGenreRelation> movieToGenre = criteriaQuery.from(MovieToGenreRelation.class);
+            Join<MovieToGenreRelation, Genre> movieToGenreXGenre = movieToGenre.join(MovieToGenreRelation_.genre);
+            return movieToGenreXGenre.get(Genre_.name).in(genres);
         };
     }
 

@@ -101,7 +101,7 @@ public class ScreeningService {
     public List<Screening> getScreeningsBySearchParams(MovieScreeningSearchParams searchParams) {
         List<Specification<Screening>> specifications = new ArrayList<>();
         specifications.add(specification.whereStartTimeBetween(searchParams.getBeginDateTime(), searchParams.getEndDateTime()));
-        if (CollectionUtils.isEmpty(searchParams.getGenres())) {
+        if (!CollectionUtils.isEmpty(searchParams.getGenres())) {
             specifications.add(specification.whereMovieGenreIn(searchParams.getGenres()));
         }
         if (!Strings.isNullOrEmpty(searchParams.getSearchText())) {
