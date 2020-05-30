@@ -10,6 +10,7 @@ import com.piisw.cinema_tickets_app.domain.reservation.control.ReservationServic
 import com.piisw.cinema_tickets_app.domain.reservation.control.ReservationSpecification;
 import com.piisw.cinema_tickets_app.domain.reservation.control.ReservationToRelationSpecification;
 import com.piisw.cinema_tickets_app.domain.reservation.control.ReservationToSeatRelationService;
+import com.piisw.cinema_tickets_app.domain.reservation.entity.ReservationState;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningRepository;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningSpecification;
@@ -60,9 +61,10 @@ public class SeatTests {
         ScreeningRoom screeningRoom = screeningRoomService.createScreeningRoom(ScreeningTests.getDummyScreeningRoom());
         Movie movie = movieRepository.save(ScreeningTests.getDummyMovie());
         Screening screening = screeningRepository.save(ScreeningTests.getDummyScreening(screeningRoom, movie));
-        List<SeatAvailabilityDetails> seatsDetailsForScreening = seatService.getSeatsDetailsForScreening(screening, Set.of(ObjectState.ACTIVE));
+        List<SeatAvailabilityDetails> seatsDetailsForScreening = seatService.getSeatsDetailsForScreening(screening, Set.of(ObjectState.ACTIVE), 0);
         boolean allSeatsAreAvailable = seatsDetailsForScreening.stream()
-                .map(SeatAvailabilityDetails::isAvailable)
+                .map(SeatAvailabilityDetails::getReservationState)
+                .map(ReservationState.AVAILABLE::equals)
                 .allMatch(Boolean.TRUE::equals);
         assertTrue(allSeatsAreAvailable);
     }

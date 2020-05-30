@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toMap;
 
 
 @Service
@@ -28,6 +30,12 @@ public class ReservationToSeatRelationService {
         return relations.stream()
                 .map(ReservationToSeatRelation::getSeat)
                 .collect(Collectors.toList());
+    }
+
+    Map<Seat, Long> getReservedSeatsWithUserId(List<Reservation> reservations, Set<ObjectState> objectStates) {
+        List<ReservationToSeatRelation> relations = getReservationToSeatRelationsForReservations(reservations, objectStates);
+        return relations.stream()
+                .collect(toMap(relation -> relation.getSeat(), relation -> relation.getReservation().getReservedByUser()));
     }
 
     List<ReservationToSeatRelation> getReservationToSeatRelationsForReservations(List<Reservation> reservations, Set<ObjectState> objectStates) {

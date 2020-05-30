@@ -20,6 +20,7 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -113,6 +114,10 @@ public class ReservationService {
 
     public List<Seat> getReservedSeats(List<Reservation> reservations, Set<ObjectState> objectStates) {
         return reservationToSeatRelationService.getReservedSeats(reservations, objectStates);
+    }
+
+    public Map<Seat, Long> getReservedSeatsWithUserId(List<Reservation> reservations, Set<ObjectState> objectStates) {
+        return reservationToSeatRelationService.getReservedSeatsWithUserId(reservations, objectStates);
     }
 
     private Set<Long> getAlreadyReservedSeatsIds(List<Seat> alreadyReserved, List<Seat> seatsToReserve) {

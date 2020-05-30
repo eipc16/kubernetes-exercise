@@ -6,7 +6,9 @@ import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.domain.seat.control.SeatService;
 import com.piisw.cinema_tickets_app.domain.seat.entity.SeatAvailabilityDetails;
+import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
+import com.piisw.cinema_tickets_app.infrastructure.security.validation.LoggedUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Set;
@@ -38,9 +41,10 @@ public class SeatController {
     @GetMapping("/screening" + ID_PATH)
     @HasAnyRole
     public List<SeatDTO> getSeatsForScreening(@PathVariable(ID) Long screeningId,
-                                              @RequestParam(value = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
+                                              @RequestParam(value = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates,
+                                              @ApiIgnore  @LoggedUser UserInfo currentUser) {
         Screening screening = screeningService.getScreeningById(screeningId, objectStates);
-        List<SeatAvailabilityDetails> seats = seatService.getSeatsDetailsForScreening(screening, objectStates);
+        List<SeatAvailabilityDetails> seats = seatService.getSeatsDetailsForScreening(screening, objectStates, currentUser.getId());
         return seats.stream()
                 .map(seatMapper::mapToSeatDTO)
                 .collect(Collectors.toList());

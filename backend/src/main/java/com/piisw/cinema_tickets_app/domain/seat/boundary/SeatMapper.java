@@ -12,7 +12,7 @@ public class SeatMapper {
                 .id(seatDetails.getSeat().getId())
                 .rowNumber(seatDetails.getSeat().getRow())
                 .seatNumber(seatDetails.getSeat().getNumber())
-                .isAvailable(seatDetails.isAvailable())
+                .reservationState(seatDetails.getReservationState())
                 .build();
     }
 

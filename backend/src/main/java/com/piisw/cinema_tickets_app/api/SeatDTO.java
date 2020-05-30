@@ -1,5 +1,6 @@
 package com.piisw.cinema_tickets_app.api;
 
+import com.piisw.cinema_tickets_app.domain.reservation.entity.ReservationState;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,6 @@ public class SeatDTO {
     private Long rowNumber;
 
     @NotNull
-    boolean isAvailable;
+    private ReservationState reservationState;
 
 }

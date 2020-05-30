@@ -4,11 +4,13 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.reservation.control.ReservationService;
 import com.piisw.cinema_tickets_app.domain.reservation.entity.Reservation;
+import com.piisw.cinema_tickets_app.domain.reservation.entity.ReservationState;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import com.piisw.cinema_tickets_app.domain.seat.entity.Seat;
 import com.piisw.cinema_tickets_app.domain.seat.entity.SeatAvailabilityDetails;
+import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
@@ -98,20 +101,29 @@ public class SeatService {
                 .collect(Collectors.toSet());
     }
 
-    public List<SeatAvailabilityDetails> getSeatsDetailsForScreening(Screening screening, Set<ObjectState> objectStates) {
+    public List<SeatAvailabilityDetails> getSeatsDetailsForScreening(Screening screening, Set<ObjectState> objectStates, long currentUserId) {
         List<Reservation> reservations = reservationService.getReservationsForScreening(screening, objectStates);
-        List<Seat> reservedSeats = reservationService.getReservedSeats(reservations, objectStates);
+        Map<Seat, Long> reservedSeatsWithUserId = reservationService.getReservedSeatsWithUserId(reservations, objectStates);
         ScreeningRoom screeningRoom = screening.getScreeningRoom();
         List<Seat> allSeatsInRoom = getSeatsForScreeningRoom(screeningRoom, objectStates);
         return allSeatsInRoom.stream()
-                .map(seat -> buildSeatAvailabilityDetails(seat, !reservedSeats.contains(seat)))
+                .map(seat -> buildSeatAvailabilityDetails(seat, getReservationState(seat, reservedSeatsWithUserId, currentUserId)))
                 .collect(Collectors.toList());
     }
 
-    private SeatAvailabilityDetails buildSeatAvailabilityDetails(Seat seat, boolean isAvailable) {
+    private SeatAvailabilityDetails buildSeatAvailabilityDetails(Seat seat, ReservationState isAvailable) {
         return SeatAvailabilityDetails.builder()
                 .seat(seat)
-                .isAvailable(isAvailable)
+                .reservationState(isAvailable)
                 .build();
+    }
+
+    private ReservationState getReservationState(Seat seat, Map<Seat, Long> reservedSeatsWithUserId, long currentUserId) {
+        if (reservedSeatsWithUserId.containsKey(seat) && reservedSeatsWithUserId.get(seat).equals(currentUserId)) {
+            return ReservationState.RESERVED_BY_YOU;
+        } else if (reservedSeatsWithUserId.containsKey(seat)) {
+            return ReservationState.RESERVED;
+        }
+        return ReservationState.AVAILABLE;
     }
 }

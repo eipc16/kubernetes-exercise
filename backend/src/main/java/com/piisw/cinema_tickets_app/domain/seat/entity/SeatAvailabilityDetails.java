@@ -1,5 +1,6 @@
 package com.piisw.cinema_tickets_app.domain.seat.entity;
 
+import com.piisw.cinema_tickets_app.domain.reservation.entity.ReservationState;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,6 +9,6 @@ import lombok.Data;
 public class SeatAvailabilityDetails {
 
     private Seat seat;
-    private boolean isAvailable;
+    private ReservationState reservationState;
 
 }
