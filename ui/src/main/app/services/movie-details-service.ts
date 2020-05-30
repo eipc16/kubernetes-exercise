@@ -3,7 +3,7 @@ import { appConfig } from '../config'
 import { MovieDetails } from "../models/movie-details";
 
 export interface MovieDetailsService {
-    getMovieDetails(id: String): Promise<MovieDetails>;
+    getMovieDetails(id: number): Promise<MovieDetails>;
 }
 
 export class MovieDetailsServiceImpl implements MovieDetailsService {
@@ -19,7 +19,7 @@ export class MovieDetailsServiceImpl implements MovieDetailsService {
         return MovieDetailsServiceImpl.movieDetailsService
     }
 
-    getMovieDetails(id: String): Promise<MovieDetails> {
+    getMovieDetails(id: number): Promise<MovieDetails> {
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }

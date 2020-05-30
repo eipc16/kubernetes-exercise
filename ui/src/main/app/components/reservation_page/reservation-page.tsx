@@ -3,6 +3,7 @@ import React from 'react'
 import './reservation-page.scss'
 import {PageHeader} from "antd";
 import {useHistory} from "react-router-dom";
+import {MovieDetailsComponent} from "../movie-details/movie-details";
 
 export const ReservationPage = (props: any) => {
     let history = useHistory();
@@ -17,9 +18,7 @@ export const ReservationPage = (props: any) => {
                 onBack={() => onClick()}
                 title="Reservation page"
             />
-            <div>
-                {props.match.params.id}
-            </div>
+            <MovieDetailsComponent id={props.match.params.id}/>
         </div>
     )
 }
