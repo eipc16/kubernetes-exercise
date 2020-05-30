@@ -11,6 +11,7 @@ import { movieListReducer } from './movie-list-reducer'
 import { genreReducer } from "./genre-reducer";
 import { movieDetailsReducer } from "./movie-details";
 import { seatsReducer } from './seats-reducer';
+import { screeningReducer } from './screening-reducer';
 
 export const rootReducer = (history: History) => combineReducers({
   router: connectRouter(history),
@@ -21,5 +22,6 @@ export const rootReducer = (history: History) => combineReducers({
   movieList: movieListReducer,
   genres: genreReducer,
   movieDetails: movieDetailsReducer,
-  screeningSeats: seatsReducer
+  screeningSeats: seatsReducer,
+  movieScreenings: screeningReducer
 })

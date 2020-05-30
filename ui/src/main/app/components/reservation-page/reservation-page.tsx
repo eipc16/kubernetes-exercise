@@ -9,11 +9,18 @@ import {ReservationSeats} from "./reservation-seats-grid/reservation-seats-grid"
 import {ReservationActions} from "./reservation-actions/reservation-actions";
 import {SeatActionPublisherImpl} from "../../redux/actions/seat";
 import {SeatServiceImpl} from "../../services/seat-service";
+import {ScreeningServiceImpl} from "../../services/screening-service";
+import {ScreeningActionPublisherImpl} from "../../redux/actions/screening";
 
 export const ReservationPage = (props: any) => {
     let history = useHistory();
-    const [seatService] = useState(SeatServiceImpl.createInstance())
-    const [seatActionPublisher] = useState(new SeatActionPublisherImpl(seatService))
+
+    const [seatService] = useState(SeatServiceImpl.createInstance());
+    const [screeningService] = useState(ScreeningServiceImpl.createInstance());
+    const [seatActionPublisher] = useState(new SeatActionPublisherImpl(seatService));
+    const [screeningActionPublisher] = useState(new ScreeningActionPublisherImpl(screeningService));
+
+    const movieId = props.match.params.id;
 
     const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
@@ -28,9 +35,12 @@ export const ReservationPage = (props: any) => {
                 title="Reservation page"
             />
             <div className='page--content'>
-                <MovieDetailsComponent movieId={props.match.params.id} className='reservation--movie--details'/>
-                <ReservationDateSelector className='reservation--date--selector'/>
-                <ReservationSeats screeningId={371} seatActionPublisher={seatActionPublisher} className='reservation--seats--grid'/>
+                <MovieDetailsComponent movieId={movieId} className='reservation--movie--details'/>
+                <ReservationDateSelector movieId={movieId}
+                                         screeningActionPublisher={screeningActionPublisher}
+                                         className='reservation--date--selector'/>
+                <ReservationSeats seatActionPublisher={seatActionPublisher}
+                                  className='reservation--seats--grid'/>
                 <ReservationActions className='reservation--actions'/>
             </div>
         </React.Fragment>

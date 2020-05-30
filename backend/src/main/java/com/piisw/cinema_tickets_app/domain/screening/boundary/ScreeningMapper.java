@@ -4,7 +4,9 @@ import com.piisw.cinema_tickets_app.api.ResourceDTO;
 import com.piisw.cinema_tickets_app.api.ScreeningDTO;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
+import com.piisw.cinema_tickets_app.domain.screeningroom.boundary.ScreeningRoomMapper;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -13,7 +15,10 @@ import java.net.URI;
 import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.IDS_PATH;
 
 @Component
+@RequiredArgsConstructor
 public class ScreeningMapper {
+
+    private final ScreeningRoomMapper screeningRoomMapper;
 
     public ScreeningDTO mapToScreeningDTO(Screening screening) {
         return ScreeningDTO.builder()
@@ -23,6 +28,7 @@ public class ScreeningMapper {
                 .startTime(screening.getStartTime())
                 .endTime(screening.getEndTime())
                 .objectState(screening.getObjectState())
+                .screeningRoom(screeningRoomMapper.mapToScreeningRoomDTO(screening.getScreeningRoom()))
                 .build();
     }
 

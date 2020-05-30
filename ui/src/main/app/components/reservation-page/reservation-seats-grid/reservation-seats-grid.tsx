@@ -6,16 +6,18 @@ import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch/dist";
 import {SeatActionPublisher, SeatsMap} from "../../../redux/actions/seat";
 import {connect, useDispatch} from "react-redux";
 import {useFetching} from "../../../utils/custom-fetch-hook";
+import {Screening} from "../../../models/screening";
+import {ScreeningsState} from "../../../redux/reducers/screening-reducer";
 
 interface OwnProps {
     className?: string;
-    screeningId: number;
     seatActionPublisher: SeatActionPublisher;
 }
 
 interface SeatGridState {
     seats: SeatsMap;
     isFetching: boolean;
+    currentScreening: Screening;
 }
 
 interface SeatLayout {
@@ -32,13 +34,13 @@ interface SeatGridProps {
 export type ReservationSeatsGridProps = SeatGridState & OwnProps;
 
 const SeatsGridComponent = (props: SeatGridProps) => {
-    const { columns, rows, seats, onSeatClick } = props;
+    const {columns, rows, seats, onSeatClick} = props;
 
     const mapSeatListToRows = (seatsToMap: Seat[]) => {
         let resultMap: SeatLayout = {}
-        for(let i = 0; i < seatsToMap.length; i++) {
+        for (let i = 0; i < seatsToMap.length; i++) {
             let seat = seatsToMap[i];
-            if(resultMap[seat.rowNumber]) {
+            if (resultMap[seat.rowNumber]) {
                 resultMap[seat.rowNumber].push(seat)
             } else {
                 resultMap[seat.rowNumber] = [seat]
@@ -48,7 +50,7 @@ const SeatsGridComponent = (props: SeatGridProps) => {
     }
 
     const getSeatColor = (seat: Seat) => {
-        switch(seat.reservationState) {
+        switch (seat.reservationState) {
             case ReservationState.AVAILABLE:
                 return 'gray';
             case ReservationState.RESERVED:
@@ -73,7 +75,7 @@ const SeatsGridComponent = (props: SeatGridProps) => {
         onSeatClick(seat);
     }
 
-    if(!seats || seats.length < 1) {
+    if (!seats || seats.length < 1) {
         return (
             <div className='message--info'>
                 Sorry! Could not find any seats!
@@ -109,7 +111,7 @@ const SeatsGridComponent = (props: SeatGridProps) => {
                                             style={getSeatStyle(seat)}
                                             className='single--seat'
                                             onClick={(e) => handleSeatClick(e, seat)}>
-                                                {seat.seatNumber}
+                                            {seat.seatNumber}
                                         </td>
                                     ))
                                 }
@@ -124,14 +126,16 @@ const SeatsGridComponent = (props: SeatGridProps) => {
 }
 
 const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
-    const { seats, isFetching, seatActionPublisher, screeningId } = props;
+    const {seats, isFetching, seatActionPublisher, currentScreening} = props;
     const dispatch = useDispatch();
+
+    const screeningId = currentScreening ? currentScreening.screeningId : 0;
 
     useFetching(seatActionPublisher.fetchSeats(screeningId), [screeningId])
 
     const createArrayWithGivenSize = (size: number) => {
         let rowsList: number[] = [];
-        for(let i = 0; i < size; i++) {
+        for (let i = 0; i < size; i++) {
             rowsList.push(i + 1)
         }
         return rowsList;
@@ -139,7 +143,7 @@ const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
 
     const onSeatClick = (seat: Seat) => {
         console.log(seat);
-        switch(seat.reservationState) {
+        switch (seat.reservationState) {
             case ReservationState.AVAILABLE:
                 return dispatch(seatActionPublisher.updateSeatReservationState(seat.id, ReservationState.SELECTED));
             case ReservationState.SELECTED:
@@ -149,7 +153,7 @@ const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
         }
     }
 
-    if(isFetching) {
+    if (isFetching) {
         return (
             <div className='message--info'>
                 Fetching seats info...
@@ -157,7 +161,7 @@ const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
         )
     }
 
-    if(!seats) {
+    if (!seats) {
         return (
             <div className='message--info'>
                 Sorry! Could not find any seats!
@@ -165,11 +169,19 @@ const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
         )
     }
 
-    const seatsList: Seat[] = Object.values(seats);
-    const rows = createArrayWithGivenSize(10);
-    const columns = createArrayWithGivenSize(15);
+    if (!currentScreening) {
+        return (
+            <div className='message--info'>
+                Please select a screening
+            </div>
+        )
+    }
 
-    if(!seatsList || seatsList.length < 1) {
+    const seatsList: Seat[] = Object.values(seats);
+    const rows = createArrayWithGivenSize(currentScreening.screeningRoom.rowsNumber);
+    const columns = createArrayWithGivenSize(currentScreening.screeningRoom.seatsInRowNumber);
+
+    if (!seatsList || seatsList.length < 1) {
         return (
             <div className='message--info'>
                 Sorry! Could not find any seats!
@@ -188,10 +200,12 @@ const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
 }
 
 const mapStateToProps = (store: any, ownProps: OwnProps) => {
-    const state = store.screeningSeats;
+    const seatsState = store.screeningSeats;
+    const screeningsState: ScreeningsState = store.movieScreenings;
     return {
-        seats: state.seats,
-        isFetching: state.isFetching,
+        seats: seatsState.seats,
+        isFetching: seatsState.isFetching,
+        currentScreening: screeningsState.currentScreening,
         ...ownProps
     }
 }
@@ -201,7 +215,7 @@ const ConnectedReservationSeatsComponent: React.FC<OwnProps> = connect(mapStateT
 
 export const ReservationSeats = (props: OwnProps) => {
 
-    const { className } = props;
+    const {className} = props;
 
     return (
         <div className={className}>

@@ -35,4 +35,5 @@ public class ScreeningDTO {
     @ApiModelProperty(readOnly = true)
     ObjectState objectState;
 
+    private ScreeningRoomDTO screeningRoom;
 }

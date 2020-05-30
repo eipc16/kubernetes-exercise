@@ -15,7 +15,7 @@ import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.OBJ
 @Component
 public class ScreeningRoomMapper {
 
-    ScreeningRoomDTO mapToScreeningRoomDTO(ScreeningRoom screeningRoom) {
+    public ScreeningRoomDTO mapToScreeningRoomDTO(ScreeningRoom screeningRoom) {
         return ScreeningRoomDTO.builder()
                 .id(screeningRoom.getId())
                 .number(screeningRoom.getNumber())
