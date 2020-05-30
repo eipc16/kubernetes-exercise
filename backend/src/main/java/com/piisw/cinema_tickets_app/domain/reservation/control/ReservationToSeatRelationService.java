@@ -35,7 +35,7 @@ public class ReservationToSeatRelationService {
     Map<Seat, Long> getReservedSeatsWithUserId(List<Reservation> reservations, Set<ObjectState> objectStates) {
         List<ReservationToSeatRelation> relations = getReservationToSeatRelationsForReservations(reservations, objectStates);
         return relations.stream()
-                .collect(toMap(relation -> relation.getSeat(), relation -> relation.getReservation().getReservedByUser()));
+                .collect(toMap(ReservationToSeatRelation::getSeat, relation -> relation.getReservation().getReservedByUser()));
     }
 
     List<ReservationToSeatRelation> getReservationToSeatRelationsForReservations(List<Reservation> reservations, Set<ObjectState> objectStates) {

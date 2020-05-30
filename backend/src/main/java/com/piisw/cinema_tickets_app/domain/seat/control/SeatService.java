@@ -10,7 +10,6 @@ import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import com.piisw.cinema_tickets_app.domain.seat.entity.Seat;
 import com.piisw.cinema_tickets_app.domain.seat.entity.SeatAvailabilityDetails;
-import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
