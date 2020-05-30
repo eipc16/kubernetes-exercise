@@ -1,8 +1,9 @@
 import {DateRange} from "./index";
+import {Pageable} from "../infrastructure";
 
 export interface MovieListFiltersInterface {
     searchText?: string;
     genres?: string[];
-    currentPage?: number;
+    pageOptions: Pageable;
     dateRange: DateRange;
 }

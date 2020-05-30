@@ -7,7 +7,7 @@ describe('Movie list reducer', () => {
             movieListReducer({
                 isFetching: false,
                 isFetched: false,
-                filters: {dateRange: {beginDate: 0, endDate: 0}},
+                filters: {dateRange: {beginDate: 0, endDate: 0}, pageOptions: { pageNumber: 0, pageSize: 5 }},
                 playedMovies: null}, {
                 type: movieListConstants.MOVIE_LIST_REQUEST
             })
@@ -15,7 +15,7 @@ describe('Movie list reducer', () => {
             {
                 isFetching: true,
                 isFetched: false,
-                filters: {dateRange: {beginDate: 0, endDate: 0}},
+                filters: {dateRange: {beginDate: 0, endDate: 0}, pageOptions: { pageNumber: 0, pageSize: 5 }},
                 playedMovies: null
             }
         )
@@ -25,7 +25,7 @@ describe('Movie list reducer', () => {
             movieListReducer({
                 isFetching: true,
                 isFetched: false,
-                filters: {dateRange: {beginDate: 0, endDate: 0}},
+                filters: {dateRange: {beginDate: 0, endDate: 0}, pageOptions: { pageNumber: 0, pageSize: 5 }},
                 playedMovies: null}, {
                 type: movieListConstants.MOVIE_LIST_SUCCESS
             })
@@ -33,7 +33,7 @@ describe('Movie list reducer', () => {
             {
                 isFetching: false,
                 isFetched: true,
-                filters: {dateRange: {beginDate: 0, endDate: 0}},
+                filters: {dateRange: {beginDate: 0, endDate: 0}, pageOptions: { pageNumber: 0, pageSize: 5 }},
                 playedMovies: undefined
             }
         )
@@ -43,7 +43,7 @@ describe('Movie list reducer', () => {
             movieListReducer({
                 isFetching: true,
                 isFetched: false,
-                filters: {dateRange: {beginDate: 0, endDate: 0}},
+                filters: {dateRange: {beginDate: 0, endDate: 0}, pageOptions: { pageNumber: 0, pageSize: 5 }},
                 playedMovies: null}, {
                 type: movieListConstants.MOVIE_LIST_FAILURE
             })
@@ -51,7 +51,7 @@ describe('Movie list reducer', () => {
             {
                 isFetching: false,
                 isFetched: false,
-                filters: {dateRange: {beginDate: 0, endDate: 0}},
+                filters: {dateRange: {beginDate: 0, endDate: 0}, pageOptions: { pageNumber: 0, pageSize: 5 }},
                 playedMovies: null
             }
         )
@@ -61,7 +61,7 @@ describe('Movie list reducer', () => {
             movieListReducer({
                 isFetching: false,
                 isFetched: true,
-                filters: {dateRange: {beginDate: 0, endDate: 0}},
+                filters: {dateRange: {beginDate: 0, endDate: 0}, pageOptions: { pageNumber: 0, pageSize: 5 }},
                 playedMovies: undefined}, {
                 type: movieListConstants.MOVIE_LIST_FILTERS_UPDATE
             })

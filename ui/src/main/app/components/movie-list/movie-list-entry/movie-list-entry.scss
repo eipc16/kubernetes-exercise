@@ -1,20 +1,28 @@
 .movie--entry--card {
-  & img {
-    width: 100%;
+  & .ant-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     height: 100%;
-    object-fit: fill;
+  }
+
+  & .movie--poster {
+    width: 100%;
+    flex-grow: 1;
+    object-fit: cover;
   }
 
   max-width: 340px;
   height: 600px;
 
   .meta {
+    max-height: 20%;
     padding: 10px;
   }
 
   .thumbnail--overlay {
     position: absolute;
-    top: 100%;
+    bottom: 0;
     left: 0;
     z-index: 100;
     width: 100%;

@@ -8,7 +8,7 @@ import './App.css'
 import { LoginPage } from './components/login-page/login-page'
 import { RegisterPage } from './components/register-page/register-page'
 import { MainPage } from './components/main-page/main-page'
-import {ReservationPage} from "./components/reservation_page/reservation-page";
+import {ReservationPage} from "./components/reservation-page/reservation-page";
 
 function App () {
   return (

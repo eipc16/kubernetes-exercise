@@ -12,6 +12,10 @@ const initialState = {
         dateRange: {
             beginDate: Date.now(),
             endDate: Date.now() + WEEK_IN_MS
+        },
+        pageOptions: {
+            pageSize: 5,
+            pageNumber: 0
         }
     }
 }
@@ -51,12 +55,7 @@ export function movieListReducer(state: MovieListState = initialState, action: M
         case movieListConstants.MOVIE_LIST_FILTERS_CLEAR:
             return {
                 ...state,
-                filters: {
-                    dateRange: {
-                        beginDate: Date.now(),
-                        endDate: Date.now() + WEEK_IN_MS
-                    }
-                }
+                filters: initialState.filters
             }
         default:
             return state

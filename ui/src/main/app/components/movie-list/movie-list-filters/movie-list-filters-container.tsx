@@ -27,27 +27,26 @@ interface State {
     totalGenres: number;
     filters: MovieListFilters;
     totalMovies: number;
-    pageSize: number;
 }
 
 enum FiltersEnum {
     SEARCH_TEXT = "searchText",
     DATARANGE = "dateRange",
     GENRES = "genres",
-    PAGE = "page"
+    PAGE = "pageOptions"
 }
 
 export type MovieListFiltersProps = OwnProps & State;
 
 export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
-    const {genres, totalGenres, genreFetching, movieListActionPublisher, filters, totalMovies, children, pageSize} = props;
+    const {genres, totalGenres, genreFetching, movieListActionPublisher, filters, totalMovies, children} = props;
     const dispatch = useDispatch()
 
     // State holders
     let searchText = filters.searchText;
     let dateRange = filters.dateRange;
     let selectedGenres = filters.genres;
-    let currentPage = filters.currentPage;
+    let pageOptions = filters.pageOptions;
 
     const [genreService,] = useState(GenreServiceImpl.createInstance());
     const [genrePublisher,] = useState(new GenreActionPublisherImpl(genreService));
@@ -73,10 +72,11 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
         updateFilters(FiltersEnum.SEARCH_TEXT, finalSearchText);
     }
 
-    const handlePage = (page: number) => {
-        const selectedPage = page - 1;
-        currentPage = selectedPage
-        updateFilters(FiltersEnum.PAGE, selectedPage);
+    const handlePage = (page: number, moviesPerPage?: number) => {
+        updateFilters(FiltersEnum.PAGE, {
+            pageNumber: page,
+            pageSize: moviesPerPage
+        });
     }
 
     const updateFilters = (lastUpdated: FiltersEnum, value: any) => {
@@ -84,16 +84,16 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
             dateRange: dateRange,
             searchText: searchText,
             genres: selectedGenres,
-            currentPage: currentPage,
+            pageOptions: lastUpdated === FiltersEnum.PAGE ? value : {pageNumber: 0, ...pageOptions},
             [lastUpdated.toString()]: value
         }))
     }
 
-    const getPlaceHolder = (totalGenres: number) => {
-        if (totalGenres < 1) {
+    const getPlaceHolder = (allGenres: number) => {
+        if (allGenres < 1) {
             return 'No genres';
         }
-        return `Select genre. Total genres: ${totalGenres}`
+        return `Select genre. Total genres: ${allGenres}`
     }
 
     useFetching(genrePublisher.fetchGenres())
@@ -144,7 +144,7 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
             {children}
             <Pagination className='pagination--selector'
                         defaultCurrent={1}
-                        pageSize={pageSize}
+                        pageSize={pageOptions.pageSize}
                         total={totalMovies}
                         onChange={handlePage}
                         responsive={true}
@@ -161,7 +161,6 @@ const mapStateToProps = (state: any, ownProps: OwnProps) => ({
     totalGenres: state.genres.totalGenres,
     filters: state.movieList.filters,
     totalMovies: state.movieList.playedMovies ? state.movieList.playedMovies.totalElements : 1,
-    pageSize: state.movieList.playedMovies ? state.movieList.playedMovies.size : 10,
     ...ownProps
 })
 

@@ -9,11 +9,12 @@ import {
     MovieListRequestActionInterface,
     MovieListSuccessActionInterface
 } from './types'
+import {Pageable} from "../../../models/infrastructure";
 
 export interface MovieListActionPublisher {
     getMovieListByFilters(filters: MovieListFilters): (dispatch: Dispatch<Action>) => void;
 
-    getMovieList(dateRange: DateRange, searchText?: string, genres?: string[], page?: number): (dispatch: Dispatch<Action>) => void;
+    getMovieList(dateRange: DateRange, searchText?: string, genres?: string[], pageOptions?: Pageable): (dispatch: Dispatch<Action>) => void;
 
     updateFilters(filters: MovieListFilters): MovieListFiltersUpdateInterface;
 
@@ -31,14 +32,14 @@ export class MovieListActionPublisherImpl implements MovieListActionPublisher {
         return this.getMovieList({
             beginDate: filters.dateRange.beginDate,
             endDate: filters.dateRange.endDate
-        }, filters.searchText, filters.genres, filters.currentPage)
+        }, filters.searchText, filters.genres, filters.pageOptions)
     }
 
-    getMovieList(dateRange: DateRange, searchText?: string, genres?: string[], page?: number): (dispatch: Dispatch<Action>) => void {
+    getMovieList(dateRange: DateRange, searchText?: string, genres?: string[], pageOptions?: Pageable): (dispatch: Dispatch<Action>) => void {
         return (dispatch: Dispatch<Action>) => {
             dispatch(request(dateRange))
 
-            this.movieListService.getMovieList(dateRange, searchText, genres, page)
+            this.movieListService.getMovieList(dateRange, searchText, genres, pageOptions)
                 .then(
                     (moviesList: PlayerMovies) => {
                         dispatch(success(moviesList))

@@ -7,7 +7,9 @@ import {MovieDetailsComponent} from "../movie-details/movie-details";
 
 export const ReservationPage = (props: any) => {
     let history = useHistory();
-    const onClick = () => {
+
+    const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.preventDefault()
         history.push('/')
     }
 
@@ -15,7 +17,7 @@ export const ReservationPage = (props: any) => {
         <div>
             <PageHeader
                 className="site-page-header"
-                onBack={() => onClick()}
+                onBack={onClick}
                 title="Reservation page"
             />
             <MovieDetailsComponent id={props.match.params.id}/>
