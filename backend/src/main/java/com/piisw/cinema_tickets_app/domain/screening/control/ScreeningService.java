@@ -26,7 +26,8 @@ import java.util.Set;
 public class ScreeningService {
 
     private static final String SCREENING_ROOM_IN_USE = "There are already defined screenings with ids {0} in screening room with id {1} between {2} and {3}";
-    private static final String DURATION_OF_SCREENING_SHORTER_THAN_MOVIE = "Duration of screening cannot be shorter than movie duration ({0})";
+    public static final String WRONG_START_END_TIME = "Start time must be lesser than end time";
+    public static final String DURATION_OF_SCREENING_SHORTER_THAN_MOVIE = "Duration of screening cannot be shorter than movie duration ({0})";
     private static final String NOT_AVAILABLE = "N/A";
     private static final String MIN_SUFFIX = " min";
 
@@ -67,8 +68,8 @@ public class ScreeningService {
     }
 
     private void validateIfStartTimeLesserThanEndTime(Screening screening) {
-        if (screening.getEndTime().compareTo(screening.getStartTime()) < 0) {
-            throw new IllegalArgumentException("Start time must be lesser than end time");
+        if (screening.getEndTime().compareTo(screening.getStartTime()) <= 0) {
+            throw new IllegalArgumentException(WRONG_START_END_TIME);
         }
     }
 

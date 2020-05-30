@@ -25,6 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService.DURATION_OF_SCREENING_SHORTER_THAN_MOVIE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -228,6 +230,36 @@ public class ScreeningTests {
         screeningService.createScreening(screening);
         exceptionRule.expect(IllegalArgumentException.class);
         screeningService.createScreening(outsideOverlappingScreening);
+    }
+
+    @Test
+    public void shouldThrowExceptionOnEndTimeBeforeStartTime() {
+        ScreeningRoom screeningRoom = screeningRoomRepository.save(getDummyScreeningRoom());
+        Movie movie = movieRepository.save(getDummyMovie());
+        LocalDateTime now = LocalDateTime.now();
+        Screening screening = getDummyScreening(screeningRoom, movie)
+                .toBuilder()
+                .startTime(now)
+                .endTime(now)
+                .build();
+        exceptionRule.expect(IllegalArgumentException.class);
+        exceptionRule.expectMessage(ScreeningService.WRONG_START_END_TIME);
+        screeningService.createScreening(screening);
+    }
+
+    @Test
+    public void shouldThrowExceptionOnWrongScreeningDuration() {
+        ScreeningRoom screeningRoom = screeningRoomRepository.save(getDummyScreeningRoom());
+        Movie movie = movieRepository.save(getDummyMovie());
+        LocalDateTime now = LocalDateTime.now();
+        Screening screening = getDummyScreening(screeningRoom, movie)
+                .toBuilder()
+                .startTime(now)
+                .endTime(now.plusHours(1))
+                .build();
+        exceptionRule.expect(IllegalArgumentException.class);
+        exceptionRule.expectMessage(MessageFormat.format(DURATION_OF_SCREENING_SHORTER_THAN_MOVIE, screening.getMovie().getRunTime()));
+        screeningService.createScreening(screening);
     }
 
 }
