@@ -13,7 +13,6 @@ import {AlertPublisher, AlertPublisherImpl} from "../alert";
 
 export interface SeatActionPublisher {
     fetchSeats(screeningId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void;
-
     updateSeatReservationState(seatId: number, seatReservationState: ReservationState): SeatUpdateStateActionInterface;
 }
 

@@ -4,7 +4,7 @@ import './reservation-seats-grid.scss'
 import {ReservationState, Seat} from "../../../models/screening-rooms";
 import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch/dist";
 import {SeatActionPublisher, SeatsMap} from "../../../redux/actions/seat";
-import {connect} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import {useFetching} from "../../../utils/custom-fetch-hook";
 
 interface OwnProps {
@@ -26,12 +26,13 @@ interface SeatGridProps {
     columns: number[];
     rows: number[];
     seats: Seat[];
+    onSeatClick: (seat: Seat) => void;
 }
 
 export type ReservationSeatsGridProps = SeatGridState & OwnProps;
 
 const SeatsGridComponent = (props: SeatGridProps) => {
-    const { columns, rows, seats } = props;
+    const { columns, rows, seats, onSeatClick } = props;
 
     const mapSeatListToRows = (seatsToMap: Seat[]) => {
         let resultMap: SeatLayout = {}
@@ -67,6 +68,11 @@ const SeatsGridComponent = (props: SeatGridProps) => {
         }
     }
 
+    const handleSeatClick = (e: React.MouseEvent<HTMLTableDataCellElement>, seat: Seat) => {
+        e.preventDefault();
+        onSeatClick(seat);
+    }
+
     if(!seats || seats.length < 1) {
         return (
             <div className='message--info'>
@@ -99,8 +105,11 @@ const SeatsGridComponent = (props: SeatGridProps) => {
                             <React.Fragment>
                                 {
                                     seatsMap[row].map(seat => (
-                                        <td key={seat.id} style={getSeatStyle(seat)} className='single--seat'>
-                                            {seat.seatNumber}
+                                        <td key={seat.id}
+                                            style={getSeatStyle(seat)}
+                                            className='single--seat'
+                                            onClick={(e) => handleSeatClick(e, seat)}>
+                                                {seat.seatNumber}
                                         </td>
                                     ))
                                 }
@@ -115,7 +124,8 @@ const SeatsGridComponent = (props: SeatGridProps) => {
 }
 
 const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
-    const { seats, isFetching, seatActionPublisher, screeningId, className } = props;
+    const { seats, isFetching, seatActionPublisher, screeningId } = props;
+    const dispatch = useDispatch();
 
     useFetching(seatActionPublisher.fetchSeats(screeningId), [screeningId])
 
@@ -125,6 +135,18 @@ const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
             rowsList.push(i + 1)
         }
         return rowsList;
+    }
+
+    const onSeatClick = (seat: Seat) => {
+        console.log(seat);
+        switch(seat.reservationState) {
+            case ReservationState.AVAILABLE:
+                return dispatch(seatActionPublisher.updateSeatReservationState(seat.id, ReservationState.SELECTED));
+            case ReservationState.SELECTED:
+                return dispatch(seatActionPublisher.updateSeatReservationState(seat.id, ReservationState.AVAILABLE));
+            default:
+                return;
+        }
     }
 
     if(isFetching) {
@@ -156,6 +178,32 @@ const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
     }
 
     return (
+        <SeatsGridComponent
+            columns={columns}
+            rows={rows}
+            seats={seatsList}
+            onSeatClick={onSeatClick}
+        />
+    )
+}
+
+const mapStateToProps = (store: any, ownProps: OwnProps) => {
+    const state = store.screeningSeats;
+    return {
+        seats: state.seats,
+        isFetching: state.isFetching,
+        ...ownProps
+    }
+}
+
+// @ts-ignore
+const ConnectedReservationSeatsComponent: React.FC<OwnProps> = connect(mapStateToProps)(ReservationSeatsComponent);
+
+export const ReservationSeats = (props: OwnProps) => {
+
+    const { className } = props;
+
+    return (
         <div className={className}>
             <TransformWrapper
                 defaultPositionX={0}
@@ -171,26 +219,9 @@ const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
                 }}
                 scale={0.6}>
                 <TransformComponent>
-                    <SeatsGridComponent
-                        columns={columns}
-                        rows={rows}
-                        seats={seatsList}
-                    />
+                    <ConnectedReservationSeatsComponent {...props} />
                 </TransformComponent>
             </TransformWrapper>
         </div>
     )
 }
-
-const mapStateToProps = (store: any, ownProps: OwnProps) => {
-    const state = store.screeningSeats;
-    console.log(state);
-    return {
-        seats: state.seats,
-        isFetching: state.isFetching,
-        ...ownProps
-    }
-}
-
-// @ts-ignore
-export const ReservationSeats: React.FC<OwnProps> = connect(mapStateToProps)(ReservationSeatsComponent);
