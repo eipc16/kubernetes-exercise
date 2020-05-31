@@ -206,4 +206,24 @@ public class ReservationTests {
                 .allMatch(ReservationState.AVAILABLE::equals);
         assertTrue(allSeatsAreAvailable);
     }
+
+    @Test
+    public void shouldThrowExceptionOnRemovingReservationOfOtherUser() {
+        ScreeningRoom screeningRoom = screeningRoomService.createScreeningRoom(ScreeningTests.getDummyScreeningRoom());
+        Movie movie = movieRepository.save(ScreeningTests.getDummyMovie());
+        Screening screening = screeningRepository.save(getDummyScreeningThatNotStartedYet(screeningRoom, movie));
+        User user = userService.registerUser(getDummyUser());
+        Reservation dummyReservation = getDummyReservation(screening, user);
+        List<SeatAvailabilityDetails> seats = seatService.getSeatsDetailsForScreening(screening, Set.of(ObjectState.ACTIVE), user.getId());
+        Set<Seat> seatsToReserve = getAtMostNOfSeats(seats, 3);
+        Reservation reservation = reservationService.createReservation(dummyReservation, seatsToReserve, UserInfo.fromUser(user));
+        User otherDummyUser = getDummyUser().toBuilder()
+                .username("Tommy")
+                .email("tommy@example.com")
+                .build();
+        User otherUser = userService.registerUser(otherDummyUser);
+        exceptionRule.expect(IllegalArgumentException.class);
+        exceptionRule.expectMessage(ReservationService.NO_PERMISSION_TO_MAKE_OR_REMOVE_RESERVATION);
+        reservationService.removeReservationsByIds(Set.of(reservation.getId()), UserInfo.fromUser(otherUser));
+    }
 }

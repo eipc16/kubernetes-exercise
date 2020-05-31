@@ -29,7 +29,7 @@ import java.util.Set;
 public class ReservationService {
 
     private static final String CANNOT_MAKE_RESERVATION_FOR_USER = "Cannot make reservation for user with id {0}. User doesn't exist or has inactive account.";
-    private static final String NO_PERMISSION_TO_MAKE_RESERVATION = "You don't have sufficient privileges to make reservation for different user than currently logged!";
+    public static final String NO_PERMISSION_TO_MAKE_OR_REMOVE_RESERVATION = "You don't have sufficient privileges to make/remove reservation for different user than currently logged!";
     public static final String SEATS_ALREADY_RESERVED = "Cannot make reservation for seats {0}. They are already reserved.";
     public static final String CANNOT_RESERVE_AFTER_SCREENING_START = "Cannot make reservation after screening start time.";
 
@@ -76,7 +76,7 @@ public class ReservationService {
 
     private void validateIfCanPerformOnBehalfOfSuppliedUser(Reservation reservation, UserInfo currentUser) {
         if (!isModeratorOrAdmin(currentUser) && !currentUserIsUserFromReservation(reservation.getReservedByUser(), currentUser.getId())) {
-            throw new IllegalArgumentException(NO_PERMISSION_TO_MAKE_RESERVATION);
+            throw new IllegalArgumentException(NO_PERMISSION_TO_MAKE_OR_REMOVE_RESERVATION);
         }
     }
 
