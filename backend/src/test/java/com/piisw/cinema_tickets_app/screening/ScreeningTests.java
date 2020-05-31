@@ -76,6 +76,7 @@ public class ScreeningTests {
                 .startTime(LocalDateTime.now())
                 .endTime(LocalDateTime.now().plusHours(3))
                 .price(BigDecimal.TEN)
+                .objectState(ObjectState.ACTIVE)
                 .build();
     }
 
@@ -84,6 +85,7 @@ public class ScreeningTests {
                 .number(23L)
                 .rowsNumber(10L)
                 .seatsInRowNumber(10L)
+                .objectState(ObjectState.ACTIVE)
                 .build();
     }
 
@@ -102,6 +104,7 @@ public class ScreeningTests {
                 .posterUrl("https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg")
                 .actors("Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page, Tom Hardy")
                 .country("USA, UK")
+                .objectState(ObjectState.ACTIVE)
                 .build();
     }
 

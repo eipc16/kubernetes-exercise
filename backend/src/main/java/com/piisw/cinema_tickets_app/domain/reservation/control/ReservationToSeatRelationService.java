@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +44,7 @@ public class ReservationToSeatRelationService {
         return reservationToSeatRelationRepository.findAll(specification.whereReservationIdAndObjectStateIn(reservationsIds, objectStates));
     }
 
-    public List<ReservationToSeatRelation> createReservationToSeatRelation(Reservation reservation, List<Seat> seats) {
+    public List<ReservationToSeatRelation> createReservationToSeatRelation(Reservation reservation, Collection<Seat> seats) {
         List<ReservationToSeatRelation> relationsToCreate = seats.stream()
                 .map(seat -> buildReservationToSeatRelation(reservation, seat))
                 .collect(Collectors.toList());

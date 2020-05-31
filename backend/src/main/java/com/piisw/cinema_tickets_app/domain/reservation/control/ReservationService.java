@@ -44,7 +44,7 @@ public class ReservationService {
         return reservationRepository.findAll(specification.whereIdAndObjectStateIn(ids, objectStates));
     }
 
-    public Reservation createReservation(Reservation reservation, List<Seat> seatsToReserve, UserInfo userInfo) {
+    public Reservation createReservation(Reservation reservation, Collection<Seat> seatsToReserve, UserInfo userInfo) {
         Reservation reservationToCreate = reservation.toBuilder()
                 .id(null)
                 .objectState(ObjectState.ACTIVE)
@@ -56,7 +56,7 @@ public class ReservationService {
         return createdReservation;
     }
 
-    private void validateReservationOnCreate(Reservation reservation, Screening screening, List<Seat> seats, UserInfo userInfo) {
+    private void validateReservationOnCreate(Reservation reservation, Screening screening, Collection<Seat> seats, UserInfo userInfo) {
         validateReservationUser(reservation, userInfo);
         validateScreeningTime(screening);
         validateSeatsAvailability(screening, seats);
@@ -103,7 +103,7 @@ public class ReservationService {
         return reservationRepository.findAll(specification.whereScreeningIdEqualsAndObjectStateIn(screening.getId(), objectStates));
     }
 
-    private void validateSeatsAvailability(Screening screening, List<Seat> seatsToReserve) {
+    private void validateSeatsAvailability(Screening screening, Collection<Seat> seatsToReserve) {
         List<Reservation> alreadyExistingReservations = getReservationsForScreening(screening, Set.of(ObjectState.ACTIVE));
         List<Seat> reservedSeats = getReservedSeats(alreadyExistingReservations, Set.of(ObjectState.ACTIVE));
         Set<Long> alreadyReservedSeatsIds = getAlreadyReservedSeatsIds(reservedSeats, seatsToReserve);
@@ -120,7 +120,7 @@ public class ReservationService {
         return reservationToSeatRelationService.getReservedSeatsWithUserId(reservations, objectStates);
     }
 
-    private Set<Long> getAlreadyReservedSeatsIds(List<Seat> alreadyReserved, List<Seat> seatsToReserve) {
+    private Set<Long> getAlreadyReservedSeatsIds(Collection<Seat> alreadyReserved, Collection<Seat> seatsToReserve) {
         Set<Long> alreadyReservedIds = auditedObjectService.toSetOfIds(alreadyReserved);
         Set<Long> seatsToReserveIds = auditedObjectService.toSetOfIds(seatsToReserve);
         return Sets.intersection(alreadyReservedIds, seatsToReserveIds);
