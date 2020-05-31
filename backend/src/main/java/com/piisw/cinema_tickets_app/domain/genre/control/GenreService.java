@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,11 +22,6 @@ public class GenreService {
 
     public List<Genre> getGenresByName(String genreName, Set<ObjectState> objectStates) {
         return genreRepository.findAllByNameLikeAndObjectStateIn("%" + genreName + "%", objectStates);
-    }
-
-    public Optional<Genre> createGenre(String genreName) {
-        return createGenres(Collections.singleton(genreName)).getByOperationResult(OperationResultEnum.CREATED).stream()
-                .findFirst();
     }
 
     public BulkOperationResult<Genre> createGenres(Collection<String> genreNames) {
