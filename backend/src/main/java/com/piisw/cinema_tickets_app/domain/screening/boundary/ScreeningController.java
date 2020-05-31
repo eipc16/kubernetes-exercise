@@ -7,7 +7,6 @@ import com.piisw.cinema_tickets_app.domain.movie.control.MovieService;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
-import com.piisw.cinema_tickets_app.domain.screeningroom.boundary.ScreeningRoomMapper;
 import com.piisw.cinema_tickets_app.domain.screeningroom.control.ScreeningRoomService;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;

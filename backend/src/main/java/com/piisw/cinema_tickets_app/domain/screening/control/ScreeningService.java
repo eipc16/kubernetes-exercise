@@ -16,7 +16,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.text.MessageFormat;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -99,14 +98,23 @@ public class ScreeningService {
     }
 
     public List<Screening> getScreeningsBySearchParams(MovieScreeningSearchParams searchParams) {
-        List<Specification<Screening>> specifications = new ArrayList<>();
-        specifications.add(specification.whereStartTimeBetween(searchParams.getBeginDateTime(), searchParams.getEndDateTime()));
-        if (!CollectionUtils.isEmpty(searchParams.getGenres())) {
-            specifications.add(specification.whereMovieGenreIn(searchParams.getGenres()));
+        Specification<Screening> spec = specification.whereStartTimeBetween(searchParams.getBeginDateTime(), searchParams.getEndDateTime());
+        spec = applyMovieTitleFilter(spec, searchParams.getSearchText());
+        spec = applyMovieGenreFilter(spec, searchParams.getGenres());
+        return screeningRepository.findAll(spec);
+    }
+
+    private Specification<Screening> applyMovieTitleFilter(Specification<Screening> spec, String searchText) {
+        if (!Strings.isNullOrEmpty(searchText)) {
+            return spec.and(specification.whereMovieTitleLike(searchText));
         }
-        if (!Strings.isNullOrEmpty(searchParams.getSearchText())) {
-            specifications.add(specification.whereMovieTitleLike(searchParams.getSearchText()));
+        return spec;
+    }
+
+    private Specification<Screening> applyMovieGenreFilter(Specification<Screening> spec, List<String> genres) {
+        if (!CollectionUtils.isEmpty(genres)) {
+            return spec.and(specification.whereMovieGenreIn(genres));
         }
-        return screeningRepository.findAll(specification.mergeSpecifications(specifications));
+        return spec;
     }
 }

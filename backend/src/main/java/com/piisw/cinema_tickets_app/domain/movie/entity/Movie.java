@@ -61,7 +61,9 @@ public class Movie extends AuditedObject {
     private String country;
 
     @Transient
-    @OneToMany
     private Set<Genre> genres;
+
+    @OneToMany(mappedBy = MovieToGenreRelation_.MOVIE)
+    private Set<MovieToGenreRelation> movieToGenreRelations;
 
 }

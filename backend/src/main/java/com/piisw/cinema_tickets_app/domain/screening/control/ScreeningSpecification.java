@@ -3,9 +3,7 @@ package com.piisw.cinema_tickets_app.domain.screening.control;
 import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectSpecification;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject_;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
-import com.piisw.cinema_tickets_app.domain.genre.entity.Genre;
 import com.piisw.cinema_tickets_app.domain.genre.entity.Genre_;
-import com.piisw.cinema_tickets_app.domain.movie.entity.MovieToGenreRelation;
 import com.piisw.cinema_tickets_app.domain.movie.entity.MovieToGenreRelation_;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie_;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
@@ -13,13 +11,9 @@ import com.piisw.cinema_tickets_app.domain.screening.entity.Screening_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Component
@@ -46,18 +40,12 @@ public class ScreeningSpecification extends AuditedObjectSpecification<Screening
     }
 
     public Specification<Screening> whereMovieGenreIn(List<String> genres) {
-        return (root, criteriaQuery, criteriaBuilder) -> {
-            Root<MovieToGenreRelation> movieToGenre = criteriaQuery.from(MovieToGenreRelation.class);
-            Join<MovieToGenreRelation, Genre> movieToGenreXGenre = movieToGenre.join(MovieToGenreRelation_.genre);
-            return movieToGenreXGenre.get(Genre_.name).in(genres);
-        };
-    }
-
-    public Specification<Screening> distinct() {
-        return (root, criteriaQuery, criteriaBuilder) -> {
-            criteriaQuery.select(root.get(Screening_.MOVIE).get(Movie_.IMDB_ID)).distinct(true);
-            return criteriaBuilder.conjunction();
-        };
+        return (root, criteriaQuery, criteriaBuilder) ->
+                root.join(Screening_.movie)
+                        .join(Movie_.movieToGenreRelations)
+                        .join(MovieToGenreRelation_.genre)
+                        .get(Genre_.name)
+                        .in(genres);
     }
 
     public Specification<Screening> whereStartTimeBetween(LocalDateTime begin, LocalDateTime end) {
@@ -77,12 +65,4 @@ public class ScreeningSpecification extends AuditedObjectSpecification<Screening
         };
     }
 
-    public Specification<Screening> mergeSpecifications(@NotEmpty List<Specification<Screening>> specifications) {
-        if (specifications.size() == 1) {
-            return specifications.get(0);
-        }
-        return specifications.stream()
-                .filter(Objects::nonNull)
-                .reduce(specifications.get(0), Specification::and);
-    }
 }

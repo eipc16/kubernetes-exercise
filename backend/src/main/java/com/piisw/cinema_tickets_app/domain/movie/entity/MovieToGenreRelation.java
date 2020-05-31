@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,11 +21,11 @@ import javax.persistence.Table;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MovieToGenreRelation extends AuditedObject {
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "movieId")
     private Movie movie;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "genreId")
     private Genre genre;
 
