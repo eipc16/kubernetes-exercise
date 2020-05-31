@@ -21,11 +21,11 @@ import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.SEA
 
 @Api(tags = "Genres")
 @RestController
-@RequestMapping(GenreController.MAIN_PATH)
+@RequestMapping(GenreController.MAIN_RESOURCE)
 @RequiredArgsConstructor
 public class GenreController {
 
-    public static final String MAIN_PATH = "/genres";
+    public static final String MAIN_RESOURCE = "/genres";
 
     private final GenreService genreService;
     private final GenreMapper genreMapper;

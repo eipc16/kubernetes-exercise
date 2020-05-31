@@ -86,13 +86,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js")
                 .permitAll()
                 .antMatchers(
-                        AuthenticationController.MAIN_PATH + WILDCARD_PATH)
+                        AuthenticationController.MAIN_RESOURCE + WILDCARD_PATH)
                 .permitAll()
                 .antMatchers(
-                        MovieController.MAIN_PATH + WILDCARD_PATH)
+                        MovieController.MAIN_RESOURCE + WILDCARD_PATH)
                 .permitAll()
                 .antMatchers(
-                        GenreController.MAIN_PATH + WILDCARD_PATH)
+                        GenreController.MAIN_RESOURCE + WILDCARD_PATH)
                 .permitAll()
                 .antMatchers(
                         "/v2/api-docs",

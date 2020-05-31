@@ -45,7 +45,7 @@ public class ReservationMapper {
 
     private URI buildReservationUri(Reservation reservation) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(ReservationController.MAIN_PATH)
+                .path(ReservationController.MAIN_RESOURCE)
                 .path(ID_PATH)
                 .buildAndExpand(reservation.getId())
                 .toUri();

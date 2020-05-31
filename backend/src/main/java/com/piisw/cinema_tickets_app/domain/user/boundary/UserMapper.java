@@ -38,7 +38,7 @@ public class UserMapper {
 
     private URI buildUri(Long id) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(UserController.MAIN_PATH)
+                .path(UserController.MAIN_RESOURCE)
                 .path(ID_PATH)
                 .queryParam(OBJECT_STATE, ObjectState.values())
                 .buildAndExpand(id)

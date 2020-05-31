@@ -47,7 +47,7 @@ public class ScreeningRoomMapper {
 
     private URI buildScreeningRoomUri(Long ...ids) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(ScreeningRoomController.MAIN_PATH)
+                .path(ScreeningRoomController.MAIN_RESOURCE)
                 .path(IDS_PATH)
                 .queryParam(OBJECT_STATE, ObjectState.values())
                 .buildAndExpand(ids)

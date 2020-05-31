@@ -52,7 +52,7 @@ public class ScreeningMapper {
 
     private URI buildResourceDTO(Long id) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(ScreeningController.MAIN_PATH)
+                .path(ScreeningController.MAIN_RESOURCE)
                 .path(IDS_PATH)
                 .buildAndExpand(id)
                 .toUri();

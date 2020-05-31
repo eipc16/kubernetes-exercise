@@ -7,7 +7,6 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.entity.AuditedObject;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.movie.control.MovieService;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
-import com.piisw.cinema_tickets_app.domain.movie.entity.MovieScreeningSearchParams;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.BulkOperationResult;
@@ -42,11 +41,11 @@ import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.*;
 
 @Api(tags = "Movies")
 @RestController
-@RequestMapping(MovieController.MAIN_PATH)
+@RequestMapping(MovieController.MAIN_RESOURCE)
 @RequiredArgsConstructor
 public class MovieController {
 
-    public static final String MAIN_PATH = "/movies";
+    public static final String MAIN_RESOURCE = "/movies";
     public static final String BEGIN_DATE = "beginDate";
     public static final String END_DATE = "endDate";
     public static final String GENRES = "genres";

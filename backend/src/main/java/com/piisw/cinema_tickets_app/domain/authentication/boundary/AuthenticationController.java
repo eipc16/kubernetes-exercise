@@ -30,11 +30,11 @@ import javax.validation.Valid;
 
 @Api(tags = "Authentication")
 @RestController
-@RequestMapping(AuthenticationController.MAIN_PATH)
+@RequestMapping(AuthenticationController.MAIN_RESOURCE)
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    public static final String MAIN_PATH = "/auth";
+    public static final String MAIN_RESOURCE = "/auth";
 
     private final AuthenticationManager authenticationManager;
     private final TokenHandler tokenHandler;

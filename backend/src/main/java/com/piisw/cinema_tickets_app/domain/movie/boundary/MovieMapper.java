@@ -79,7 +79,7 @@ public class MovieMapper {
 
     private URI buildResourceDTOUri(Long... ids) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(MovieController.MAIN_PATH)
+                .path(MovieController.MAIN_RESOURCE)
                 .path(IDS_PATH)
                 .queryParam(OBJECT_STATE, ObjectState.values())
                 .buildAndExpand(ids)

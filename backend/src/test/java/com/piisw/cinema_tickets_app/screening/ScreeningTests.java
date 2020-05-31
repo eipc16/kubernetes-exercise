@@ -5,7 +5,7 @@ import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectSp
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.movie.control.MovieRepository;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
-import com.piisw.cinema_tickets_app.domain.movie.entity.MovieScreeningSearchParams;
+import com.piisw.cinema_tickets_app.domain.movie.boundary.MovieScreeningSearchParams;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningService;
 import com.piisw.cinema_tickets_app.domain.screening.control.ScreeningSpecification;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;

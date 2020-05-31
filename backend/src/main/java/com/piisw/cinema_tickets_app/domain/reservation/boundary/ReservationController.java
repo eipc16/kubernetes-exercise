@@ -35,11 +35,11 @@ import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.IDS
 
 @Api(tags = "Reservations")
 @RestController
-@RequestMapping(ReservationController.MAIN_PATH)
+@RequestMapping(ReservationController.MAIN_RESOURCE)
 @RequiredArgsConstructor
 public class ReservationController {
 
-    public static final String MAIN_PATH = "/reservation";
+    public static final String MAIN_RESOURCE = "/reservation";
 
     private final ReservationMapper reservationMapper;
     private final ReservationService reservationService;

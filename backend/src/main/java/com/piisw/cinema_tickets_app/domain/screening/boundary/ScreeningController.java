@@ -33,12 +33,12 @@ import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.OBJ
 
 @Api(tags = "Screenings")
 @RestController
-@RequestMapping(ScreeningController.MAIN_PATH)
+@RequestMapping(ScreeningController.MAIN_RESOURCE)
 @RequiredArgsConstructor
 public class ScreeningController {
 
-    public static final String MAIN_PATH = "/screening";
-    public static final String MOVIE_PATH = "/movie";
+    public static final String MAIN_RESOURCE = "/screening";
+    public static final String MOVIE_RESOURCE = "/movie";
 
     private final ScreeningService screeningService;
     private final MovieService movieService;
@@ -55,7 +55,7 @@ public class ScreeningController {
     }
 
     @ApiOperation(value = "${api.screenings.for.movie.value}", notes = "${api.screenings.for.movie.get.notes}")
-    @GetMapping(MOVIE_PATH + ID_PATH)
+    @GetMapping(MOVIE_RESOURCE + ID_PATH)
     @HasAnyRole
     public List<ScreeningDTO> getScreeningsForMovie(@PathVariable(ID) Long movieId,
                                                     @RequestParam(value = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {

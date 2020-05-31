@@ -1,4 +1,4 @@
-package com.piisw.cinema_tickets_app.domain.movie.entity;
+package com.piisw.cinema_tickets_app.domain.movie.boundary;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -4,7 +4,7 @@ import com.google.common.base.Strings;
 import com.piisw.cinema_tickets_app.domain.auditedobject.control.AuditedObjectService;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
-import com.piisw.cinema_tickets_app.domain.movie.entity.MovieScreeningSearchParams;
+import com.piisw.cinema_tickets_app.domain.movie.boundary.MovieScreeningSearchParams;
 import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.infrastructure.utils.ExceptionUtils;
 import lombok.RequiredArgsConstructor;

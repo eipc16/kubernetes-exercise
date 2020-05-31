@@ -29,11 +29,11 @@ import java.util.stream.Collectors;
 
 @Api(tags = "Screening Rooms")
 @RestController
-@RequestMapping(ScreeningRoomController.MAIN_PATH)
+@RequestMapping(ScreeningRoomController.MAIN_RESOURCE)
 @RequiredArgsConstructor
 public class ScreeningRoomController {
 
-    public static final String MAIN_PATH = "/screening-rooms";
+    public static final String MAIN_RESOURCE = "/screening-rooms";
 
     private final ScreeningRoomService screeningRoomService;
     private final ScreeningRoomMapper screeningRoomMapper;

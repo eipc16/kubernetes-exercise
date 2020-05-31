@@ -20,11 +20,11 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = "Users")
 @RestController
-@RequestMapping(UserController.MAIN_PATH)
+@RequestMapping(UserController.MAIN_RESOURCE)
 @RequiredArgsConstructor
 public class UserController {
 
-    public static final String MAIN_PATH = "/users";
+    public static final String MAIN_RESOURCE = "/users";
     private static final String USERNAME = "username";
     private static final String EMAIL = "email";
     private static final String CHECK_USERNAME_PATH = "/check/username/{" + USERNAME + "}";
