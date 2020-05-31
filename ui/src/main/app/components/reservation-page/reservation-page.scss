@@ -1,9 +1,9 @@
 @media all and (min-width: 900px) {
   .page--content {
     grid-template:
-            "details date-selector" 0.15fr
+            "details date-selector" 0.25fr
             "details seats" 0.70fr
-            "details actions" 0.15fr
+            "actions seats" 0.15fr
                 / 0.2fr 1fr;
   }
 }
@@ -37,7 +37,7 @@
   }
 
   & > .reservation--date--selector {
-    background: cornflowerblue;
+    overflow: auto;
     grid-area: date-selector;
   }
 

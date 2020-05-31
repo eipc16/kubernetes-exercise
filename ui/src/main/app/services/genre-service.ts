@@ -1,6 +1,7 @@
 import {appConfig} from "../config";
 import {handleResponse} from "./response-handler";
 import {Genre} from "../models/genre";
+import {AuthenticationService, AuthenticationServiceImpl} from "./auth-service";
 
 export interface GenreService {
     // all genres
@@ -9,13 +10,15 @@ export interface GenreService {
 
 export class GenreServiceImpl implements GenreService {
     static genreService: GenreService;
+    private authService: AuthenticationService;
 
-    private constructor () {
+    private constructor(authenticationService?: AuthenticationService) {
+        this.authService = authenticationService || AuthenticationServiceImpl.createInstance();
     }
 
-    static createInstance () {
+    static createInstance (authenticationService?: AuthenticationService) {
         if (!GenreServiceImpl.genreService) {
-            GenreServiceImpl.genreService = new GenreServiceImpl()
+            GenreServiceImpl.genreService = new GenreServiceImpl(authenticationService)
         }
         return GenreServiceImpl.genreService
     }
@@ -23,7 +26,7 @@ export class GenreServiceImpl implements GenreService {
     fetchGenres(searchText?: string): Promise<Genre[]> {
         const requestOptions = {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json', 'Authorization': this.authService.getCurrentTokenAsString() }
         }
         let queryParams = '';
         if(searchText) {

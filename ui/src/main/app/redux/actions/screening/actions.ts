@@ -3,26 +3,28 @@ import {Alert} from "../../../models/infrastructure";
 import {
     ScreeningsFailureActionInterface,
     ScreeningsRequestActionInterface,
-    ScreeningsSetCurrentActionInterface,
     ScreeningsSuccessActionInterface
 } from "./types";
 import {AlertPublisher, AlertPublisherImpl} from "../alert";
 import {ScreeningService} from "../../../services/screening-service";
 import {screeningConstants} from "../../constants/screening-constants";
 import {Screening} from "../../../models/screening";
+import {SeatActionPublisher, SeatActionPublisherImpl} from "../seat";
+import {SeatServiceImpl} from "../../../services/seat-service";
 
 export interface ScreeningActionPublisher {
     fetchScreenings(movieId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void;
-
-    setCurrentScreening(screeningId: number): ScreeningsSetCurrentActionInterface;
+    setCurrentScreening(screeningId: number): (dispatch: Dispatch<Action>) => void;
 }
 
 export class ScreeningActionPublisherImpl implements ScreeningActionPublisher {
     private screeningService: ScreeningService;
     private alertPublisher: AlertPublisher;
+    private seatsPublisher: SeatActionPublisher;
 
-    constructor(screeningService: ScreeningService, alertPublisher?: AlertPublisher) {
+    constructor(screeningService: ScreeningService, seatsPublisher?: SeatActionPublisher, alertPublisher?: AlertPublisher) {
         this.screeningService = screeningService;
+        this.seatsPublisher = seatsPublisher || new SeatActionPublisherImpl(SeatServiceImpl.createInstance());
         this.alertPublisher = alertPublisher || AlertPublisherImpl.createInstance();
     }
 
@@ -67,10 +69,17 @@ export class ScreeningActionPublisherImpl implements ScreeningActionPublisher {
         }
     }
 
-    setCurrentScreening(screeningId: number): ScreeningsSetCurrentActionInterface {
-        return {
-            type: screeningConstants.SET_CURRENT_SCREENING,
-            screeningId: screeningId
-        };
+    setCurrentScreening(screeningId: number): (dispatch: Dispatch<Action>) => void {
+        return (dispatch: Dispatch<Action>) => {
+            this.seatsPublisher.fetchSeats(screeningId)(dispatch);
+            dispatch(setScreening(screeningId));
+        }
+
+        function setScreening(screeningId: number) {
+            return {
+                type: screeningConstants.SET_CURRENT_SCREENING,
+                screeningId: screeningId
+            };
+        }
     }
 }

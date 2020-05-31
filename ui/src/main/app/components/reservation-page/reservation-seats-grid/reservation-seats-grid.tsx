@@ -18,6 +18,8 @@ interface SeatGridState {
     seats: SeatsMap;
     isFetching: boolean;
     currentScreening: Screening;
+    columns?: number;
+    rows?: number;
 }
 
 interface SeatLayout {
@@ -25,8 +27,8 @@ interface SeatLayout {
 }
 
 interface SeatGridProps {
-    columns: number[];
-    rows: number[];
+    columns: number;
+    rows: number;
     seats: Seat[];
     onSeatClick: (seat: Seat) => void;
 }
@@ -70,6 +72,14 @@ const SeatsGridComponent = (props: SeatGridProps) => {
         }
     }
 
+    const createArrayWithGivenSize = (size: number) => {
+        let rowsList: number[] = [];
+        for (let i = 0; i < size; i++) {
+            rowsList.push(i + 1)
+        }
+        return rowsList;
+    }
+
     const handleSeatClick = (e: React.MouseEvent<HTMLTableDataCellElement>, seat: Seat) => {
         e.preventDefault();
         onSeatClick(seat);
@@ -84,7 +94,11 @@ const SeatsGridComponent = (props: SeatGridProps) => {
     }
 
     const seatsMap = mapSeatListToRows(seats);
-    console.log(seatsMap);
+    const rowsArray = createArrayWithGivenSize(rows);
+    const columnsArray = createArrayWithGivenSize(columns);
+
+    console.log(seatsMap, rowsArray, columnsArray);
+
     return (
         <div className='seat--grid'>
             <p className='screen'>Screen</p>
@@ -94,14 +108,14 @@ const SeatsGridComponent = (props: SeatGridProps) => {
                     <td key='empty' className='single--seat empty'> </td>
                     <React.Fragment>
                         {
-                            columns.map(column => (<td key={column} className='single--seat no--seat'>{column}</td>))
+                            columnsArray.map(column => (<td key={column} className='single--seat no--seat'>{column}</td>))
                         }
                     </React.Fragment>
                 </tr>
                 </thead>
                 <tbody>
                 {
-                    rows.map(row =>
+                    rowsArray.map(row =>
                         <tr key={row}>
                             <td key={row} className='single--seat no--seat'>{row}</td>
                             <React.Fragment>
@@ -126,20 +140,12 @@ const SeatsGridComponent = (props: SeatGridProps) => {
 }
 
 const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
-    const {seats, isFetching, seatActionPublisher, currentScreening} = props;
+    const {seats, isFetching, seatActionPublisher, currentScreening, columns, rows } = props;
     const dispatch = useDispatch();
 
     const screeningId = currentScreening ? currentScreening.screeningId : 0;
 
     useFetching(seatActionPublisher.fetchSeats(screeningId), [screeningId])
-
-    const createArrayWithGivenSize = (size: number) => {
-        let rowsList: number[] = [];
-        for (let i = 0; i < size; i++) {
-            rowsList.push(i + 1)
-        }
-        return rowsList;
-    }
 
     const onSeatClick = (seat: Seat) => {
         console.log(seat);
@@ -178,8 +184,6 @@ const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
     }
 
     const seatsList: Seat[] = Object.values(seats);
-    const rows = createArrayWithGivenSize(currentScreening.screeningRoom.rowsNumber);
-    const columns = createArrayWithGivenSize(currentScreening.screeningRoom.seatsInRowNumber);
 
     if (!seatsList || seatsList.length < 1) {
         return (
@@ -191,8 +195,8 @@ const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
 
     return (
         <SeatsGridComponent
-            columns={columns}
-            rows={rows}
+            columns={columns || 0}
+            rows={rows || 0}
             seats={seatsList}
             onSeatClick={onSeatClick}
         />
@@ -206,6 +210,8 @@ const mapStateToProps = (store: any, ownProps: OwnProps) => {
         seats: seatsState.seats,
         isFetching: seatsState.isFetching,
         currentScreening: screeningsState.currentScreening,
+        rows: screeningsState.currentScreening?.screeningRoom.rowsNumber,
+        columns: screeningsState.currentScreening?.screeningRoom.seatsInRowNumber,
         ...ownProps
     }
 }
