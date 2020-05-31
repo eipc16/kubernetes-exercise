@@ -49,6 +49,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -186,5 +187,23 @@ public class ReservationTests {
         exceptionRule.expect(IllegalArgumentException.class);
         exceptionRule.expectMessage(MessageFormat.format(ReservationService.SEATS_ALREADY_RESERVED, StringUtils.join(auditedObjectService.toSetOfIds(seatsToReserve))));
         reservationService.createReservation(otherReservation, otherSeatsToReserve, UserInfo.fromUser(user));
+    }
+
+    @Test
+    public void shouldRemoveReservation() {
+        ScreeningRoom screeningRoom = screeningRoomService.createScreeningRoom(ScreeningTests.getDummyScreeningRoom());
+        Movie movie = movieRepository.save(ScreeningTests.getDummyMovie());
+        Screening screening = screeningRepository.save(getDummyScreeningThatNotStartedYet(screeningRoom, movie));
+        User user = userService.registerUser(getDummyUser());
+        Reservation dummyReservation = getDummyReservation(screening, user);
+        List<SeatAvailabilityDetails> seats = seatService.getSeatsDetailsForScreening(screening, Set.of(ObjectState.ACTIVE), user.getId());
+        Set<Seat> seatsToReserve = getAtMostNOfSeats(seats, 3);
+        Reservation reservation = reservationService.createReservation(dummyReservation, seatsToReserve, UserInfo.fromUser(user));
+        reservationService.removeReservationsByIds(Set.of(reservation.getId()), UserInfo.fromUser(user));
+        List<SeatAvailabilityDetails> seatsAfterRemovingReservation = seatService.getSeatsDetailsForScreening(screening, Set.of(ObjectState.ACTIVE), user.getId());
+        boolean allSeatsAreAvailable = seatsAfterRemovingReservation.stream()
+                .map(SeatAvailabilityDetails::getReservationState)
+                .allMatch(ReservationState.AVAILABLE::equals);
+        assertTrue(allSeatsAreAvailable);
     }
 }
