@@ -1,17 +1,28 @@
 import React from "react";
 
 import './reservation-actions.scss'
+import {Button} from "antd";
 
 interface ReservationActionsProps {
     className: string;
 }
 
 const ReservationActionsComponent = (props: ReservationActionsProps) => {
-    const { className } = props;
+    let { className } = props;
+
+
 
     return (
         <div className={className} >
-            ReservationActionsComponent
+            <span>
+                Your reservation:
+            </span>
+            <span>
+                Number of seats: 0
+            </span>
+            <Button>
+                Reserve
+            </Button>
         </div>
     )
 }

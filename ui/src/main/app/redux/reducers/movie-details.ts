@@ -1,5 +1,5 @@
 import {movieDetailsConstants} from '../constants'
-import {MovieDetails} from "../../models/movie-details";
+import {MovieDetailsList} from "../../models/movie-details";
 import {MovieDetailsAction, MovieDetailsSuccessActionInterface} from "../actions/movie-details";
 
 const initialState = {
@@ -11,7 +11,7 @@ const initialState = {
 export interface MovieDetailsState {
     isFetching?: boolean;
     isFetched?: boolean;
-    movie?: MovieDetails | null;
+    movie?: MovieDetailsList | null;
 }
 
 export function movieDetailsReducer(state: MovieDetailsState = initialState, action: MovieDetailsAction): MovieDetailsState {

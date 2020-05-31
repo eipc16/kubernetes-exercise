@@ -5,7 +5,7 @@ import {
     MovieDetailsSuccessActionInterface
 } from './types'
 import {MovieDetailsService} from "../../../services/movie-details-service";
-import {MovieDetails} from "../../../models/movie-details";
+import {MovieDetailsList} from "../../../models/movie-details";
 import {movieDetailsConstants} from "../../constants";
 
 export interface MovieDetailsActionPublisher {
@@ -24,7 +24,7 @@ export class MovieDetailsActionPublisherImpl implements MovieDetailsActionPublis
             dispatch(request(id))
             this.movieDetailsService.getMovieDetails(id)
                 .then(
-                    (movie: MovieDetails) => {
+                    (movie: MovieDetailsList) => {
                         dispatch(success(movie))
                     },
                     (errorResponse: string) => {
@@ -40,7 +40,7 @@ export class MovieDetailsActionPublisherImpl implements MovieDetailsActionPublis
             }
         }
 
-        function success(movie: MovieDetails): MovieDetailsSuccessActionInterface {
+        function success(movie: MovieDetailsList): MovieDetailsSuccessActionInterface {
             return {
                 type: movieDetailsConstants.MOVIE_DETAILS_SUCCESS,
                 movie: movie

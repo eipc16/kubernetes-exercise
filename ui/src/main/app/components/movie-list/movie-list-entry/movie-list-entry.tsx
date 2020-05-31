@@ -20,7 +20,8 @@ export const MovieListEntry = (props: MovieListEntryProps) => {
 
     return (
         <Card className='movie--entry--card' hoverable>
-            <img className='movie--poster' src={movie.posterUrl} alt={movie.title + '__poster'} onError={handleImageError} />
+            <img className='movie--poster' src={movie.posterUrl} alt={movie.title + '__poster'}
+                 onError={handleImageError} />
             <Meta className='meta' title={movie.title} description={'Release Date: ' + movie.releaseDate}/>
             <div className='thumbnail--overlay'>
                 <h1>{movie.title}</h1>

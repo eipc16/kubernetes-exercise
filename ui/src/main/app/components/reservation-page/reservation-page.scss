@@ -1,20 +1,18 @@
-@media all and (min-width: 900px) {
+@media all and (min-width: 1200px) {
   .page--content {
     grid-template:
-            "details date-selector" 0.25fr
-            "details seats" 0.70fr
-            "actions seats" 0.15fr
-                / 0.2fr 1fr;
+            "details date-selector actions" 0.2fr
+            "details seats actions" 0.8fr / 0.15fr 0.7fr 0.15fr;
   }
 }
 
-@media all and (max-width: 900px) {
+@media all and (max-width: 1200px) {
   .page--content {
     grid-template:
-            "details"
             "date-selector"
             "seats"
-            "actions";
+            "actions"
+            "details";
   }
 }
 
@@ -32,13 +30,14 @@
   }
 
   & > .reservation--movie--details {
-    background: rebeccapurple;
     grid-area: details;
+    border-right: 1px solid #e1e4e8;
+
   }
 
   & > .reservation--date--selector {
-    overflow: auto;
     grid-area: date-selector;
+    border-right: 1px solid #e1e4e8;
   }
 
   & > .reservation--seats--grid {
@@ -46,7 +45,8 @@
   }
 
   & > .reservation--actions {
-    background: firebrick;
     grid-area: actions;
+    border-radius: 3px;
+    border-right: 1px solid #e1e4e8;
   }
 }

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {connect, useDispatch} from "react-redux";
-import {Button, Pagination} from "antd";
+import {Button, List, Pagination} from "antd";
 import moment from 'moment';
 
 import {ScreeningActionPublisher} from "../../../redux/actions/screening";
@@ -56,7 +56,6 @@ const ReservationDatePicker = (props: ReservationDatePickerProps) => {
             itemRender={customPaginationRender}
             onChange={onChange}
             showSizeChanger={false}
-            defaultCurrent={1}
             responsive={true}
         />
     )
@@ -69,24 +68,10 @@ interface ScreeningSelectorProps {
     dateFormat?: string;
 }
 
-interface ScreeningsByRoom {
-    [roomNumber: number]: Screening[];
-}
-
 const ScreeningSelector = (props: ScreeningSelectorProps) => {
     const { screenings, dateFormat, currentScreening, onSelectScreening } = props;
 
     const currentDateTimeFormat: string = dateFormat || 'hh:mm';
-
-    const screeningsGroupedByRoom = screenings.reduce((acc: ScreeningsByDay, screening: Screening) => {
-        const roomNumber = screening.screeningRoom.number;
-        if (acc[roomNumber]) {
-            acc[roomNumber].push(screening)
-        } else {
-            acc[roomNumber] = [screening]
-        }
-        return acc;
-    }, {})
 
     const onScreeningClick = (e: React.MouseEvent<HTMLElement>, screening: Screening) => {
         e.preventDefault();
@@ -98,35 +83,17 @@ const ScreeningSelector = (props: ScreeningSelectorProps) => {
     }
 
     return (
-        <table className='screenings--table'>
-            <thead className='screenings--table--column--names'>
-                <tr>
-                    <th className='screening-rom--column--name'>Screening Room</th>
-                    <th className='time--column--name'>Time</th>
-                </tr>
-            </thead>
-            <tbody className='screenings--table--body'>
-                {
-                    Object.keys(screeningsGroupedByRoom).map(screeningRoomName => (
-                        <tr key={screeningRoomName} className='screenings--screening-room-row'>
-                            <td className='screening--room--name'>{screeningRoomName}</td>
-                            <td className='screenings--per--room'>
-                                {
-                                    screeningsGroupedByRoom[screeningRoomName].map(screening => (
-                                        <Button className={`single--screening ${isSelected(screening) && 'selected-screening'}`}
-                                                key={screening.screeningId}
-                                                onClick={(e) => onScreeningClick(e, screening)}
-                                        >
-                                            {moment(screening.startTime).format(currentDateTimeFormat)}
-                                        </Button>
-                                    ))
-                                }
-                            </td>
-                        </tr>
-                    ))
-                }
-            </tbody>
-        </table>
+        <div>
+            <List dataSource={screenings} renderItem={ screening =>
+                <Button className={`single--screening ${isSelected(screening) && 'selected-screening'}`}
+                        key={screening.screeningId}
+                        onClick={(e) => onScreeningClick(e, screening)}
+                >
+                    {moment(screening.startTime).format(currentDateTimeFormat)} - Room: {screening.screeningRoom.number}
+                </Button>
+            }>
+            </List>
+        </div>
     )
 }
 

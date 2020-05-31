@@ -1,6 +1,6 @@
 import { Action } from 'redux'
 import { movieDetailsConstants } from '../../constants'
-import {MovieDetails} from "../../../models/movie-details";
+import { MovieDetailsList } from "../../../models/movie-details";
 
 export interface MovieDetailsRequestActionInterface extends Action {
     type: typeof movieDetailsConstants.MOVIE_DETAILS_REQUEST,
@@ -14,7 +14,7 @@ export interface MovieDetailsFailureActionInterface extends Action {
 
 export interface MovieDetailsSuccessActionInterface extends Action {
     type: typeof movieDetailsConstants.MOVIE_DETAILS_SUCCESS,
-    movie: MovieDetails
+    movie: MovieDetailsList
 }
 
 export type MovieDetailsAction = MovieDetailsFailureActionInterface | MovieDetailsRequestActionInterface
