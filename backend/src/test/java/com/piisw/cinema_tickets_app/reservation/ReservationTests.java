@@ -27,7 +27,9 @@ import com.piisw.cinema_tickets_app.infrastructure.configuration.AuditingConfig;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
 import com.piisw.cinema_tickets_app.screening.ScreeningTests;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -68,6 +70,9 @@ public class ReservationTests {
 
     @Autowired
     private SeatService seatService;
+
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Test
     public void shouldCreteReservation() {
@@ -117,5 +122,25 @@ public class ReservationTests {
                 .objectState(ObjectState.ACTIVE)
                 .userRole(UserRole.ROLE_USER)
                 .build();
+    }
+
+    @Test
+    public void shouldThrowExceptionOnReservationAfterScreeningStart() {
+        ScreeningRoom screeningRoom = screeningRoomRepository.save(ScreeningTests.getDummyScreeningRoom());
+        Movie movie = movieRepository.save(ScreeningTests.getDummyMovie());
+        Screening screening = screeningRepository.save(ScreeningTests.getDummyScreening(screeningRoom, movie)
+                .toBuilder()
+                .startTime(LocalDateTime.now().plusHours(-1))
+                .build());
+        User user = userService.registerUser(getDummyUser());
+        Reservation dummyReservation = getDummyReservation(screening, user);
+        List<SeatAvailabilityDetails> seats = seatService.getSeatsDetailsForScreening(screening, Set.of(ObjectState.ACTIVE), user.getId());
+        Set<Seat> seatsToReserve = seats.stream()
+                .map(SeatAvailabilityDetails::getSeat)
+                .limit(3)
+                .collect(Collectors.toSet());
+        exceptionRule.expect(IllegalArgumentException.class);
+        exceptionRule.expectMessage(ReservationService.CANNOT_RESERVE_AFTER_SCREENING_START);
+        reservationService.createReservation(dummyReservation, seatsToReserve, UserInfo.fromUser(user));
     }
 }
