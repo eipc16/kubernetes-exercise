@@ -43,7 +43,7 @@ export const ReservationPage = (props: any) => {
                                          className='reservation--date--selector'/>
                 <ReservationSeats seatActionPublisher={seatActionPublisher}
                                   className='reservation--seats--grid'/>
-                <ReservationActions className='reservation--actions'/>
+                <ReservationActions className='reservation--actions' seatActionPublisher={seatActionPublisher}/>
                 <MovieDetailsCom movieDetailsPublisher={movieDetailsPublisher} className='reservation--movie--details' movieId={props.match.params.id}/>
             </div>
         </React.Fragment>
