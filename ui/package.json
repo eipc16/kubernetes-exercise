@@ -40,8 +40,6 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "jest",
-    "test:watch": "npm test -- --watch",
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.ts src/**/*.tsx --fix"
   },
@@ -79,8 +77,6 @@
     "redux-mock-store": "^1.5.4"
   },
   "jest": {
-    "setupFiles": [
-      "jest-localstorage-mock"
-    ]
+
   }
 }
