@@ -6,7 +6,7 @@ import { Dispatch } from 'redux'
 
 export interface AlertPublisher {
     pushAlert(alert: Alert): (dispatch: Dispatch<AlertAction>) => void;
-    dismissAlert(component:string, alertId: string): DismissAlertActionInterface;
+    dismissAlert(component: string, alertId: string): DismissAlertActionInterface;
 }
 
 export class AlertPublisherImpl implements AlertPublisher {
@@ -35,7 +35,7 @@ export class AlertPublisherImpl implements AlertPublisher {
       }
     }
 
-    dismissAlert (component:string, alertId: string): DismissAlertActionInterface {
+    dismissAlert (component: string, alertId: string): DismissAlertActionInterface {
       return {
         type: alertConstants.DISMISS_ALERT,
         component: component,

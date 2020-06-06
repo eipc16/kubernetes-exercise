@@ -9,8 +9,8 @@ import {Button, Drawer} from "antd";
 import {MovieDetailsInterface} from "../../models/movie-details/movie-details";
 
 interface OwnProps {
-    movieDetailsPublisher: MovieDetailsActionPublisher,
-    movieId: number,
+    movieDetailsPublisher: MovieDetailsActionPublisher;
+    movieId: number;
     className?: string;
 }
 
@@ -40,7 +40,7 @@ const MovieDetailsComponent = (props: MovieDetailsProps) => {
         e.currentTarget.src = "not_found.jpg"
     };
 
-    const MovieDetailsInformation = (props: { movie?: MovieDetailsInterface, className: string }) => {
+    const MovieDetailsInformation = (props: { movie?: MovieDetailsInterface; className: string }) => {
         const {movie, className} = props;
 
         if (!movie) {

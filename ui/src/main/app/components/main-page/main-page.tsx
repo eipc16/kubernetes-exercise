@@ -13,7 +13,7 @@ interface OwnProps {
 }
 
 interface State {
-    loggedIn?: boolean
+    loggedIn?: boolean;
 }
 
 type MainPageProps = State & OwnProps;
@@ -26,7 +26,7 @@ const MainPageComponent: React.FC<MainPageProps> = (props: MainPageProps) => {
     const [loginPublisher] = useState(new LoginActionPublisherImpl(authService))
     const dispatch = useDispatch()
 
-    let history = useHistory();
+    const history = useHistory();
     const onClick = () => {
         if (loggedIn)
             dispatch(loginPublisher.logout())

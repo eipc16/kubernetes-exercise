@@ -11,7 +11,7 @@ export const LoginPage = (props: any) => {
   const [authService] = useState(AuthenticationServiceImpl.createInstance())
   const [loginPublisher] = useState(new LoginActionPublisherImpl(authService))
 
-  let history = useHistory();
+  const history = useHistory();
   const onClick = () => {
     history.push('/')
   }

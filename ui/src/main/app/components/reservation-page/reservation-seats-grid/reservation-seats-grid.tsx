@@ -39,9 +39,9 @@ const SeatsGridComponent = (props: SeatGridProps) => {
     const {columns, rows, seats, onSeatClick} = props;
 
     const mapSeatListToRows = (seatsToMap: Seat[]) => {
-        let resultMap: SeatLayout = {}
+        const resultMap: SeatLayout = {}
         for (let i = 0; i < seatsToMap.length; i++) {
-            let seat = seatsToMap[i];
+            const seat = seatsToMap[i];
             if (resultMap[seat.rowNumber]) {
                 resultMap[seat.rowNumber].push(seat)
             } else {
@@ -73,7 +73,7 @@ const SeatsGridComponent = (props: SeatGridProps) => {
     }
 
     const createArrayWithGivenSize = (size: number) => {
-        let rowsList: number[] = [];
+        const rowsList: number[] = [];
         for (let i = 0; i < size; i++) {
             rowsList.push(i + 1)
         }

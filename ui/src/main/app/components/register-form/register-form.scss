@@ -8,6 +8,11 @@
   margin: 10px auto;
 }
 
+.main--form--container {
+  min-width: 100%;
+  display: block;
+}
+
 @media all and (max-width: 600px) {
   .main--form--container {
     padding: 50px;

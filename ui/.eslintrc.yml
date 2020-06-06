@@ -1,8 +1,11 @@
 env:
   browser: true
+  node: true
   es6: true
 extends:
   - 'plugin:react/recommended'
+  - 'eslint:recommended'
+  - 'plugin:@typescript-eslint/recommended'
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly

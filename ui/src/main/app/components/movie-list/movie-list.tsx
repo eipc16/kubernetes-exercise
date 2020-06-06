@@ -11,7 +11,7 @@ import {useFetching} from "../../utils/custom-fetch-hook";
 import {PlayedMoviesInterface} from "../../models/movies-list/PlayedMovies";
 
 interface OwnProps {
-    movieListPublisher: MovieListActionPublisher
+    movieListPublisher: MovieListActionPublisher;
 }
 
 interface State {

@@ -26,13 +26,13 @@ type ReservationActionsProps = OwnProps & ReservationPropsState
 
 const ReservationActionsComponent = (props: ReservationActionsProps) => {
     const dispatch = useDispatch()
-    let {className, seats, seatActionPublisher, screeningId, seatPrice} = props;
-    let counter = Object.values(seats).filter(seat => seat.reservationState === ReservationState.SELECTED).length
+    const {className, seats, seatActionPublisher, screeningId, seatPrice} = props;
+    const counter = Object.values(seats).filter(seat => seat.reservationState === ReservationState.SELECTED).length
     const [modalState, setModalState] = useState({
         loading: false, visible: false,
         content: {} as ReactNode
     });
-    let history = useHistory();
+    const history = useHistory();
 
     const showModal = () => {
         if (counter > 0) {

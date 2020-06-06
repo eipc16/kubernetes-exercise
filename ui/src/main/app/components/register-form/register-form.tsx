@@ -23,7 +23,7 @@ type RegisterFormProps = OwnProps & State;
 const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormProps) => {
   const dispatch = useDispatch()
   const { registered, registering, registerPublisher } = props
-  let history = useHistory();
+  const history = useHistory();
 
   const alertSupplier = (message: string) => {
     const alert: Alert = {

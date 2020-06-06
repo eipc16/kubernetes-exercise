@@ -11,7 +11,7 @@ export const RegisterPage = (props: any) => {
   const [authService] = useState(AuthenticationServiceImpl.createInstance())
   const [registerPublisher] = useState(new RegisterActionPublisherImpl(authService))
 
-  let history = useHistory();
+  const history = useHistory();
   const onClick = () => {
     history.push('/login')
   }

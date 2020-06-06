@@ -15,7 +15,7 @@ import {MovieDetailsServiceImpl} from "../../services/movie-details-service";
 import {ReservationDateSelector} from "./reservation-date-selector/reservation-date-selector";
 
 export const ReservationPage = (props: any) => {
-    let history = useHistory();
+    const history = useHistory();
     const [movieDetailsService] = useState(MovieDetailsServiceImpl.createInstance)
     const [movieDetailsPublisher] = useState(new MovieDetailsActionPublisherImpl(movieDetailsService))
     const [seatService] = useState(SeatServiceImpl.createInstance());

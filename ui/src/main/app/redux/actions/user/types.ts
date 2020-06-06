@@ -3,7 +3,7 @@ import { userConstants } from '../../constants'
 import { User } from '../../../models/users'
 
 export interface CurrentUserRequestActionInterface extends Action {
-    type: typeof userConstants.CURRENT_USER_REQUEST
+    type: typeof userConstants.CURRENT_USER_REQUEST;
 }
 
 export interface CurrentUserSuccessActionInterface extends Action {

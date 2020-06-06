@@ -22,7 +22,7 @@ type LoginFormProps = OwnProps & State;
 
 const LoginFormComponent: React.FC<LoginFormProps> = (props: LoginFormProps & any) => {
     const dispatch = useDispatch();
-    let history = useHistory();
+    const history = useHistory();
     const {loggedIn, loggingIn, loginPublisher} = props;
 
     const redirectPath = parseQueryParams(props.location.search)['redirectPath'] || '/';

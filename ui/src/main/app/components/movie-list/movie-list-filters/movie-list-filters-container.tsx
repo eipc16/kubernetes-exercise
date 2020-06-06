@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Search from "antd/es/input/Search";
 import {DatePicker, Pagination, Select} from "antd";
 import {connect, useDispatch} from "react-redux";
-import {GenreActionPublisherImpl} from "../../../redux/actions/genre/actions";
+import {GenreActionPublisherImpl} from "../../../redux/actions/genre";
 import {Genre} from "../../../models/genre";
 import {GenreServiceImpl} from "../../../services/genre-service";
 import {useFetching} from "../../../utils/custom-fetch-hook";
@@ -46,7 +46,7 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
     let searchText = filters.searchText;
     let dateRange = filters.dateRange;
     let selectedGenres = filters.genres;
-    let pageOptions = filters.pageOptions;
+    const pageOptions = filters.pageOptions;
 
     const [genreService,] = useState(GenreServiceImpl.createInstance());
     const [genrePublisher,] = useState(new GenreActionPublisherImpl(genreService));

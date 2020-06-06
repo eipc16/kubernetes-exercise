@@ -85,7 +85,7 @@ const ReservationDateSelectorComponent = (props: ReservationDateSelectorProps) =
     return (
         <div className={props.className}>
             <ReservationDateSelectorDekstopComponent {...props} screeningsWithDates={screeningsWithDates}/>
-            <ReservationDateSelectorMobileComponent  {...props} screeningsWithDates={screeningsWithDates}/>
+            <ReservationDateSelectorMobileComponent {...props} screeningsWithDates={screeningsWithDates}/>
         </div>
     );
 };

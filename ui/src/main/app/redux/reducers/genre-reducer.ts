@@ -10,10 +10,10 @@ const initialState: GenreState = {
 }
 
 export interface GenreState {
-    isFetching: boolean,
-    isFetched: boolean,
-    genreList: Genre[],
-    totalGenres: number
+    isFetching: boolean;
+    isFetched: boolean;
+    genreList: Genre[];
+    totalGenres: number;
 }
 
 export function genreReducer(state: GenreState = initialState, action: GenreAction): GenreState {

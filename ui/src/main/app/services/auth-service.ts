@@ -28,8 +28,8 @@ export interface AuthenticationService {
 export class AuthenticationServiceImpl implements AuthenticationService {
     static authService: AuthenticationService;
     currentToken?: Token | null;
-    tokenKey: string = 'user';
-    tokenType: string = 'Bearer';
+    tokenKey = 'user';
+    tokenType = 'Bearer';
 
     private constructor () {
     }
