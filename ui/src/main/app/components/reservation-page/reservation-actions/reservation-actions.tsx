@@ -13,16 +13,17 @@ interface OwnProps {
     seatActionPublisher: SeatActionPublisher;
 }
 
-interface ReservationProps {
+interface ReservationPropsState {
     seats: SeatsMap;
+    seatPrice: number;
     screeningId: number;
 }
 
-type ReservationActionsProps = OwnProps & ReservationProps
+type ReservationActionsProps = OwnProps & ReservationPropsState
 
 const ReservationActionsComponent = (props: ReservationActionsProps) => {
     const dispatch = useDispatch()
-    let { className, seats, seatActionPublisher, screeningId } = props;
+    let { className, seats, seatActionPublisher, screeningId, seatPrice } = props;
     let counter = Object.values(seats).filter(seat => seat.reservationState === ReservationState.SELECTED).length
     const [modalState, setModalState] = useState({loading: false, visible: false,
         text: ""})
@@ -41,7 +42,7 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
             seatsIds: Object.values(seats).filter(seat => seat.reservationState === ReservationState.SELECTED).map(seat => seat.id),
             screeningId: screeningId}))
         setModalState( {...modalState, loading: true,
-            text: 'Your reservation is done. You will be redirect to main page after few seconds.'})
+            text: 'Your reservation is done. You should be redirected to main page after a few seconds.'})
         setTimeout(() => {
             setModalState({ ...modalState, loading: false });
             history.push('/')
@@ -51,6 +52,8 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
     const handleCancel = () => {
         setModalState({ ...modalState, visible: false });
     };
+
+    const totalPrice = (counter * seatPrice).toFixed(2);
 
     return (
         <div className={className} >
@@ -70,30 +73,39 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
             >
                 {modalState.text}
             </Modal>
-            <span>
-                Your reservation:
-            </span>
-            <span>
-                Number of seats: {counter}
-            </span>
-            <span>
-                Total cost: {counter * 10} $
-            </span>
-            <Button onClick={showModal} disabled={counter < 1}>
-                Reserve
-            </Button>
+            <div className='info--container'>
+                <table className="tg">
+                    <thead>
+                    <tr>
+                        <th className="column--name">Seats</th>
+                        <th className="column--name">Price</th>
+                        <th className="reserve--button" rowSpan={2}>
+                            <Button onClick={showModal} disabled={counter < 1}>
+                                Reserve
+                            </Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td className="column--value">{counter}</td>
+                        <td className="column--value">${totalPrice}</td>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
     )
-}
+};
 
 const mapStateToProps = (store: any, ownProps: OwnProps) => {
     const seatsState = store.screeningSeats;
     const screeningsState: ScreeningsState = store.movieScreenings;
+    const currentScreening = screeningsState.currentScreening;
     return {
         seats: seatsState.seats,
+        seatPrice: currentScreening ? currentScreening.price : 0,
         screeningId: screeningsState.currentScreening?.screeningId || 0,
         ...ownProps
     }
-}
+};
 
 export const ReservationActions: React.FC<OwnProps> = connect(mapStateToProps)(ReservationActionsComponent);

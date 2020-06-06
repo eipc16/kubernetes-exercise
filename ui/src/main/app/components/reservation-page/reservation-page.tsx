@@ -4,7 +4,6 @@ import './reservation-page.scss'
 import {PageHeader} from "antd";
 import {useHistory} from "react-router-dom";
 import {MovieDetailsCom} from "../movie-details/movie-details";
-import {ReservationDateSelector} from "./reservation-date-selector/reservation-date-selector";
 import {ReservationSeats} from "./reservation-seats-grid/reservation-seats-grid";
 import {ReservationActions} from "./reservation-actions/reservation-actions";
 import {SeatActionPublisherImpl} from "../../redux/actions/seat";
@@ -13,6 +12,7 @@ import {ScreeningServiceImpl} from "../../services/screening-service";
 import {ScreeningActionPublisherImpl} from "../../redux/actions/screening";
 import {MovieDetailsActionPublisherImpl} from "../../redux/actions/movie-details";
 import {MovieDetailsServiceImpl} from "../../services/movie-details-service";
+import {ReservationDateSelector} from "./reservation-date-selector/reservation-date-selector";
 
 export const ReservationPage = (props: any) => {
     let history = useHistory();
@@ -26,16 +26,19 @@ export const ReservationPage = (props: any) => {
     const movieId = props.match.params.id;
 
     const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.preventDefault()
+        e.preventDefault();
         history.push('/')
-    }
+    };
 
     return (
         <React.Fragment>
             <PageHeader
-                className="site-page-header"
+                className="site-page-header reservation--page--header"
                 onBack={onClick}
                 title="Reservation page"
+                extra={[
+                    <ReservationActions key='reservation-actions' className='reservation--actions' seatActionPublisher={seatActionPublisher}/>
+                ]}
             />
             <div className='page--content'>
                 <ReservationDateSelector movieId={movieId}
@@ -43,9 +46,9 @@ export const ReservationPage = (props: any) => {
                                          className='reservation--date--selector'/>
                 <ReservationSeats seatActionPublisher={seatActionPublisher}
                                   className='reservation--seats--grid'/>
-                <ReservationActions className='reservation--actions' seatActionPublisher={seatActionPublisher}/>
-                <MovieDetailsCom movieDetailsPublisher={movieDetailsPublisher} className='reservation--movie--details' movieId={props.match.params.id}/>
+                <MovieDetailsCom movieDetailsPublisher={movieDetailsPublisher} className='reservation--movie--details'
+                                 movieId={props.match.params.id}/>
             </div>
         </React.Fragment>
     )
-}
+};

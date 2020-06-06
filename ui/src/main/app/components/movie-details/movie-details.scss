@@ -1,10 +1,12 @@
 @media all and (min-width: 1200px) {
   .button--show--more {
     visibility: hidden;
+    display: none;
   }
 
   .movie--details {
     visibility: visible;
+    display: block;
     img{
       padding: 10px;
       width: 100%;
@@ -27,12 +29,21 @@
 }
 
 @media all and (max-width: 1200px) {
+  .poster--image {
+    width: 100%;
+    object-fit: cover;
+  }
+
   .button--show--more {
+    position: absolute;
+    bottom: 0;
+    margin: 15px;
     visibility: visible;
   }
 
   .movie--details {
     visibility: hidden;
+    display: none;
   }
 
   .movie--details2 {

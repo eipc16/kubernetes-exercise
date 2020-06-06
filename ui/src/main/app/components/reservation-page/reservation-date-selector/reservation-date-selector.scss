@@ -1,52 +1,19 @@
-.date--selector {
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+@media all and (min-width: 1201px) {
+  #date--selector--desktop {
+    display: block;
+  }
 
-  & > table {;
-    margin-top: 10px;
+  #date--selector--mobile {
+    display: none !important;
   }
 }
 
-.selected-screening {
-  color: white !important;
-  background: #7ec1ff !important;
-}
-
-.screenings--table {
-  width: 100%;
-
-  & > .screenings--table--column--names {
-    & th, p {
-      font-size: 1rem;
-    }
+@media all and (max-width: 1200px) {
+  #date--selector--desktop {
+    display: none !important;
   }
 
-  & > .screenings--table--body {
-    & > .screenings--screening-room-row {
-      padding: 10px;
-    }
-
-    & .screenings--per--room {
-      display: inline-flex;
-      overflow-x: auto;
-    }
-
-    & td {
-      font-size: 1rem;
-    }
-  }
-
-  & > .screenings--table--body, & > .screenings--table--column--names {
-    & > tr {
-      display: flex;
-
-      & .time--column--name, & .screenings--per--room {
-        flex-grow: 1;
-        display: flex;
-        justify-content: space-evenly;
-      }
-    }
+  #date--selector--mobile {
+    display: block;
   }
 }

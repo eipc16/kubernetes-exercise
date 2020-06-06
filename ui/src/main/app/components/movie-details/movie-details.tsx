@@ -6,6 +6,7 @@ import {MovieDetailsActionPublisher} from "../../redux/actions/movie-details";
 import {MovieDetails} from "../../models/movie-details";
 import {connect} from "react-redux";
 import {Button, Drawer} from "antd";
+import {MovieDetailsInterface} from "../../models/movie-details/movie-details";
 
 interface OwnProps {
     movieDetailsPublisher: MovieDetailsActionPublisher,
@@ -16,13 +17,13 @@ interface OwnProps {
 interface State {
     isFetched?: boolean;
     isFetching?: boolean;
-    movie: MovieDetails[];
+    movie?: MovieDetails;
 }
 
 type MovieDetailsProps = State & OwnProps
 
 const MovieDetailsComponent = (props: MovieDetailsProps) => {
-    const { movie, className, movieId, movieDetailsPublisher } = props
+    const {movie, className, movieId, movieDetailsPublisher} = props;
 
     const [visible, setVisible] = useState(false);
     const showDrawer = () => {
@@ -37,60 +38,59 @@ const MovieDetailsComponent = (props: MovieDetailsProps) => {
     const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
         e.preventDefault();
         e.currentTarget.src = "not_found.jpg"
-    }
+    };
 
-    if(!movie) {
+    const MovieDetailsInformation = (props: { movie?: MovieDetailsInterface, className: string }) => {
+        const {movie, className} = props;
+
+        if (!movie) {
+            return (
+                <div className={'info--message'}>
+                    Movie not found.
+                </div>
+            )
+        }
+
         return (
-            <div className={'info--message'}>
-                Movie not found.
+            <div className={className}>
+                <img className='poster--image' src={movie.posterUrl} alt={movie.title + '__poster'} onError={handleImageError}/>
+                <h3>{movie.title}</h3>
+                <p>
+                    Director: {movie.director} <br/>
+                    Release date: {movie.releaseDate} <br/>
+                    Actors: {movie.actors} <br/>
+                    Runtime: {movie.runtime} <br/>
+                    Plot description: {movie.plot}
+                </p>
             </div>
         )
     }
 
     return (
         <div className={className}>
-            <div className={'movie--details'}>
-                <img src={movie[0].posterUrl} alt={movie[0].title + '__poster'} onError={handleImageError}/>
-                <h3>{movie[0].title}</h3>
-                <p>
-                    Director: {movie[0].director} <br/>
-                    Release date: {movie[0].releaseDate} <br/>
-                    Actors: {movie[0].actors} <br/>
-                    Runtime: {movie[0].runtime} <br/>
-                    Plot description: {movie[0].plot}
-                </p>
-            </div>
+            <MovieDetailsInformation movie={movie} className='movie--details'/>
             <Button className={'button--show--more'} type="primary" onClick={showDrawer}>
                 Read more about movie
             </Button>
             <Drawer
                 title="About movie"
                 placement="left"
-                closable={false}
+                width="100%"
+                closable={true}
                 onClose={onClose}
                 visible={visible}
             >
-                <div className={'movie--details2'}>
-                    <img src={movie[0].posterUrl} alt={movie[0].title + '__poster'} onError={handleImageError}/>
-                    <h3>{movie[0].title}</h3>
-                    <p>
-                        Director: {movie[0].director} <br/>
-                        Release date: {movie[0].releaseDate} <br/>
-                        Actors: {movie[0].actors} <br/>
-                        Runtime: {movie[0].runtime} <br/>
-                        Plot description: {movie[0].plot}
-                    </p>
-                </div>
+                <MovieDetailsInformation movie={movie} className='movie--details2'/>
             </Drawer>
         </div>
     )
-}
+};
 
 const mapStateToProps = (state: any, ownProps: OwnProps) => ({
     isFetched: state.movieDetails.isFetched,
     isFetching: state.movieDetails.isFetching,
-    movie: state.movieDetails.movie,
+    movie: (state.movieDetails.movie && state.movieDetails.movie.length > 0) ? state.movieDetails.movie[0] : undefined,
     ...ownProps
-})
+});
 
-export const MovieDetailsCom: React.FC<OwnProps> = connect(mapStateToProps)(MovieDetailsComponent)
+export const MovieDetailsCom: React.FC<OwnProps> = connect(mapStateToProps)(MovieDetailsComponent);

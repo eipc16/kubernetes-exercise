@@ -32,7 +32,7 @@ export class MovieListServiceImpl implements MovieListService {
         if(searchText) {
             queryParams += `&searchText=${searchText}`
         }
-        if(genres) {
+        if(genres && genres.length > 0) {
             queryParams += `&genres=${genres.join(",")}`
         }
         if(pageOptions) {

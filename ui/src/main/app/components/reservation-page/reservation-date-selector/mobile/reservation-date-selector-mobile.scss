@@ -1,0 +1,29 @@
+#date--selector--mobile {
+  width: 100%;
+  display: flex !important;
+  flex-direction: column;
+}
+
+#date--picker {
+  text-align: center;
+}
+
+.screening--filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & > div {
+    //padding-left: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+  }
+
+  & .date--picker--input, & .screening--picker--input {
+    //flex-grow: 1;
+    width: 60%;
+  }
+}
+
+.label {
+  font-size: 1rem;
+}

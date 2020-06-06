@@ -55,29 +55,29 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
         const newRange = {
             beginDate: value[0].valueOf(),
             endDate: value[1].valueOf()
-        }
+        };
         dateRange = newRange;
         updateFilters(FiltersEnum.DATARANGE, newRange);
-    }
+    };
 
     const handleGenreSelect = (value: string[]) => {
         selectedGenres = value;
         updateFilters(FiltersEnum.GENRES, value);
-    }
+    };
 
     const handleSearchText = (e: React.ChangeEvent) => {
         const value = (e.target as HTMLInputElement).value;
         const finalSearchText = value ? value : "";
         searchText = finalSearchText;
         updateFilters(FiltersEnum.SEARCH_TEXT, finalSearchText);
-    }
+    };
 
     const handlePage = (page: number, moviesPerPage?: number) => {
         updateFilters(FiltersEnum.PAGE, {
             pageNumber: page - 1,
             pageSize: moviesPerPage
         });
-    }
+    };
 
     const updateFilters = (lastUpdated: FiltersEnum, value: any) => {
         console.log(lastUpdated, value)
@@ -88,16 +88,16 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
             pageOptions: { ...pageOptions, pageNumber: 0},
             [lastUpdated.toString()]: value
         }))
-    }
+    };
 
     const getPlaceHolder = (allGenres: number) => {
         if (allGenres < 1) {
             return 'No genres';
         }
         return `Select genre. Total genres: ${allGenres}`
-    }
+    };
 
-    useFetching(genrePublisher.fetchGenres())
+    useFetching(genrePublisher.fetchGenres());
 
     return (
         <div className='movie--list-filters'>
@@ -167,4 +167,4 @@ const mapStateToProps = (state: any, ownProps: OwnProps) => ({
     ...ownProps
 })
 
-export const MovieListFiltersContainer: React.FC<OwnProps> = connect(mapStateToProps)(MovieListFiltersComponent)
+export const MovieListFiltersContainer: React.FC<OwnProps> = connect(mapStateToProps)(MovieListFiltersComponent);

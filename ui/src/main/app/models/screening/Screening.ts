@@ -6,6 +6,7 @@ export interface ScreeningInterface {
     movieId: number;
     screeningRoomId: number;
     screeningRoom: ScreeningRoomInterface;
+    price: number;
     startTime: Date;
     endTime: Date;
     objectState: ObjectState;
