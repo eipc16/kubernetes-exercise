@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {ReactNode, useState} from "react";
 
 import './reservation-actions.scss'
 import {Button, Modal} from "antd";
@@ -7,6 +7,9 @@ import {SeatActionPublisher, SeatsMap} from "../../../redux/actions/seat";
 import {ReservationState} from "../../../models/screening-rooms";
 import {ScreeningsState} from "../../../redux/reducers/screening-reducer";
 import {useHistory} from "react-router-dom";
+import {AlertContainer} from "../../alert/alert";
+import {Alert} from "../../../models/infrastructure";
+import {AlertTypes} from "../../../models/infrastructure/Alert";
 
 interface OwnProps {
     className: string;
@@ -23,40 +26,68 @@ type ReservationActionsProps = OwnProps & ReservationPropsState
 
 const ReservationActionsComponent = (props: ReservationActionsProps) => {
     const dispatch = useDispatch()
-    let { className, seats, seatActionPublisher, screeningId, seatPrice } = props;
+    let {className, seats, seatActionPublisher, screeningId, seatPrice} = props;
     let counter = Object.values(seats).filter(seat => seat.reservationState === ReservationState.SELECTED).length
-    const [modalState, setModalState] = useState({loading: false, visible: false,
-        text: ""})
+    const [modalState, setModalState] = useState({
+        loading: false, visible: false,
+        content: {} as ReactNode
+    });
     let history = useHistory();
 
     const showModal = () => {
         if (counter > 0) {
-            setModalState({...modalState, visible: true,
-                text: `Number of seats: ${counter}\n Total cost: $${counter * 10}`});
+            setModalState({
+                ...modalState, visible: true,
+                content: <p>{`Number of seats: ${counter}\n Total cost: $${counter * 10}`}</p>
+            });
         }
     };
 
+    const alertSupplier = (message: string) => {
+        const alert: Alert = {
+            id: 'register-failure-alert',
+            component: 'reservation--modal--alert',
+            message: message,
+            type: AlertTypes.ERROR,
+            canDismiss: true
+        };
+        return alert
+    };
+
     const handleOk = () => {
-        setModalState({ ...modalState, loading: true });
-        dispatch(seatActionPublisher.reserveSeats({
+        setModalState({...modalState, loading: true});
+        const reservation = {
             seatsIds: Object.values(seats).filter(seat => seat.reservationState === ReservationState.SELECTED).map(seat => seat.id),
-            screeningId: screeningId}))
-        setModalState( {...modalState, loading: true,
-            text: 'Your reservation is done. You should be redirected to main page after a few seconds.'})
-        setTimeout(() => {
-            setModalState({ ...modalState, loading: false });
+            screeningId: screeningId
+        };
+
+        dispatch(seatActionPublisher.reserveSeats(reservation, alertSupplier,
+            () => {
+            setModalState({...modalState, loading: false })
             history.push('/')
-        }, 5000);
+        }, () => {
+            setModalState({
+                ...modalState,
+                content: <p>Exception occurred during request.</p>,
+                loading: false
+            })
+        }));
+        setModalState({
+                ...modalState,
+                loading: true,
+                content: <p>We are working on your reservation... You should be redirected to main page after success.</p>
+            }
+        );
     };
 
     const handleCancel = () => {
-        setModalState({ ...modalState, visible: false });
+        setModalState({...modalState, visible: false});
     };
 
     const totalPrice = (counter * seatPrice).toFixed(2);
 
     return (
-        <div className={className} >
+        <div className={className}>
             <Modal
                 visible={modalState.visible}
                 title="Submit reservation"
@@ -71,7 +102,12 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
                     </Button>,
                 ]}
             >
-                {modalState.text}
+                <React.Fragment>
+                    <AlertContainer component='reservation--modal--alert' />
+                    <div className='modal--content'>
+                        {modalState.content}
+                    </div>
+                </React.Fragment>
             </Modal>
             <div className='info--container'>
                 <table className="tg">

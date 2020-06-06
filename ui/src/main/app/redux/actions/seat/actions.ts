@@ -18,7 +18,8 @@ import {Reservation} from "../../../models/reservation";
 export interface SeatActionPublisher {
     fetchSeats(screeningId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void;
     updateSeatReservationState(seatId: number, seatReservationState: ReservationState): SeatUpdateStateActionInterface;
-    reserveSeats(reservation: Reservation): (dispatch: Dispatch<Action>) => void;
+    reserveSeats(reservation: Reservation, errorAlertSupplier?: (message: string) => Alert,
+                 onSuccess?: (resource: Resource) => void, onException?: (errorResponse: string) => void): (dispatch: Dispatch<Action>) => void;
 }
 
 export class SeatActionPublisherImpl implements SeatActionPublisher {
@@ -47,7 +48,7 @@ export class SeatActionPublisherImpl implements SeatActionPublisher {
                         }
                     }
                 )
-        }
+        };
 
         function request(screeningId: number): SeatRequestActionInterface {
             return {
@@ -85,16 +86,27 @@ export class SeatActionPublisherImpl implements SeatActionPublisher {
         };
     }
 
-    reserveSeats(reservation: Reservation): (dispatch: Dispatch<Action>) => void {
+    reserveSeats(reservation: Reservation, errorAlertSupplier?: (message: string) => Alert,
+                 onSuccess?: (resource: Resource) => void, onException?: (errorResponse: string) => void): (dispatch: Dispatch<Action>) => void {
         return (dispatch: Dispatch<Action>) => {
             dispatch(request(reservation));
             this.seatService.reserveSeats(reservation)
                 .then(
                     (resource: Resource) => {
-                        dispatch(success(resource))
+                        dispatch(success(resource));
+                        if (onSuccess) {
+                            onSuccess(resource);
+                        }
                     },
                     (errorResponse: string) => {
-                        dispatch(failure(errorResponse))
+                        dispatch(failure(errorResponse));
+                        if (errorAlertSupplier) {
+                            const alert = errorAlertSupplier(errorResponse);
+                            this.alertPublisher.pushAlert(alert)(dispatch)
+                        }
+                        if (onException) {
+                            onException(errorResponse);
+                        }
                     }
                 )
         };

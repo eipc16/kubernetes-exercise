@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {ScreeningActionPublisher} from "../../../redux/actions/screening";
 import {Screening} from "../../../models/screening";
 import {ReservationDateSelectorDekstopComponent} from "./desktop/reservation-date-selector-desktop";
 import {ScreeningsState} from "../../../redux/reducers/screening-reducer";
-import {connect, useDispatch} from "react-redux";
+import {connect} from "react-redux";
 import {ReservationDateSelectorMobileComponent} from "./mobile/reservation-date-selector-mobile";
 
 import './reservation-date-selector.scss';
