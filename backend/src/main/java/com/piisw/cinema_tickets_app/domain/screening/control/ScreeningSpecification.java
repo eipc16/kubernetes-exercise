@@ -36,7 +36,11 @@ public class ScreeningSpecification extends AuditedObjectSpecification<Screening
     }
 
     public Specification<Screening> whereMovieTitleLike(String searchText) {
-        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(root.get(Screening_.MOVIE).get(Movie_.TITLE), searchText);
+        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(root.get(Screening_.MOVIE).get(Movie_.TITLE), applyWildcards(searchText));
+    }
+
+    private String applyWildcards(String text) {
+        return '%' + text + '%';
     }
 
     public Specification<Screening> whereMovieGenreIn(List<String> genres) {

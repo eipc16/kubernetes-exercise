@@ -9,12 +9,17 @@ import com.piisw.cinema_tickets_app.domain.genre.entity.Genre;
 import com.piisw.cinema_tickets_app.domain.movie.control.MovieToGenreRelationService;
 import com.piisw.cinema_tickets_app.domain.movie.entity.Movie;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.IDS_PATH;
@@ -84,6 +89,21 @@ public class MovieMapper {
                 .queryParam(OBJECT_STATE, ObjectState.values())
                 .buildAndExpand(ids)
                 .toUri();
+    }
+
+    public MovieScreeningSearchParams buildSearchParams(String searchText, String genres, LocalDateTime beginDate,
+                                                         LocalDateTime endDate, Pageable pageable) {
+        return MovieScreeningSearchParams.builder()
+                .beginDateTime(beginDate)
+                .endDateTime(endDate)
+                .pageable(pageable)
+                .searchText(Optional.ofNullable(searchText)
+                        .orElse(""))
+                .genres(Optional.ofNullable(genres)
+                        .map(str -> str.split(","))
+                        .map(Arrays::asList)
+                        .orElseGet(Collections::emptyList))
+                .build();
     }
 
 }

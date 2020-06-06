@@ -12,7 +12,7 @@ import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.infrastructure.bulk.BulkOperationResult;
 import com.piisw.cinema_tickets_app.infrastructure.configuration.annotations.ApiPageable;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;
-import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
+import com.piisw.cinema_tickets_app.infrastructure.security.validation.PermitAll;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -56,7 +54,7 @@ public class MovieController {
 
     @ApiOperation(value = "${api.movies.get.value}", notes = "${api.movies.get.notes}")
     @GetMapping(IDS_PATH)
-    @HasAnyRole
+    @PermitAll
     public List<MovieDTO> getMoviesByIds(@PathVariable(IDS) Set<Long> ids,
                                          @RequestParam(name = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         List<Movie> foundMovies = movieService.getMoviesByIds(ids, objectStates);
@@ -65,7 +63,7 @@ public class MovieController {
 
     @ApiOperation(value = "${api.moviedetails.get.value}", notes = "${api.moviedetails.get.notes}")
     @GetMapping(IDS_PATH + "/details")
-    @HasAnyRole
+    @PermitAll
     public List<MovieDetailsDTO> getMoviesDetailsByIds(@PathVariable(IDS) Set<Long> ids,
                                                        @RequestParam(name = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         List<Movie> foundMovies = movieService.getMoviesByIds(ids, objectStates);
@@ -93,6 +91,7 @@ public class MovieController {
     @ApiOperation(value = "${api.movies.current.value}", notes = "${api.movies.current.notes}")
     @GetMapping("/played")
     @ApiPageable
+    @PermitAll
     public Page<MovieDTO> getCurrentlyPlayedMovies(@RequestParam(value = SEARCH_TEXT, required = false) String searchText,
                                                    @RequestParam(value = GENRES, required = false) String genres,
                                                    @RequestParam(BEGIN_DATE)
@@ -100,27 +99,12 @@ public class MovieController {
                                                    @RequestParam(END_DATE)
                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime,
                                                    @ApiIgnore @PageableDefault Pageable pageable) {
-        MovieScreeningSearchParams searchParams = buildSearchParams(searchText, genres, beginDateTime, endDateTime, pageable);
+        MovieScreeningSearchParams searchParams = movieMapper.buildSearchParams(searchText, genres, beginDateTime, endDateTime, pageable);
         Set<Long> currentMovies = screeningService.getScreeningsBySearchParams(searchParams).stream()
                 .map(Screening::getMovie)
                 .map(AuditedObject::getId)
                 .collect(Collectors.toSet());
         return movieService.getPagedMoviesByIds(currentMovies, Collections.singleton(ObjectState.ACTIVE), searchParams.getPageable())
                 .map(movieMapper::mapToMovieDTO);
-    }
-
-    private MovieScreeningSearchParams buildSearchParams(String searchText, String genres, LocalDateTime beginDate,
-                                                         LocalDateTime endDate, Pageable pageable) {
-        MovieScreeningSearchParams.MovieScreeningSearchParamsBuilder builder = MovieScreeningSearchParams.builder()
-                .beginDateTime(beginDate)
-                .endDateTime(endDate)
-                .pageable(pageable);
-        if (Objects.nonNull(searchText)) {
-            builder.searchText('%' + searchText + '%');
-        }
-        if (Objects.nonNull(genres)) {
-            builder.genres(Arrays.asList(genres.split(",")));
-        }
-        return builder.build();
     }
 }

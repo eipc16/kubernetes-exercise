@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Pageable;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,18 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 public class MovieScreeningSearchParams {
 
-    @NotNull
     private String searchText;
-
-    @NotNull
     List<String> genres;
-
-    @NotNull
     LocalDateTime beginDateTime;
-
-    @NotNull
     LocalDateTime endDateTime;
-
-    @NotNull
     Pageable pageable;
 }

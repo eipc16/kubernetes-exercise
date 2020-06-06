@@ -10,7 +10,7 @@ import com.piisw.cinema_tickets_app.domain.screening.entity.Screening;
 import com.piisw.cinema_tickets_app.domain.screeningroom.control.ScreeningRoomService;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;
-import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
+import com.piisw.cinema_tickets_app.infrastructure.security.validation.PermitAll;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ public class ScreeningController {
 
     @ApiOperation(value = "${api.screenings.get.value}", notes = "${api.screenings.get.notes}")
     @GetMapping(ID_PATH)
-    @HasAnyRole
+    @PermitAll
     public ScreeningDTO getScreeningById(@PathVariable(ID) Long id,
                                          @RequestParam(value = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         Screening screening = screeningService.getScreeningById(id, objectStates);
@@ -56,7 +56,7 @@ public class ScreeningController {
 
     @ApiOperation(value = "${api.screenings.for.movie.value}", notes = "${api.screenings.for.movie.get.notes}")
     @GetMapping(MOVIE_RESOURCE + ID_PATH)
-    @HasAnyRole
+    @PermitAll
     public List<ScreeningDTO> getScreeningsForMovie(@PathVariable(ID) Long movieId,
                                                     @RequestParam(value = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         Movie movie = movieService.getMovieById(movieId, objectStates);

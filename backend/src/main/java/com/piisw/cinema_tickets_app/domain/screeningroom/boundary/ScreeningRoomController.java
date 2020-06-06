@@ -5,9 +5,9 @@ import com.piisw.cinema_tickets_app.api.ResourceDTO;
 import com.piisw.cinema_tickets_app.api.ScreeningRoomDTO;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAdminRole;
-import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import com.piisw.cinema_tickets_app.domain.screeningroom.control.ScreeningRoomService;
 import com.piisw.cinema_tickets_app.domain.screeningroom.entity.ScreeningRoom;
+import com.piisw.cinema_tickets_app.infrastructure.security.validation.PermitAll;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -40,7 +40,7 @@ public class ScreeningRoomController {
 
     @ApiOperation(value = "${api.screening.room.get.value}", notes = "${api.screening.room.get.notes}")
     @GetMapping(IDS_PATH)
-    @HasAnyRole
+    @PermitAll
     public List<ScreeningRoomDTO> getScreeningRoomsByIds(@ApiParam(value = "${api.screening.room.ids}") @PathVariable(IDS) Set<Long> ids,
             @ApiParam(value = "${api.screening.room.states}") @RequestParam(name = OBJECT_STATE, defaultValue = "ACTIVE") Set<ObjectState> objectStates) {
         return screeningRoomService.getScreeningRoomsByIds(ids, objectStates).stream()
