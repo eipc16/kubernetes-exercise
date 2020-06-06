@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,22 +27,6 @@ public class MovieToGenreRelationService {
                 .collect(Collectors.toList());
     }
 
-    public List<Movie> getMoviesByGenre(Genre genre) {
-        return movieToGenreRelationRepository.findAllByGenre(genre).stream()
-                .map(MovieToGenreRelation::getMovie)
-                .collect(Collectors.toList());
-    }
-
-    public List<Movie> getMoviesByGenres(List<Genre> genres) {
-        return movieToGenreRelationRepository.findAllByGenreIn(genres).stream()
-                .map(MovieToGenreRelation::getMovie)
-                .collect(Collectors.toList());
-    }
-
-    public List<MovieToGenreRelation> createRelation(Movie movie) {
-        return createRelations(Collections.singleton(movie));
-    }
-
     public List<MovieToGenreRelation> createRelations(Collection<Movie> movies) {
         List<MovieToGenreRelation> createdRelations = movies.stream()
                 .map(this::createRelationEntities)
@@ -51,10 +36,9 @@ public class MovieToGenreRelationService {
     }
 
     private List<MovieToGenreRelation> createRelationEntities(Movie movie) {
-        if (movie.getGenres() == null) {
-            return Collections.emptyList();
-        }
-        return movie.getGenres().stream()
+        return Optional.ofNullable(movie.getGenres())
+                .orElseGet(Collections::emptySet)
+                .stream()
                 .map(genre -> createRelation(movie, genre))
                 .collect(Collectors.toUnmodifiableList());
     }
@@ -67,14 +51,9 @@ public class MovieToGenreRelationService {
                 .build();
     }
 
-    public List<MovieToGenreRelation> removeRelation(Movie movie) {
-        return removeRelations(Collections.singleton(movie));
-    }
-
     public List<MovieToGenreRelation> removeRelations(Collection<Movie> movies) {
-        List<MovieToGenreRelation> relationsToRemove = movieToGenreRelationRepository.findAllByMovieIn(movies).stream()
-                .peek(relation -> relation.setObjectState(ObjectState.REMOVED))
-                .collect(Collectors.toUnmodifiableList());
+        List<MovieToGenreRelation> relationsToRemove = movieToGenreRelationRepository.findAllByMovieIn(movies);
+        relationsToRemove.stream().forEach(relation -> relation.setObjectState(ObjectState.REMOVED));
         return movieToGenreRelationRepository.saveAll(relationsToRemove);
     }
 }
