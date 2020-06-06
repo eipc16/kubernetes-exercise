@@ -1,10 +1,13 @@
-import { handleResponse } from './response-handler'
-import { appConfig } from '../config'
+import {handleResponse} from './response-handler'
+import {appConfig} from '../config'
 import {Seat} from "../models/screening-rooms";
 import {AuthenticationService, AuthenticationServiceImpl} from "./auth-service";
+import {Resource} from "../models/infrastructure";
+import {Reservation} from "../models/reservation";
 
 export interface SeatService {
     fetchSeats(screeningId: number): Promise<Seat[]>;
+    reserveSeats(reservation: Reservation): Promise<Resource>;
 }
 
 export class SeatServiceImpl implements SeatService {
@@ -30,5 +33,16 @@ export class SeatServiceImpl implements SeatService {
         return fetch(`${appConfig.apiUrl}/seats/screening/${screeningId}`, requestOptions)
             .then(handleResponse)
             .then((seats: Seat[]) => seats)
+    }
+
+    reserveSeats(reservation: Reservation): Promise<Resource> {
+        const requestOptions = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'Authorization': this.authService.getCurrentTokenAsString()},
+            body: JSON.stringify(reservation)
+        }
+        return fetch(`${appConfig.apiUrl}/reservation`, requestOptions)
+            .then(handleResponse)
+            .then((resource: Resource) => resource)
     }
 }

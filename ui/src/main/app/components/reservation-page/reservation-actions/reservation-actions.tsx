@@ -2,9 +2,10 @@ import React, {useState} from "react";
 
 import './reservation-actions.scss'
 import {Button, Modal} from "antd";
-import {connect} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import {SeatActionPublisher, SeatsMap} from "../../../redux/actions/seat";
 import {ReservationState} from "../../../models/screening-rooms";
+import {ScreeningsState} from "../../../redux/reducers/screening-reducer";
 
 interface OwnProps {
     className: string;
@@ -12,15 +13,16 @@ interface OwnProps {
 }
 
 interface ReservationProps {
-    seats: SeatsMap
+    seats: SeatsMap;
+    screeningId: number;
 }
 
 type ReservationActionsProps = OwnProps & ReservationProps
 
 const ReservationActionsComponent = (props: ReservationActionsProps) => {
-    let { className, seats } = props;
+    const dispatch = useDispatch()
+    let { className, seats, seatActionPublisher, screeningId } = props;
     let counter = Object.values(seats).filter(seat => seat.reservationState === ReservationState.SELECTED).length
-
 
     const [modalState, setModalState] = useState({loading: false, visible: false})
 
@@ -32,6 +34,9 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
 
     const handleOk = () => {
         setModalState({ ...modalState, loading: true });
+        dispatch(seatActionPublisher.reserveSeats({
+            seatsIds: Object.values(seats).filter(seat => seat.reservationState === ReservationState.SELECTED).map(seat => seat.id),
+            screeningId: screeningId}))
         setTimeout(() => {
             setModalState({ loading: false, visible: false });
         }, 3000);
@@ -82,8 +87,10 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
 
 const mapStateToProps = (store: any, ownProps: OwnProps) => {
     const seatsState = store.screeningSeats;
+    const screeningsState: ScreeningsState = store.movieScreenings;
     return {
         seats: seatsState.seats,
+        screeningId: screeningsState.currentScreening?.screeningId || 0,
         ...ownProps
     }
 }

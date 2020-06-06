@@ -1,19 +1,24 @@
 import {Action, Dispatch} from "redux";
-import {Alert} from "../../../models/infrastructure";
+import {Alert, Resource} from "../../../models/infrastructure";
 import {ReservationState, Seat} from "../../../models/screening-rooms";
 import {
     SeatFailureActionInterface,
     SeatRequestActionInterface,
+    SeatReservationFailureActionInterface,
+    SeatReservationRequestActionInterface,
+    SeatReservationSuccessActionInterface,
     SeatSuccessActionInterface,
     SeatUpdateStateActionInterface
 } from "./types";
 import {seatConstants} from "../../constants/seat-constants";
 import {SeatService} from "../../../services/seat-service";
 import {AlertPublisher, AlertPublisherImpl} from "../alert";
+import {Reservation} from "../../../models/reservation";
 
 export interface SeatActionPublisher {
     fetchSeats(screeningId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void;
     updateSeatReservationState(seatId: number, seatReservationState: ReservationState): SeatUpdateStateActionInterface;
+    reserveSeats(reservation: Reservation): (dispatch: Dispatch<Action>) => void;
 }
 
 export class SeatActionPublisherImpl implements SeatActionPublisher {
@@ -78,5 +83,41 @@ export class SeatActionPublisherImpl implements SeatActionPublisher {
             seatId: seatId,
             reservationState: seatReservationState
         };
+    }
+
+    reserveSeats(reservation: Reservation): (dispatch: Dispatch<Action>) => void {
+        return (dispatch: Dispatch<Action>) => {
+            dispatch(request(reservation));
+            this.seatService.reserveSeats(reservation)
+                .then(
+                    (resource: Resource) => {
+                        dispatch(success(resource))
+                    },
+                    (errorResponse: string) => {
+                        dispatch(failure(errorResponse))
+                    }
+                )
+        };
+
+        function request(reservation: Reservation): SeatReservationRequestActionInterface {
+            return {
+                type: seatConstants.SEAT_RESERVATION_REQUEST,
+                reservation: reservation
+            }
+        }
+
+        function success(resource: Resource): SeatReservationSuccessActionInterface {
+            return {
+                type: seatConstants.SEAT_RESERVATION_SUCCESS,
+                resource: resource
+            }
+        }
+
+        function failure(error: string): SeatReservationFailureActionInterface {
+            return {
+                type: seatConstants.SEAT_RESERVATION_FAILURE,
+                error: error
+            }
+        }
     }
 }
