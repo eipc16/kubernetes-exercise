@@ -6,6 +6,7 @@ import {connect, useDispatch} from "react-redux";
 import {SeatActionPublisher, SeatsMap} from "../../../redux/actions/seat";
 import {ReservationState} from "../../../models/screening-rooms";
 import {ScreeningsState} from "../../../redux/reducers/screening-reducer";
+import {useHistory} from "react-router-dom";
 
 interface OwnProps {
     className: string;
@@ -23,12 +24,14 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
     const dispatch = useDispatch()
     let { className, seats, seatActionPublisher, screeningId } = props;
     let counter = Object.values(seats).filter(seat => seat.reservationState === ReservationState.SELECTED).length
-
-    const [modalState, setModalState] = useState({loading: false, visible: false})
+    const [modalState, setModalState] = useState({loading: false, visible: false,
+        text: ""})
+    let history = useHistory();
 
     const showModal = () => {
         if (counter > 0) {
-            setModalState({...modalState, visible: true});
+            setModalState({...modalState, visible: true,
+                text: `Number of seats: ${counter}\n Total cost: $${counter * 10}`});
         }
     };
 
@@ -37,9 +40,12 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
         dispatch(seatActionPublisher.reserveSeats({
             seatsIds: Object.values(seats).filter(seat => seat.reservationState === ReservationState.SELECTED).map(seat => seat.id),
             screeningId: screeningId}))
+        setModalState( {...modalState, loading: true,
+            text: 'Your reservation is done. You will be redirect to main page after few seconds.'})
         setTimeout(() => {
-            setModalState({ loading: false, visible: false });
-        }, 3000);
+            setModalState({ ...modalState, loading: false });
+            history.push('/')
+        }, 5000);
     };
 
     const handleCancel = () => {
@@ -55,19 +61,14 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
                 onCancel={handleCancel}
                 footer={[
                     <Button key="back" onClick={handleCancel}>
-                        Return
+                        Cancel
                     </Button>,
                     <Button key="submit" type="primary" loading={modalState.loading} onClick={handleOk}>
                         Submit
                     </Button>,
                 ]}
             >
-                <p>
-                    Number of seats: {counter}
-                </p>
-                <p>
-                    Total cost: {counter * 10} $
-                </p>
+                {modalState.text}
             </Modal>
             <span>
                 Your reservation:
