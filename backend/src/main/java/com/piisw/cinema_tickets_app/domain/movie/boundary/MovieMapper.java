@@ -102,7 +102,10 @@ public class MovieMapper {
                 .genres(Optional.ofNullable(genres)
                         .map(str -> str.split(","))
                         .map(Arrays::asList)
-                        .orElseGet(Collections::emptyList))
+                        .orElseGet(Collections::emptyList)
+                        .stream()
+                        .filter(str -> !str.isEmpty())
+                        .collect(Collectors.toList()))
                 .build();
     }
 
