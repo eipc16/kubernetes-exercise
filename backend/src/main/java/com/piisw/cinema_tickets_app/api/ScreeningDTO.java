@@ -32,6 +32,9 @@ public class ScreeningDTO {
     @NotNull
     private LocalDateTime endTime;
 
+    @NotNull
+    private String price;
+
     @ApiModelProperty(readOnly = true)
     ObjectState objectState;
 

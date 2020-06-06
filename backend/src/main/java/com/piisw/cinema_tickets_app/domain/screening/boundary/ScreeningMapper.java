@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.net.URI;
 
 import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.IDS_PATH;
@@ -27,6 +28,7 @@ public class ScreeningMapper {
                 .screeningRoomId(screening.getScreeningRoom().getId())
                 .startTime(screening.getStartTime())
                 .endTime(screening.getEndTime())
+                .price(screening.getPrice().toString())
                 .objectState(screening.getObjectState())
                 .screeningRoom(screeningRoomMapper.mapToScreeningRoomDTO(screening.getScreeningRoom()))
                 .build();
@@ -38,6 +40,7 @@ public class ScreeningMapper {
                 .screeningRoom(screeningRoom)
                 .startTime(screeningDTO.getStartTime())
                 .endTime(screeningDTO.getEndTime())
+                .price(new BigDecimal(screeningDTO.getPrice()))
                 .objectState(screeningRoom.getObjectState())
                 .build();
     }

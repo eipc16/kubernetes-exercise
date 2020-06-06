@@ -25,6 +25,4 @@ public class Reservation extends AuditedObject {
     @NotNull
     private Long screeningId;
 
-    private boolean isPaid;
-
 }
