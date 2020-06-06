@@ -3,7 +3,7 @@ import { connect, useDispatch } from 'react-redux'
 import { Button, Checkbox, Form, Input } from 'antd'
 import { LoginActionPublisher } from '../../redux/actions/login'
 import './login-form.scss'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import { Alert } from '../../models/infrastructure'
 import { AlertTypes } from '../../models/infrastructure/Alert'
 import { AlertContainer } from '../alert/alert'
@@ -21,6 +21,7 @@ type LoginFormProps = OwnProps & State;
 
 const LoginFormComponent: React.FC<LoginFormProps> = (props: LoginFormProps) => {
   const dispatch = useDispatch()
+  let history = useHistory();
   const { loggedIn, loggingIn, loginPublisher } = props
 
   const alertSupplier = (message: string) => {
@@ -41,6 +42,10 @@ const LoginFormComponent: React.FC<LoginFormProps> = (props: LoginFormProps) => 
       remember: values.remember
     }
     dispatch(loginPublisher.login(loginData, alertSupplier))
+  }
+
+  if (loggedIn) {
+      history.push('/')
   }
 
   return (

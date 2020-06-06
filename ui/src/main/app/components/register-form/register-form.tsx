@@ -1,13 +1,13 @@
 import React from 'react'
 import { connect, useDispatch } from 'react-redux'
-import { Button, Form, Input } from 'antd'
+import {Button, Form, Input, message} from 'antd'
 
-import { AuthorizationState } from '../../redux/reducers/login-reducer'
 import { RegisterActionPublisher } from '../../redux/actions/register'
 import './register-form.scss'
 import { Alert } from '../../models/infrastructure'
 import { AlertTypes } from '../../models/infrastructure/Alert'
 import { AlertContainer } from '../alert/alert'
+import {useHistory} from "react-router-dom";
 
 interface OwnProps {
     registerPublisher: RegisterActionPublisher;
@@ -23,6 +23,7 @@ type RegisterFormProps = OwnProps & State;
 const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormProps) => {
   const dispatch = useDispatch()
   const { registered, registering, registerPublisher } = props
+  let history = useHistory();
 
   const alertSupplier = (message: string) => {
     const alert: Alert = {
@@ -45,6 +46,14 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
       phoneNumber: values.phoneNumber
     }
     dispatch(registerPublisher.register(registerData, alertSupplier))
+  }
+
+  if(registered) {
+      message.success({ content: 'Your account is created! You will be redirect to login page.',
+          duration: 3 });
+      setTimeout(() => {
+          history.push('/login')
+      }, 3000);
   }
 
   return (
@@ -162,9 +171,9 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
   )
 }
 
-const mapStateToProps = (state: AuthorizationState, ownProps: OwnProps) => ({
-  loggingIn: state.loggingIn,
-  loggedIn: state.loggedIn,
+const mapStateToProps = (state: any, ownProps: OwnProps) => ({
+  registered: state.registration.registered,
+  registering: state.registration.registering,
   ...ownProps
 })
 
