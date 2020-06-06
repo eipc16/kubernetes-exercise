@@ -14,8 +14,8 @@ function App () {
   return (
     <Router>
       <Switch>
-        <Route path='/login' component={LoginPage} />
-        <Route path='/reservation/:id' component={ReservationPage}/>
+        <Route path='/login/:redirectPath?' component={LoginPage} />
+        <Route path='/screenings/:id' component={ReservationPage}/>
         <Route path='/register' component={RegisterPage}/>
         <Route path='/' component={MainPage} exact/>
       </Switch>

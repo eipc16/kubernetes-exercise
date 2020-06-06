@@ -7,16 +7,25 @@ import Meta from "antd/es/card/Meta";
 import {Link} from "react-router-dom";
 
 interface MovieListEntryProps {
+    isAuthenticated: boolean;
     movie: Movie;
 }
 
 export const MovieListEntry = (props: MovieListEntryProps) => {
-    const {movie} = props;
+    const { movie, isAuthenticated } = props;
 
     const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
         e.preventDefault();
         e.currentTarget.src = "not_found.jpg"
-    }
+    };
+
+    const getReservationLink = (movie: Movie) => {
+        let path = `/screenings/${movie.id}`;
+        if(!isAuthenticated) {
+            path = `/login?redirectPath=${path}`
+        }
+        return path
+    };
 
     return (
         <Card className='movie--entry--card' hoverable>
@@ -25,10 +34,10 @@ export const MovieListEntry = (props: MovieListEntryProps) => {
             <Meta className='meta' title={movie.title} description={'Release Date: ' + movie.releaseDate}/>
             <div className='thumbnail--overlay'>
                 <h1>{movie.title}</h1>
-                <Link className='btn' to={`/reservation/${movie.id}`}>
+                <Link className='btn' to={getReservationLink(movie)}>
                     Reserve&nbsp;
                 </Link>
             </div>
         </Card>
     )
-}
+};

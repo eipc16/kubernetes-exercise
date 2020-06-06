@@ -107,7 +107,11 @@ export const ReservationDateSelectorDekstopComponent = (props: ReservationDateSe
 
     return (
         <div id='date--selector--desktop' className='date--selector'>
-            <ReservationDatePicker formattedDates={formattedDates} onSelectDate={onSelectedDate}/>
+            {
+                screeningsWithDates.formattedDates.length > 0 ? (
+                    <ReservationDatePicker formattedDates={formattedDates} onSelectDate={onSelectedDate}/>
+                ) : null
+            }
             {visibleScreenings ? (
                 <ScreeningSelector screenings={visibleScreenings} currentScreening={currentScreening}
                                    onSelectScreening={onSelectScreening}/>

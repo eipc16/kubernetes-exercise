@@ -15,6 +15,7 @@ interface OwnProps {
 }
 
 interface State {
+    isAuthenticated: boolean;
     isFetched?: boolean;
     isFetching?: boolean;
     movieList: PlayerMovies;
@@ -24,7 +25,7 @@ interface State {
 type MovieListProps = State & OwnProps
 
 const MovieListComponent = (props: MovieListProps) => {
-    const {isFetching, movieList, movieListPublisher, filters} = props
+    const {isFetching, movieList, movieListPublisher, filters, isAuthenticated} = props
 
     useFetching(movieListPublisher.getMovieListByFilters(filters), [filters])
 
@@ -34,7 +35,7 @@ const MovieListComponent = (props: MovieListProps) => {
 
     const areMoviesAvailable = (movieList: PlayedMoviesInterface) => {
         return movieList && movieList.content && movieList.content.length > 0
-    }
+    };
 
     return (
         <div className='main--list--container'>
@@ -46,7 +47,7 @@ const MovieListComponent = (props: MovieListProps) => {
                         {areMoviesAvailable(movieList) ? (
                             areMoviesAvailable(movieList) && movieList.content.map(movie =>
                                 <Col key={movie.imdbId}>
-                                    <MovieListEntry movie={movie}/>
+                                    <MovieListEntry movie={movie} isAuthenticated={isAuthenticated}/>
                                 </Col>
                             )
                         ) : (
@@ -60,14 +61,15 @@ const MovieListComponent = (props: MovieListProps) => {
             </MovieListFiltersContainer>
         </div>
     )
-}
+};
 
 const mapStateToProps = (state: any, ownProps: OwnProps) => ({
+    isAuthenticated: state.auth.loggedIn,
     isFetched: state.movieList.isFetched,
     isFetching: state.movieList.isFetching,
     movieList: state.movieList.playedMovies,
     filters: state.movieList.filters,
     ...ownProps
-})
+});
 
 export const MovieList: React.FC<OwnProps> = connect(mapStateToProps)(MovieListComponent)

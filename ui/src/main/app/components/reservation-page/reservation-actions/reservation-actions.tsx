@@ -38,7 +38,7 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
         if (counter > 0) {
             setModalState({
                 ...modalState, visible: true,
-                content: <p>{`Number of seats: ${counter}\n Total cost: $${counter * 10}`}</p>
+                content: <p>{`Number of seats: ${counter}\n Total cost: $${totalPrice}`}</p>
             });
         }
     };
