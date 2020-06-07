@@ -1,13 +1,14 @@
 import React from 'react'
-import { connect, useDispatch } from 'react-redux'
+import {connect, useDispatch} from 'react-redux'
 import {Button, Form, Input, message} from 'antd'
 
-import { RegisterActionPublisher } from '../../redux/actions/register'
+import {RegisterActionPublisher} from '../../redux/actions/register'
 import './register-form.scss'
-import { Alert } from '../../models/infrastructure'
-import { AlertTypes } from '../../models/infrastructure/Alert'
-import { AlertContainer } from '../alert/alert'
+import {Alert} from '../../models/infrastructure'
+import {AlertTypes} from '../../models/infrastructure/Alert'
+import {AlertContainer} from '../alert/alert'
 import {useHistory} from "react-router-dom";
+import {RegistrationData} from "../../models/authorization";
 
 interface OwnProps {
     registerPublisher: RegisterActionPublisher;
@@ -25,18 +26,17 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
   const { registered, registering, registerPublisher } = props
   const history = useHistory();
 
-  const alertSupplier = (message: string) => {
-    const alert: Alert = {
-      id: 'register-failure-alert',
-      component: 'register-form',
-      message: message,
-      type: AlertTypes.ERROR,
-      canDismiss: true
+  const alertSupplier = (message: string): Alert => {
+      return {
+        id: 'register-failure-alert',
+        component: 'register-form',
+        message: message,
+        type: AlertTypes.ERROR,
+        canDismiss: true
     }
-    return alert
-  }
+  };
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: RegistrationData): void => {
     const registerData = {
       name: values.name,
       surname: values.surname,
@@ -44,9 +44,9 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
       password: values.password,
       email: values.email,
       phoneNumber: values.phoneNumber
-    }
+    };
     dispatch(registerPublisher.register(registerData, alertSupplier))
-  }
+  };
 
   if(registered) {
       message.success({ content: 'Your account is created! You will be redirect to login page.',
@@ -63,7 +63,7 @@ const RegisterFormComponent: React.FC<RegisterFormProps> = (props: RegisterFormP
               initialValues={{
                   remember: true
               }}
-              onFinish={onFinish}
+              onFinish={(values: any) => onFinish((values as RegistrationData))}
           >
               <h1 className="text-center"> Welcome</h1>
               <div className="text-center">

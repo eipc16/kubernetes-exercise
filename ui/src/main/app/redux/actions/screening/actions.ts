@@ -2,7 +2,7 @@ import {Action, Dispatch} from "redux";
 import {Alert} from "../../../models/infrastructure";
 import {
     ScreeningsFailureActionInterface,
-    ScreeningsRequestActionInterface,
+    ScreeningsRequestActionInterface, ScreeningsSetCurrentActionInterface,
     ScreeningsSuccessActionInterface
 } from "./types";
 import {AlertPublisher, AlertPublisherImpl} from "../alert";
@@ -11,6 +11,7 @@ import {screeningConstants} from "../../constants/screening-constants";
 import {Screening} from "../../../models/screening";
 import {SeatActionPublisher, SeatActionPublisherImpl} from "../seat";
 import {SeatServiceImpl} from "../../../services/seat-service";
+import moment from "moment";
 
 export interface ScreeningActionPublisher {
     fetchScreenings(movieId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void;
@@ -29,24 +30,6 @@ export class ScreeningActionPublisherImpl implements ScreeningActionPublisher {
     }
 
     fetchScreenings(movieId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void {
-        return (dispatch: Dispatch<Action>) => {
-            dispatch(request(movieId));
-
-            this.screeningService.fetchScreenings(movieId)
-                .then(
-                    (screenings: Screening[]) => {
-                        dispatch(success(screenings))
-                    },
-                    (errorResponse: string) => {
-                        dispatch(failure(errorResponse))
-                        if (errorAlertSupplier) {
-                            const alert = errorAlertSupplier(errorResponse)
-                            this.alertPublisher.pushAlert(alert)(dispatch)
-                        }
-                    }
-                )
-        }
-
         function request(movieId: number): ScreeningsRequestActionInterface {
             return {
                 type: screeningConstants.MOVIE_SCREENINGS_REQUEST,
@@ -67,19 +50,39 @@ export class ScreeningActionPublisherImpl implements ScreeningActionPublisher {
                 error: error
             }
         }
+
+        return (dispatch: Dispatch<Action>): void => {
+            dispatch(request(movieId));
+
+            this.screeningService.fetchScreenings(movieId)
+                .then((screenings: Screening[]) => screenings
+                    .filter(screening => moment(screening.startTime).isAfter(moment.now())))
+                .then(
+                    (screenings: Screening[]) => {
+                        dispatch(success(screenings));
+                    },
+                    (errorResponse: string) => {
+                        dispatch(failure(errorResponse));
+                        if (errorAlertSupplier) {
+                            const alert = errorAlertSupplier(errorResponse);
+                            this.alertPublisher.pushAlert(alert)(dispatch);
+                        }
+                    }
+                )
+        };
     }
 
     setCurrentScreening(screeningId: number): (dispatch: Dispatch<Action>) => void {
-        return (dispatch: Dispatch<Action>) => {
-            this.seatsPublisher.fetchSeats(screeningId)(dispatch);
-            dispatch(setScreening(screeningId));
-        }
-
-        function setScreening(screeningId: number) {
+        function setScreening(screeningId: number): ScreeningsSetCurrentActionInterface {
             return {
                 type: screeningConstants.SET_CURRENT_SCREENING,
                 screeningId: screeningId
             };
+        }
+
+        return (dispatch: Dispatch<Action>): void => {
+            this.seatsPublisher.fetchSeats(screeningId)(dispatch);
+            dispatch(setScreening(screeningId));
         }
     }
 }

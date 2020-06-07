@@ -12,8 +12,7 @@ interface OwnProps {
 
 export type ReservationDateSelectorMobileProps = OwnProps & ReservationDateSelectorProps;
 
-
-export const ReservationDateSelectorMobileComponent = (props: ReservationDateSelectorMobileProps) => {
+export const ReservationDateSelectorMobileComponent = (props: ReservationDateSelectorMobileProps): JSX.Element => {
     const dispatch = useDispatch();
     const { screeningsWithDates, dateFormat, screeningActionPublisher } = props;
     const { groupedScreenings, formattedDates } = screeningsWithDates;
@@ -26,22 +25,22 @@ export const ReservationDateSelectorMobileComponent = (props: ReservationDateSel
     const currentDateTimeFormat: string = dateFormat || 'DD/MM/YYYY';
     const timeFormat = 'HH:mm';
 
-    const isDateDisabled = (moment: moment.Moment) => {
+    const isDateDisabled = (moment: moment.Moment): boolean => {
         return moment.isBefore(moment.fromNow()) || !formattedDates.includes(moment.format(currentDateTimeFormat));
     };
 
-    const onDateSelect = (moment: moment.Moment | null) => {
-        if(moment) {
-            setVisibleScreenings(groupedScreenings[moment.format(currentDateTimeFormat)]);
-            onSelectScreening(0);
-        }
-    };
-
-    const onSelectScreening =(selectedValueIndex: number) => {
+    const onSelectScreening = (selectedValueIndex: number): void => {
         setSelectedScreeningIndex(selectedValueIndex);
         const screening = visibleScreenings[selectedValueIndex];
         console.log(screening);
         dispatch(screeningActionPublisher.setCurrentScreening(screening.screeningId))
+    };
+
+    const onDateSelect = (moment: moment.Moment | null): void => {
+        if(moment) {
+            setVisibleScreenings(groupedScreenings[moment.format(currentDateTimeFormat)]);
+            onSelectScreening(0);
+        }
     };
 
     const getDateStyle = (): CSSProperties => {

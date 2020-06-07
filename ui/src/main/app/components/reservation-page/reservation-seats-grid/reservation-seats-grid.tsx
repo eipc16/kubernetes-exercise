@@ -1,4 +1,4 @@
-import React from "react";
+import React, {CSSProperties} from "react";
 
 import './reservation-seats-grid.scss'
 import {ReservationState, Seat} from "../../../models/screening-rooms";
@@ -8,6 +8,7 @@ import {connect, useDispatch} from "react-redux";
 import {useFetching} from "../../../utils/custom-fetch-hook";
 import {Screening} from "../../../models/screening";
 import {ScreeningsState} from "../../../redux/reducers/screening-reducer";
+import {ReduxStore} from "../../../redux/reducers/root-reducer";
 
 interface OwnProps {
     className?: string;
@@ -17,7 +18,7 @@ interface OwnProps {
 interface SeatGridState {
     seats: SeatsMap;
     isFetching: boolean;
-    currentScreening: Screening;
+    currentScreening?: Screening;
     columns?: number;
     rows?: number;
 }
@@ -35,11 +36,11 @@ interface SeatGridProps {
 
 export type ReservationSeatsGridProps = SeatGridState & OwnProps;
 
-const SeatsGridComponent = (props: SeatGridProps) => {
+const SeatsGridComponent = (props: SeatGridProps): JSX.Element => {
     const {columns, rows, seats, onSeatClick} = props;
 
-    const mapSeatListToRows = (seatsToMap: Seat[]) => {
-        const resultMap: SeatLayout = {}
+    const mapSeatListToRows = (seatsToMap: Seat[]): SeatLayout => {
+        const resultMap: SeatLayout = {};
         for (let i = 0; i < seatsToMap.length; i++) {
             const seat = seatsToMap[i];
             if (resultMap[seat.rowNumber]) {
@@ -49,9 +50,9 @@ const SeatsGridComponent = (props: SeatGridProps) => {
             }
         }
         return resultMap;
-    }
+    };
 
-    const getSeatColor = (seat: Seat) => {
+    const getSeatColor = (seat: Seat): string => {
         switch (seat.reservationState) {
             case ReservationState.AVAILABLE:
                 return 'gray';
@@ -64,26 +65,26 @@ const SeatsGridComponent = (props: SeatGridProps) => {
             default:
                 return 'gray';
         }
-    }
+    };
 
-    const getSeatStyle = (seat: Seat) => {
+    const getSeatStyle = (seat: Seat): CSSProperties => {
         return {
             backgroundColor: getSeatColor(seat)
         }
-    }
+    };
 
-    const createArrayWithGivenSize = (size: number) => {
+    const createArrayWithGivenSize = (size: number): number[] => {
         const rowsList: number[] = [];
         for (let i = 0; i < size; i++) {
             rowsList.push(i + 1)
         }
         return rowsList;
-    }
+    };
 
-    const handleSeatClick = (e: React.MouseEvent<HTMLTableDataCellElement>, seat: Seat) => {
+    const handleSeatClick = (e: React.MouseEvent<HTMLTableDataCellElement>, seat: Seat): void => {
         e.preventDefault();
         onSeatClick(seat);
-    }
+    };
 
     if (!seats || seats.length < 1) {
         return (
@@ -97,18 +98,17 @@ const SeatsGridComponent = (props: SeatGridProps) => {
     const rowsArray = createArrayWithGivenSize(rows);
     const columnsArray = createArrayWithGivenSize(columns);
 
-    console.log(seatsMap, rowsArray, columnsArray);
-
     return (
         <div className='seat--grid'>
             <p className='screen'>Screen</p>
             <table className='seats'>
                 <thead>
                 <tr>
-                    <td key='empty' className='single--seat empty'> </td>
+                    <td key='empty' className='single--seat empty'></td>
                     <React.Fragment>
                         {
-                            columnsArray.map(column => (<td key={column} className='single--seat no--seat'>{column}</td>))
+                            columnsArray.map(column => (
+                                <td key={column} className='single--seat no--seat'>{column}</td>))
                         }
                     </React.Fragment>
                 </tr>
@@ -124,7 +124,8 @@ const SeatsGridComponent = (props: SeatGridProps) => {
                                         <td key={seat.id}
                                             style={getSeatStyle(seat)}
                                             className='single--seat'
-                                            onClick={(e) => handleSeatClick(e, seat)}>
+                                            onClick={(e: React.MouseEvent<HTMLTableDataCellElement, MouseEvent>): void =>
+                                                handleSeatClick(e, seat)}>
                                             {seat.seatNumber}
                                         </td>
                                     ))
@@ -137,27 +138,28 @@ const SeatsGridComponent = (props: SeatGridProps) => {
             </table>
         </div>
     )
-}
+};
 
-const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
-    const {seats, isFetching, seatActionPublisher, currentScreening, columns, rows } = props;
+const ReservationSeatsComponent = (props: ReservationSeatsGridProps): JSX.Element => {
+    const {seats, isFetching, seatActionPublisher, currentScreening, columns, rows} = props;
     const dispatch = useDispatch();
 
     const screeningId = currentScreening ? currentScreening.screeningId : 0;
 
-    useFetching(seatActionPublisher.fetchSeats(screeningId), [screeningId])
+    useFetching(seatActionPublisher.fetchSeats(screeningId), [screeningId]);
 
-    const onSeatClick = (seat: Seat) => {
-        console.log(seat);
+    const onSeatClick = (seat: Seat): void => {
         switch (seat.reservationState) {
             case ReservationState.AVAILABLE:
-                return dispatch(seatActionPublisher.updateSeatReservationState(seat.id, ReservationState.SELECTED));
+                dispatch(seatActionPublisher.updateSeatReservationState(seat.id, ReservationState.SELECTED));
+                break;
             case ReservationState.SELECTED:
-                return dispatch(seatActionPublisher.updateSeatReservationState(seat.id, ReservationState.AVAILABLE));
+                dispatch(seatActionPublisher.updateSeatReservationState(seat.id, ReservationState.AVAILABLE));
+                break;
             default:
                 return;
         }
-    }
+    };
 
     if (isFetching) {
         return (
@@ -201,9 +203,9 @@ const ReservationSeatsComponent = (props: ReservationSeatsGridProps) => {
             onSeatClick={onSeatClick}
         />
     )
-}
+};
 
-const mapStateToProps = (store: any, ownProps: OwnProps) => {
+const mapStateToProps = (store: ReduxStore, ownProps: OwnProps): ReservationSeatsGridProps => {
     const seatsState = store.screeningSeats;
     const screeningsState: ScreeningsState = store.movieScreenings;
     return {
@@ -214,12 +216,11 @@ const mapStateToProps = (store: any, ownProps: OwnProps) => {
         columns: screeningsState.currentScreening?.screeningRoom.seatsInRowNumber,
         ...ownProps
     }
-}
+};
 
-// @ts-ignore
 const ConnectedReservationSeatsComponent: React.FC<OwnProps> = connect(mapStateToProps)(ReservationSeatsComponent);
 
-export const ReservationSeats = (props: OwnProps) => {
+export const ReservationSeats = (props: OwnProps): JSX.Element => {
 
     const {className} = props;
 
@@ -244,4 +245,4 @@ export const ReservationSeats = (props: OwnProps) => {
             </TransformWrapper>
         </div>
     )
-}
+};

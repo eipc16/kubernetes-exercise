@@ -14,10 +14,11 @@ import {MovieDetailsActionPublisherImpl} from "../../redux/actions/movie-details
 import {MovieDetailsServiceImpl} from "../../services/movie-details-service";
 import {ReservationDateSelector} from "./reservation-date-selector/reservation-date-selector";
 
-export const ReservationPage = (props: any) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const ReservationPage = (props: any): JSX.Element => {
     const history = useHistory();
-    const [movieDetailsService] = useState(MovieDetailsServiceImpl.createInstance)
-    const [movieDetailsPublisher] = useState(new MovieDetailsActionPublisherImpl(movieDetailsService))
+    const [movieDetailsService] = useState(MovieDetailsServiceImpl.createInstance);
+    const [movieDetailsPublisher] = useState(new MovieDetailsActionPublisherImpl(movieDetailsService));
     const [seatService] = useState(SeatServiceImpl.createInstance());
     const [screeningService] = useState(ScreeningServiceImpl.createInstance());
     const [seatActionPublisher] = useState(new SeatActionPublisherImpl(seatService));
@@ -25,7 +26,7 @@ export const ReservationPage = (props: any) => {
 
     const movieId = props.match.params.id;
 
-    const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const onClick = (e: React.MouseEvent<HTMLDivElement>): void => {
         e.preventDefault();
         history.push('/')
     };
@@ -37,7 +38,8 @@ export const ReservationPage = (props: any) => {
                 onBack={onClick}
                 title="Reservation page"
                 extra={[
-                    <ReservationActions key='reservation-actions' className='reservation--actions' seatActionPublisher={seatActionPublisher}/>
+                    <ReservationActions key='reservation-actions' className='reservation--actions'
+                                        seatActionPublisher={seatActionPublisher}/>
                 ]}
             />
             <div className='page--content'>

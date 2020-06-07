@@ -14,7 +14,7 @@ interface ReservationDatePickerProps {
 
 type PaginationActions = 'page' | 'prev' | 'next' | 'jump-prev' | 'jump-next';
 
-const ReservationDatePicker = (props: ReservationDatePickerProps) => {
+const ReservationDatePicker = (props: ReservationDatePickerProps): JSX.Element => {
     const {formattedDates, onSelectDate} = props;
 
     const customPaginationRender = (page: number, type: PaginationActions, originalElement: React.ReactElement<HTMLElement>): React.ReactNode => {
@@ -30,12 +30,12 @@ const ReservationDatePicker = (props: ReservationDatePickerProps) => {
         }
     };
 
-    const onChange = (page: number) => {
+    const onChange = (page: number): void => {
         onSelectDate(formattedDates[page - 1])
     };
 
     // eslint-disable-next-line
-    useEffect(() => onChange(1), [])
+    useEffect(() => onChange(1), []);
 
     return (
         <Pagination
@@ -56,26 +56,26 @@ interface ScreeningSelectorProps {
     dateFormat?: string;
 }
 
-const ScreeningSelector = (props: ScreeningSelectorProps) => {
+const ScreeningSelector = (props: ScreeningSelectorProps): JSX.Element => {
     const {screenings, dateFormat, currentScreening, onSelectScreening} = props;
 
     const currentDateTimeFormat: string = dateFormat || 'HH:mm';
 
-    const onScreeningClick = (e: React.MouseEvent<HTMLElement>, screening: Screening) => {
+    const onScreeningClick = (e: React.MouseEvent<HTMLElement>, screening: Screening): void => {
         e.preventDefault();
         onSelectScreening(screening);
     };
 
-    const isSelected = (screening: Screening) => {
-        return currentScreening && currentScreening.screeningId === screening.screeningId;
+    const isSelected = (screening: Screening): boolean => {
+        return currentScreening ? currentScreening.screeningId === screening.screeningId : false;
     };
 
     return (
         <div>
-            <List dataSource={screenings} renderItem={screening =>
+            <List dataSource={screenings} renderItem={(screening: Screening): JSX.Element =>
                 <Button className={`single--screening ${isSelected(screening) && 'selected-screening'}`}
                         key={screening.screeningId}
-                        onClick={(e) => onScreeningClick(e, screening)}
+                        onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>): void => onScreeningClick(e, screening)}
                 >
                     {moment(screening.startTime).format(currentDateTimeFormat)} - Room: {screening.screeningRoom.number}
                 </Button>
@@ -91,17 +91,17 @@ interface OwnProps {
 
 export type ReservationDateSelectorDesktopProps = OwnProps & ReservationDateSelectorProps;
 
-export const ReservationDateSelectorDekstopComponent = (props: ReservationDateSelectorDesktopProps) => {
+export const ReservationDateSelectorDesktopComponent = (props: ReservationDateSelectorDesktopProps): JSX.Element => {
     const dispatch = useDispatch();
     const {screeningActionPublisher, screeningsWithDates, currentScreening} = props;
     const [visibleScreenings, setVisibleScreenings] = useState(([] as Screening[]));
     const {groupedScreenings, formattedDates} = screeningsWithDates;
 
-    const onSelectedDate = (date: string) => {
+    const onSelectedDate = (date: string): void => {
         setVisibleScreenings(groupedScreenings[date]);
     };
 
-    const onSelectScreening = (screening: Screening) => {
+    const onSelectScreening = (screening: Screening): void => {
         dispatch(screeningActionPublisher.setCurrentScreening(screening.screeningId))
     };
 

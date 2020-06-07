@@ -7,32 +7,20 @@ import {
 import {MovieDetailsService} from "../../../services/movie-details-service";
 import {MovieDetailsList} from "../../../models/movie-details";
 import {movieDetailsConstants} from "../../constants";
+import {MovieDetailsListInterface} from "../../../models/movie-details/movie-details-list";
 
 export interface MovieDetailsActionPublisher {
-    getMovieDetails(id: number): (dispatch: Dispatch<Action>) => void;
+    getMovieDetails(id: number): (dispatch: Dispatch<Action>) => Promise<MovieDetailsListInterface | void>;
 }
 
 export class MovieDetailsActionPublisherImpl implements MovieDetailsActionPublisher {
     movieDetailsService: MovieDetailsService;
 
     constructor(movieDetailsService: MovieDetailsService) {
-        this.movieDetailsService = movieDetailsService
+        this.movieDetailsService = movieDetailsService;
     }
 
-    getMovieDetails(id: number): (dispatch: Dispatch<Action>) => void {
-        return (dispatch: Dispatch<Action>) => {
-            dispatch(request(id))
-            this.movieDetailsService.getMovieDetails(id)
-                .then(
-                    (movie: MovieDetailsList) => {
-                        dispatch(success(movie))
-                    },
-                    (errorResponse: string) => {
-                        dispatch(failure(errorResponse))
-                    }
-                )
-        }
-
+    getMovieDetails(id: number): (dispatch: Dispatch<Action>) => Promise<MovieDetailsListInterface | void> {
         function request(id: number): MovieDetailsRequestActionInterface {
             return {
                 type: movieDetailsConstants.MOVIE_DETAILS_REQUEST,
@@ -53,5 +41,17 @@ export class MovieDetailsActionPublisherImpl implements MovieDetailsActionPublis
                 error: error
             }
         }
+
+        return (dispatch: Dispatch<Action>): Promise<MovieDetailsListInterface | void> => {
+            dispatch(request(id));
+            return this.movieDetailsService.getMovieDetails(id)
+                .then((movie: MovieDetailsList) => {
+                        dispatch(success(movie));
+                        return movie;
+                    }
+                ).catch((errorResponse: string) => {
+                    dispatch(failure(errorResponse));
+                })
+        };
     }
 }

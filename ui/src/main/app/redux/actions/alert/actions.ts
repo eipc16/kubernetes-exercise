@@ -20,8 +20,8 @@ export class AlertPublisherImpl implements AlertPublisher {
     }
 
     pushAlert (alert: AlertInterface): (dispatch: Dispatch<AlertAction>) => void {
-      return dispatch => {
-        dispatch(AlertPublisherImpl.pushAlertAction(alert))
+      return (dispatch: Dispatch<AlertAction>): void => {
+        dispatch(AlertPublisherImpl.pushAlertAction(alert));
         if (alert.duration && alert.duration > 0) {
           setTimeout(() => dispatch(this.dismissAlert(alert.component, alert.id)), alert.duration * 1000)
         }

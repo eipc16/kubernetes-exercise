@@ -17,7 +17,9 @@ import {Reservation} from "../../../models/reservation";
 
 export interface SeatActionPublisher {
     fetchSeats(screeningId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void;
+
     updateSeatReservationState(seatId: number, seatReservationState: ReservationState): SeatUpdateStateActionInterface;
+
     reserveSeats(reservation: Reservation, errorAlertSupplier?: (message: string) => Alert,
                  onSuccess?: (resource: Resource) => void, onException?: (errorResponse: string) => void): (dispatch: Dispatch<Action>) => void;
 }
@@ -32,24 +34,6 @@ export class SeatActionPublisherImpl implements SeatActionPublisher {
     }
 
     fetchSeats(screeningId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void {
-        return (dispatch: Dispatch<Action>) => {
-            dispatch(request(screeningId));
-
-            this.seatService.fetchSeats(screeningId)
-                .then(
-                    (seats: Seat[]) => {
-                        dispatch(success(seats))
-                    },
-                    (errorResponse: string) => {
-                        dispatch(failure(errorResponse))
-                        if (errorAlertSupplier) {
-                            const alert = errorAlertSupplier(errorResponse)
-                            this.alertPublisher.pushAlert(alert)(dispatch)
-                        }
-                    }
-                )
-        };
-
         function request(screeningId: number): SeatRequestActionInterface {
             return {
                 type: seatConstants.SEAT_LAYOUT_REQUEST,
@@ -76,6 +60,24 @@ export class SeatActionPublisherImpl implements SeatActionPublisher {
                 error: error
             }
         }
+
+        return (dispatch: (Dispatch<Action>)): void => {
+            dispatch(request(screeningId));
+
+            this.seatService.fetchSeats(screeningId)
+                .then(
+                    (seats: Seat[]) => {
+                        dispatch(success(seats))
+                    },
+                    (errorResponse: string) => {
+                        dispatch(failure(errorResponse));
+                        if (errorAlertSupplier) {
+                            const alert = errorAlertSupplier(errorResponse);
+                            this.alertPublisher.pushAlert(alert)(dispatch);
+                        }
+                    }
+                )
+        };
     }
 
     updateSeatReservationState(seatId: number, seatReservationState: ReservationState): SeatUpdateStateActionInterface {
@@ -88,29 +90,6 @@ export class SeatActionPublisherImpl implements SeatActionPublisher {
 
     reserveSeats(reservation: Reservation, errorAlertSupplier?: (message: string) => Alert,
                  onSuccess?: (resource: Resource) => void, onException?: (errorResponse: string) => void): (dispatch: Dispatch<Action>) => void {
-        return (dispatch: Dispatch<Action>) => {
-            dispatch(request(reservation));
-            this.seatService.reserveSeats(reservation)
-                .then(
-                    (resource: Resource) => {
-                        dispatch(success(resource));
-                        if (onSuccess) {
-                            onSuccess(resource);
-                        }
-                    },
-                    (errorResponse: string) => {
-                        dispatch(failure(errorResponse));
-                        if (errorAlertSupplier) {
-                            const alert = errorAlertSupplier(errorResponse);
-                            this.alertPublisher.pushAlert(alert)(dispatch)
-                        }
-                        if (onException) {
-                            onException(errorResponse);
-                        }
-                    }
-                )
-        };
-
         function request(reservation: Reservation): SeatReservationRequestActionInterface {
             return {
                 type: seatConstants.SEAT_RESERVATION_REQUEST,
@@ -131,5 +110,28 @@ export class SeatActionPublisherImpl implements SeatActionPublisher {
                 error: error
             }
         }
+
+        return (dispatch: Dispatch<Action>): void => {
+            dispatch(request(reservation));
+            this.seatService.reserveSeats(reservation)
+                .then(
+                    (resource: Resource) => {
+                        dispatch(success(resource));
+                        if (onSuccess) {
+                            onSuccess(resource);
+                        }
+                    },
+                    (errorResponse: string) => {
+                        dispatch(failure(errorResponse));
+                        if (errorAlertSupplier) {
+                            const alert = errorAlertSupplier(errorResponse);
+                            this.alertPublisher.pushAlert(alert)(dispatch);
+                        }
+                        if (onException) {
+                            onException(errorResponse);
+                        }
+                    }
+                )
+        };
     }
 }

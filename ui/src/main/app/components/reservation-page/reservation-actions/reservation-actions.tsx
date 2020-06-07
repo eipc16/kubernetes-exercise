@@ -10,6 +10,8 @@ import {useHistory} from "react-router-dom";
 import {AlertContainer} from "../../alert/alert";
 import {Alert} from "../../../models/infrastructure";
 import {AlertTypes} from "../../../models/infrastructure/Alert";
+import {Reservation} from "../../../models/reservation";
+import {ReduxStore} from "../../../redux/reducers/root-reducer";
 
 interface OwnProps {
     className: string;
@@ -24,8 +26,8 @@ interface ReservationPropsState {
 
 type ReservationActionsProps = OwnProps & ReservationPropsState
 
-const ReservationActionsComponent = (props: ReservationActionsProps) => {
-    const dispatch = useDispatch()
+const ReservationActionsComponent = (props: ReservationActionsProps): JSX.Element => {
+    const dispatch = useDispatch();
     const {className, seats, seatActionPublisher, screeningId, seatPrice} = props;
     const counter = Object.values(seats).filter(seat => seat.reservationState === ReservationState.SELECTED).length
     const [modalState, setModalState] = useState({
@@ -34,29 +36,28 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
     });
     const history = useHistory();
 
-    const showModal = () => {
-        if (counter > 0) {
+    const showModal = (numOfSeats: number, totalPrice: string): void => {
+        if (numOfSeats > 0) {
             setModalState({
                 ...modalState, visible: true,
-                content: <p>{`Number of seats: ${counter}\n Total cost: $${totalPrice}`}</p>
+                content: <p>{`Number of seats: ${numOfSeats}\n Total cost: $${totalPrice}`}</p>
             });
         }
     };
 
-    const alertSupplier = (message: string) => {
-        const alert: Alert = {
+    const alertSupplier = (message: string): Alert => {
+        return {
             id: 'register-failure-alert',
             component: 'reservation--modal--alert',
             message: message,
             type: AlertTypes.ERROR,
             canDismiss: true
-        };
-        return alert
+        }
     };
 
-    const handleOk = () => {
+    const handleOk = (): void => {
         setModalState({...modalState, loading: true});
-        const reservation = {
+        const reservation: Reservation = {
             seatsIds: Object.values(seats).filter(seat => seat.reservationState === ReservationState.SELECTED).map(seat => seat.id),
             screeningId: screeningId
         };
@@ -80,7 +81,7 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
         );
     };
 
-    const handleCancel = () => {
+    const handleCancel = (): void => {
         setModalState({...modalState, visible: false});
     };
 
@@ -91,7 +92,7 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
             <Modal
                 visible={modalState.visible}
                 title="Submit reservation"
-                onOk={showModal}
+                onOk={(): void => showModal(counter, totalPrice)}
                 onCancel={handleCancel}
                 footer={[
                     <Button key="back" onClick={handleCancel}>
@@ -116,7 +117,8 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
                         <th className="column--name">Seats</th>
                         <th className="column--name">Price</th>
                         <th className="reserve--button" rowSpan={2}>
-                            <Button onClick={showModal} disabled={counter < 1}>
+                            <Button onClick={(): void => showModal(counter, totalPrice)}
+                                    disabled={counter < 1}>
                                 Reserve
                             </Button>
                         </th>
@@ -132,7 +134,7 @@ const ReservationActionsComponent = (props: ReservationActionsProps) => {
     )
 };
 
-const mapStateToProps = (store: any, ownProps: OwnProps) => {
+const mapStateToProps = (store: ReduxStore, ownProps: OwnProps): ReservationActionsProps => {
     const seatsState = store.screeningSeats;
     const screeningsState: ScreeningsState = store.movieScreenings;
     const currentScreening = screeningsState.currentScreening;

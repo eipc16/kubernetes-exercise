@@ -20,25 +20,6 @@ export class GenreActionPublisherImpl implements GenreActionPublisher {
     }
 
     fetchGenres(searchText?: string, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void {
-        return (dispatch: Dispatch<Action>) => {
-            dispatch(request())
-
-            this.genreService.fetchGenres(searchText)
-                .then(
-                    (genres: Genre[]) => {
-                        dispatch(success(genres))
-                    },
-                    (errorResponse: string) => {
-                        dispatch(failure(errorResponse))
-                        if (errorAlertSupplier) {
-                            const alert = errorAlertSupplier(errorResponse)
-                            this.alertPublisher.pushAlert(alert)(dispatch)
-                        }
-                    }
-                )
-
-        }
-
         function request(): GenreRequestActionInterface {
             return {
                 type: genreConstants.GENRES_REQUEST
@@ -58,6 +39,25 @@ export class GenreActionPublisherImpl implements GenreActionPublisher {
                 error: error
             }
         }
+
+        return (dispatch: Dispatch<Action>): void => {
+            dispatch(request());
+
+            this.genreService.fetchGenres(searchText)
+                .then(
+                    (genres: Genre[]) => {
+                        dispatch(success(genres))
+                    },
+                    (errorResponse: string) => {
+                        dispatch(failure(errorResponse))
+                        if (errorAlertSupplier) {
+                            const alert = errorAlertSupplier(errorResponse)
+                            this.alertPublisher.pushAlert(alert)(dispatch)
+                        }
+                    }
+                )
+
+        };
     }
 
 }

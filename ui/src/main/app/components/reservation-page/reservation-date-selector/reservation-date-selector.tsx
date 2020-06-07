@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScreeningActionPublisher} from "../../../redux/actions/screening";
 import {Screening} from "../../../models/screening";
-import {ReservationDateSelectorDekstopComponent} from "./desktop/reservation-date-selector-desktop";
+import {ReservationDateSelectorDesktopComponent} from "./desktop/reservation-date-selector-desktop";
 import {ScreeningsState} from "../../../redux/reducers/screening-reducer";
 import {connect} from "react-redux";
 import {ReservationDateSelectorMobileComponent} from "./mobile/reservation-date-selector-mobile";
@@ -9,6 +9,8 @@ import {ReservationDateSelectorMobileComponent} from "./mobile/reservation-date-
 import './reservation-date-selector.scss';
 import {useFetching} from "../../../utils/custom-fetch-hook";
 import moment from "moment";
+import {ReduxStore} from "../../../redux/reducers/root-reducer";
+import {ScreeningInterface} from "../../../models/screening/Screening";
 
 interface OwnProps {
     className: string;
@@ -34,7 +36,7 @@ interface ReservationDateSelectorState {
 
 export type ReservationDateSelectorProps = OwnProps & ReservationDateSelectorState;
 
-const ReservationDateSelectorComponent = (props: ReservationDateSelectorProps) => {
+const ReservationDateSelectorComponent = (props: ReservationDateSelectorProps): JSX.Element => {
     const {movieId, screeningActionPublisher, isFetching, screenings, dateFormat} = props;
     useFetching(screeningActionPublisher.fetchScreenings(movieId), [movieId]);
 
@@ -48,8 +50,8 @@ const ReservationDateSelectorComponent = (props: ReservationDateSelectorProps) =
 
     const currentDateTimeFormat: string = dateFormat || 'DD/MM/YYYY';
 
-    const getSortedScreenings = (screeningsToSort: Screening[]) => {
-        const sortingRule = (first: Screening, second: Screening) => {
+    const getSortedScreenings = (screeningsToSort: Screening[]): ScreeningInterface[] => {
+        const sortingRule = (first: Screening, second: Screening): number => {
             return new Date(first.startTime).getTime() - new Date(second.startTime).getTime();
         };
         const tempScreenings = Object.assign([], screeningsToSort);
@@ -69,7 +71,7 @@ const ReservationDateSelectorComponent = (props: ReservationDateSelectorProps) =
                 dates.push(formattedDate);
             }
             if (acc[formattedDate]) {
-                acc[formattedDate].push(screening)
+                acc[formattedDate].push(screening);
             } else {
                 acc[formattedDate] = [screening]
             }
@@ -84,13 +86,13 @@ const ReservationDateSelectorComponent = (props: ReservationDateSelectorProps) =
 
     return (
         <div className={props.className}>
-            <ReservationDateSelectorDekstopComponent {...props} screeningsWithDates={screeningsWithDates}/>
+            <ReservationDateSelectorDesktopComponent {...props} screeningsWithDates={screeningsWithDates}/>
             <ReservationDateSelectorMobileComponent {...props} screeningsWithDates={screeningsWithDates}/>
         </div>
     );
 };
 
-const mapStateToProps = (store: any, ownProps: OwnProps) => {
+const mapStateToProps = (store: ReduxStore, ownProps: OwnProps): ReservationDateSelectorProps => {
     const screeningState: ScreeningsState = store.movieScreenings;
     return {
         screenings: screeningState.screenings,
