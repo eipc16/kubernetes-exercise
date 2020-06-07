@@ -9,6 +9,7 @@ import './movie-list.scss';
 import {MovieListFiltersContainer} from "./movie-list-filters/movie-list-filters-container";
 import {useFetching} from "../../utils/custom-fetch-hook";
 import {PlayedMoviesInterface} from "../../models/movies-list/PlayedMovies";
+import {ReduxStore} from "../../redux/reducers/root-reducer";
 
 interface OwnProps {
     movieListPublisher: MovieListActionPublisher;
@@ -24,17 +25,13 @@ interface State {
 
 type MovieListProps = State & OwnProps
 
-const MovieListComponent = (props: MovieListProps) => {
-    const {isFetching, movieList, movieListPublisher, filters, isAuthenticated} = props
+const MovieListComponent = (props: MovieListProps): JSX.Element => {
+    const {isFetching, movieList, movieListPublisher, filters, isAuthenticated} = props;
 
-    useFetching(movieListPublisher.getMovieListByFilters(filters), [filters])
+    useFetching(movieListPublisher.getMovieListByFilters(filters), [filters]);
 
-    // if (isFetching) {
-    //     return <div>Fetching..</div>
-    // }
-
-    const areMoviesAvailable = (movieList: PlayedMoviesInterface) => {
-        return movieList && movieList.content && movieList.content.length > 0
+    const areMoviesAvailable = (movieList: PlayedMoviesInterface): boolean => {
+        return movieList && movieList.content && movieList.content.length > 0;
     };
 
     return (
@@ -63,13 +60,26 @@ const MovieListComponent = (props: MovieListProps) => {
     )
 };
 
-const mapStateToProps = (state: any, ownProps: OwnProps) => ({
-    isAuthenticated: state.auth.loggedIn,
+const defaultMovieList = {
+    content: [],
+    pageable: {
+        pageSize: 0,
+        pageNumber: 0
+    },
+    last: true,
+    totalElements: 0,
+    totalPages: 0,
+    first: true,
+    number: 0
+};
+
+const mapStateToProps = (state: ReduxStore, ownProps: OwnProps): MovieListProps => ({
+    isAuthenticated: state.auth.loggedIn || false,
     isFetched: state.movieList.isFetched,
     isFetching: state.movieList.isFetching,
-    movieList: state.movieList.playedMovies,
+    movieList: state.movieList.playedMovies || defaultMovieList,
     filters: state.movieList.filters,
     ...ownProps
 });
 
-export const MovieList: React.FC<OwnProps> = connect(mapStateToProps)(MovieListComponent)
+export const MovieList: React.FC<OwnProps> = connect(mapStateToProps)(MovieListComponent);

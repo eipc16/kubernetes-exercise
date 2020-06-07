@@ -15,7 +15,7 @@ export class MovieDetailsServiceImpl implements MovieDetailsService {
         this.authService = authService || AuthenticationServiceImpl.createInstance();
     }
 
-    static createInstance (authService?: AuthenticationService) {
+    static createInstance (authService?: AuthenticationService): MovieDetailsService {
         if (!MovieDetailsServiceImpl.movieDetailsService) {
             MovieDetailsServiceImpl.movieDetailsService = new MovieDetailsServiceImpl(authService)
         }

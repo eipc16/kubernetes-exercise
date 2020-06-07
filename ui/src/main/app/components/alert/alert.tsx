@@ -6,6 +6,7 @@ import { Alert as AntdAlert } from 'antd'
 import { AlertTypes } from '../../models/infrastructure/Alert'
 import { AlertPublisher, AlertPublisherImpl } from '../../redux/actions/alert'
 import './alert.scss'
+import {ReduxStore} from "../../redux/reducers/root-reducer";
 
 interface OwnProps {
     component: string;
@@ -19,30 +20,30 @@ interface State {
 export type AlertProps = State & OwnProps;
 export type AntdAlertType = 'success' | 'info' | 'warning' | 'error' | undefined;
 
-const AlertContainerComponent: React.FC<AlertProps> = (props: AlertProps) => {
-  const dispatch = useDispatch()
+const AlertContainerComponent: React.FC<AlertProps> = (props: AlertProps): JSX.Element => {
+  const dispatch = useDispatch();
   const [alertPublisher] = useState(props.alertPublisher
-    ? props.alertPublisher : AlertPublisherImpl.createInstance())
-  const alerts = props.alerts
+    ? props.alertPublisher : AlertPublisherImpl.createInstance());
+  const alerts = props.alerts;
 
-  const getAlertTitle = (alertType: AlertTypes) => {
+  const getAlertTitle = (alertType: AlertTypes): (string | undefined)[] => {
     switch (alertType) {
       case AlertTypes.SUCCESS:
-        return ['success', 'Success']
+        return ['success', 'Success'];
       case AlertTypes.INFO:
-        return ['info', 'Info']
+        return ['info', 'Info'];
       case AlertTypes.WARNING:
-        return ['warning', 'Warning']
+        return ['warning', 'Warning'];
       case AlertTypes.ERROR:
-        return ['error', 'Error']
+        return ['error', 'Error'];
       default:
-        return [undefined, 'Unknown']
+        return [undefined, 'Unknown'];
     }
-  }
+  };
 
-  const getSingleAlert = (alertData: Alert) => {
-    const [type] = getAlertTitle(alertData.type)
-    const alertType = type as AntdAlertType
+  const getSingleAlert = (alertData: Alert): JSX.Element => {
+    const [type] = getAlertTitle(alertData.type);
+    const alertType = type as AntdAlertType;
 
     return (
       <div className='single--alert'>
@@ -52,11 +53,11 @@ const AlertContainerComponent: React.FC<AlertProps> = (props: AlertProps) => {
           type={alertType}
           showIcon={true}
           closable={alertData.canDismiss}
-          afterClose={() => dispatch(alertPublisher.dismissAlert(alertData.component, alertData.id))}
+          afterClose={(): void => { dispatch(alertPublisher.dismissAlert(alertData.component, alertData.id))}}
         />
       </div>
     )
-  }
+  };
 
   return (
     alerts && alerts.length > 0
@@ -68,9 +69,9 @@ const AlertContainerComponent: React.FC<AlertProps> = (props: AlertProps) => {
   )
 }
 
-const mapStateToProps = (state: any, ownProps: OwnProps) => ({
+const mapStateToProps = (state: ReduxStore, ownProps: OwnProps): AlertProps => ({
   alerts: state.alerts[ownProps.component],
   ...ownProps
-})
+});
 
-export const AlertContainer: React.FC<OwnProps> = connect(mapStateToProps)(AlertContainerComponent)
+export const AlertContainer: React.FC<OwnProps> = connect(mapStateToProps)(AlertContainerComponent);

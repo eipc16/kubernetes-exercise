@@ -7,6 +7,7 @@ import {MovieDetails} from "../../models/movie-details";
 import {connect} from "react-redux";
 import {Button, Drawer} from "antd";
 import {MovieDetailsInterface} from "../../models/movie-details/movie-details";
+import {ReduxStore} from "../../redux/reducers/root-reducer";
 
 interface OwnProps {
     movieDetailsPublisher: MovieDetailsActionPublisher;
@@ -22,25 +23,25 @@ interface State {
 
 type MovieDetailsProps = State & OwnProps
 
-const MovieDetailsComponent = (props: MovieDetailsProps) => {
+const MovieDetailsComponent = (props: MovieDetailsProps): JSX.Element => {
     const {movie, className, movieId, movieDetailsPublisher} = props;
 
     const [visible, setVisible] = useState(false);
-    const showDrawer = () => {
+    const showDrawer = (): void => {
         setVisible(true);
     };
-    const onClose = () => {
+    const onClose = (): void => {
         setVisible(false);
     };
 
-    useFetching(movieDetailsPublisher.getMovieDetails(movieId), [movieId])
+    useFetching(movieDetailsPublisher.getMovieDetails(movieId), [movieId]);
 
-    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>): void => {
         e.preventDefault();
         e.currentTarget.src = "not_found.jpg"
     };
 
-    const MovieDetailsInformation = (props: { movie?: MovieDetailsInterface; className: string }) => {
+    const MovieDetailsInformation = (props: { movie?: MovieDetailsInterface; className: string }): JSX.Element => {
         const {movie, className} = props;
 
         if (!movie) {
@@ -53,7 +54,8 @@ const MovieDetailsComponent = (props: MovieDetailsProps) => {
 
         return (
             <div className={className}>
-                <img className='poster--image' src={movie.posterUrl} alt={movie.title + '__poster'} onError={handleImageError}/>
+                <img className='poster--image' src={movie.posterUrl} alt={movie.title + '__poster'}
+                     onError={handleImageError}/>
                 <h3>{movie.title}</h3>
                 <p>
                     Director: {movie.director} <br/>
@@ -64,7 +66,7 @@ const MovieDetailsComponent = (props: MovieDetailsProps) => {
                 </p>
             </div>
         )
-    }
+    };
 
     return (
         <div className={className}>
@@ -86,10 +88,10 @@ const MovieDetailsComponent = (props: MovieDetailsProps) => {
     )
 };
 
-const mapStateToProps = (state: any, ownProps: OwnProps) => ({
+const mapStateToProps = (state: ReduxStore, ownProps: OwnProps): MovieDetailsProps => ({
     isFetched: state.movieDetails.isFetched,
     isFetching: state.movieDetails.isFetching,
-    movie: (state.movieDetails.movie && state.movieDetails.movie.length > 0) ? state.movieDetails.movie[0] : undefined,
+    movie: (state.movieDetails.movie && state.movieDetails.movie.list.length > 0) ? state.movieDetails.movie.list[0] : undefined,
     ...ownProps
 });
 

@@ -10,7 +10,7 @@ import { RegisterPage } from './components/register-page/register-page'
 import { MainPage } from './components/main-page/main-page'
 import {ReservationPage} from "./components/reservation-page/reservation-page";
 
-function App () {
+function App(): JSX.Element {
   return (
     <Router>
       <Switch>

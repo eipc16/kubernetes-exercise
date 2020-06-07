@@ -18,7 +18,7 @@ export class SeatServiceImpl implements SeatService {
         this.authService = authenticationService || AuthenticationServiceImpl.createInstance();
     }
 
-    static createInstance(authenticationService?: AuthenticationService) {
+    static createInstance(authenticationService?: AuthenticationService): SeatService {
         if (!SeatServiceImpl.seatService) {
             SeatServiceImpl.seatService = new SeatServiceImpl(authenticationService)
         }
@@ -29,7 +29,7 @@ export class SeatServiceImpl implements SeatService {
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json', 'Authorization': this.authService.getCurrentTokenAsString() }
-        }
+        };
         return fetch(`${appConfig.apiUrl}/seats/screening/${screeningId}`, requestOptions)
             .then(handleResponse)
             .then((seats: Seat[]) => seats)
@@ -40,7 +40,7 @@ export class SeatServiceImpl implements SeatService {
             method: 'POST',
             headers: {'Content-Type': 'application/json', 'Authorization': this.authService.getCurrentTokenAsString()},
             body: JSON.stringify(reservation)
-        }
+        };
         return fetch(`${appConfig.apiUrl}/reservation`, requestOptions)
             .then(handleResponse)
             .then((resource: Resource) => resource)

@@ -11,15 +11,15 @@ interface MovieListEntryProps {
     movie: Movie;
 }
 
-export const MovieListEntry = (props: MovieListEntryProps) => {
+export const MovieListEntry = (props: MovieListEntryProps): JSX.Element => {
     const { movie, isAuthenticated } = props;
 
-    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>): void => {
         e.preventDefault();
         e.currentTarget.src = "not_found.jpg"
     };
 
-    const getReservationLink = (movie: Movie) => {
+    const getReservationLink = (movie: Movie): string => {
         let path = `/screenings/${movie.id}`;
         if(!isAuthenticated) {
             path = `/login?redirectPath=${path}`

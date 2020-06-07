@@ -8,30 +8,29 @@ import './main-page.scss'
 import {AuthenticationServiceImpl, MovieListServiceImpl} from '../../services'
 import {LoginActionPublisherImpl} from '../../redux/actions/login'
 import {useHistory} from 'react-router-dom'
-
-interface OwnProps {
-}
+import {ReduxStore} from "../../redux/reducers/root-reducer";
 
 interface State {
     loggedIn?: boolean;
 }
 
-type MainPageProps = State & OwnProps;
+type MainPageProps = State & {};
 
 const MainPageComponent: React.FC<MainPageProps> = (props: MainPageProps) => {
-    const {loggedIn} = props
-    const [movieListService] = useState(MovieListServiceImpl.createInstance())
-    const [movieListPublisher] = useState(new MovieListActionPublisherImpl(movieListService))
-    const [authService] = useState(AuthenticationServiceImpl.createInstance())
-    const [loginPublisher] = useState(new LoginActionPublisherImpl(authService))
-    const dispatch = useDispatch()
+    const {loggedIn} = props;
+    const [movieListService] = useState(MovieListServiceImpl.createInstance());
+    const [movieListPublisher] = useState(new MovieListActionPublisherImpl(movieListService));
+    const [authService] = useState(AuthenticationServiceImpl.createInstance());
+    const [loginPublisher] = useState(new LoginActionPublisherImpl(authService));
+    const dispatch = useDispatch();
 
     const history = useHistory();
-    const onClick = () => {
-        if (loggedIn)
-            dispatch(loginPublisher.logout())
+    const onClick = (): void => {
+        if (loggedIn) {
+            dispatch(loginPublisher.logout());
+        }
         history.push('/login')
-    }
+    };
 
     return (
         <React.Fragment>
@@ -51,11 +50,11 @@ const MainPageComponent: React.FC<MainPageProps> = (props: MainPageProps) => {
             </React.Fragment>
         </React.Fragment>
     )
-}
+};
 
-const mapStateToProps = (state: any, ownProps: OwnProps) => ({
+const mapStateToProps = (state: ReduxStore, ownProps: {}): MainPageProps => ({
     loggedIn: state.auth.loggedIn,
     ...ownProps
-})
+});
 
-export const MainPage: React.FC<OwnProps> = connect(mapStateToProps)(MainPageComponent)
+export const MainPage: React.FC<{}> = connect(mapStateToProps)(MainPageComponent);

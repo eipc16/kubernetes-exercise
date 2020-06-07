@@ -8,6 +8,8 @@ import {Alert} from '../../models/infrastructure'
 import {AlertTypes} from '../../models/infrastructure/Alert'
 import {AlertContainer} from '../alert/alert'
 import {parseQueryParams} from "../../utils/parse-query-params";
+import {LoginData} from "../../models/authorization";
+import {ReduxStore} from "../../redux/reducers/root-reducer";
 
 interface OwnProps {
     loginPublisher: LoginActionPublisher;
@@ -20,6 +22,7 @@ interface State {
 
 type LoginFormProps = OwnProps & State;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LoginFormComponent: React.FC<LoginFormProps> = (props: LoginFormProps & any) => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -27,19 +30,19 @@ const LoginFormComponent: React.FC<LoginFormProps> = (props: LoginFormProps & an
 
     const redirectPath = parseQueryParams(props.location.search)['redirectPath'] || '/';
 
-    const alertSupplier = (message: string) => {
-        const alert: Alert = {
+    const alertSupplier = (message: string): Alert => {
+        return {
             id: 'login-failure-alert',
             component: 'login-form',
             message: message,
             type: AlertTypes.ERROR,
             canDismiss: true
-        };
-        return alert
+        }
     };
 
-    const onFinish = (values: any) => {
-        const loginData = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const onFinish = (values: any): void => {
+        const loginData: LoginData = {
             usernameOrEmail: values.usernameOrEmail,
             password: values.password,
             remember: values.remember
@@ -125,12 +128,12 @@ const LoginFormComponent: React.FC<LoginFormProps> = (props: LoginFormProps & an
             </div>
         </div>
     )
-}
+};
 
-const mapStateToProps = (state: any, ownProps: OwnProps) => ({
+const mapStateToProps = (state: ReduxStore, ownProps: OwnProps): LoginFormProps => ({
     loggingIn: state.auth.loggingIn,
     loggedIn: state.auth.loggedIn,
     ...ownProps
-})
+});
 
-export const LoginForm: React.FC<OwnProps> = connect(mapStateToProps)(LoginFormComponent)
+export const LoginForm: React.FC<OwnProps> = connect(mapStateToProps)(LoginFormComponent);

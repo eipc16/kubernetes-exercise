@@ -2,7 +2,7 @@ import {AlertAction, DismissAlertActionInterface, PushAlertActionInterface} from
 import {alertConstants} from '../constants'
 import {Alert} from '../../models/infrastructure'
 
-const initialState = {}
+const initialState = {};
 
 export interface AlertState {
     [component: string]: Alert[];

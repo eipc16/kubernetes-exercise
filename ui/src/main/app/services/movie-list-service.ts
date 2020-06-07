@@ -11,10 +11,7 @@ export interface MovieListService {
 export class MovieListServiceImpl implements MovieListService {
     static movieListService: MovieListService;
 
-    private constructor () {
-    }
-
-    static createInstance () {
+    static createInstance(): MovieListService {
       if (!MovieListServiceImpl.movieListService) {
         MovieListServiceImpl.movieListService = new MovieListServiceImpl()
       }

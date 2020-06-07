@@ -15,7 +15,7 @@ export class ScreeningServiceImpl implements ScreeningService {
         this.authService = authenticationService || AuthenticationServiceImpl.createInstance();
     }
 
-    static createInstance(authenticationService?: AuthenticationService) {
+    static createInstance(authenticationService?: AuthenticationService): ScreeningService {
         if (!ScreeningServiceImpl.screeningService) {
             ScreeningServiceImpl.screeningService = new ScreeningServiceImpl(authenticationService)
         }

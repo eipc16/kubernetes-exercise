@@ -16,7 +16,7 @@ export class GenreServiceImpl implements GenreService {
         this.authService = authenticationService || AuthenticationServiceImpl.createInstance();
     }
 
-    static createInstance (authenticationService?: AuthenticationService) {
+    static createInstance(authenticationService?: AuthenticationService): GenreService {
         if (!GenreServiceImpl.genreService) {
             GenreServiceImpl.genreService = new GenreServiceImpl(authenticationService)
         }

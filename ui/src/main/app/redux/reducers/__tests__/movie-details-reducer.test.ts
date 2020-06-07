@@ -31,7 +31,7 @@ describe('Movie details reducer', () => {
         )
     })
     it('should handle MOVIE_DETAILS_SUCCESS', () => {
-        let list: MovieDetails[] = [{actors: "", runtime: "0", plot: "", id: 0, director: "", year: "2020",
+        const list: MovieDetails[] = [{actors: "", runtime: "0", plot: "", id: 0, director: "", year: "2020",
             posterUrl: "", country: "", language: "", title: "", objectState: ObjectState.ACTIVE,
             releaseDate: Date.prototype, imdbId: "0", maturityRate: "0", genres: []}];
         expect(

@@ -6,11 +6,12 @@ import {GenreActionPublisherImpl} from "../../../redux/actions/genre";
 import {Genre} from "../../../models/genre";
 import {GenreServiceImpl} from "../../../services/genre-service";
 import {useFetching} from "../../../utils/custom-fetch-hook";
-import {MovieListFilters} from "../../../models/movies-list";
+import {DateRange, MovieListFilters} from "../../../models/movies-list";
 import {MovieListActionPublisher} from "../../../redux/actions/movie-list";
 import moment from 'moment';
 
 import './movie-list-filters.scss';
+import {ReduxStore} from "../../../redux/reducers/root-reducer";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
@@ -36,11 +37,13 @@ enum FiltersEnum {
     PAGE = "pageOptions"
 }
 
+type FilterValue = DateRange & string[] & string & number & undefined;
+
 export type MovieListFiltersProps = OwnProps & State;
 
-export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
+export const MovieListFiltersComponent = (props: MovieListFiltersProps): JSX.Element => {
     const {genres, totalGenres, genreFetching, movieListActionPublisher, filters, totalMovies, children} = props;
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     // State holders
     let searchText = filters.searchText;
@@ -51,36 +54,7 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
     const [genreService,] = useState(GenreServiceImpl.createInstance());
     const [genrePublisher,] = useState(new GenreActionPublisherImpl(genreService));
 
-    const handleDatePicker = (value: any) => {
-        const newRange = {
-            beginDate: value[0].valueOf(),
-            endDate: value[1].valueOf()
-        };
-        dateRange = newRange;
-        updateFilters(FiltersEnum.DATARANGE, newRange);
-    };
-
-    const handleGenreSelect = (value: string[]) => {
-        selectedGenres = value;
-        updateFilters(FiltersEnum.GENRES, value);
-    };
-
-    const handleSearchText = (e: React.ChangeEvent) => {
-        const value = (e.target as HTMLInputElement).value;
-        const finalSearchText = value ? value : "";
-        searchText = finalSearchText;
-        updateFilters(FiltersEnum.SEARCH_TEXT, finalSearchText);
-    };
-
-    const handlePage = (page: number, moviesPerPage?: number) => {
-        updateFilters(FiltersEnum.PAGE, {
-            pageNumber: page - 1,
-            pageSize: moviesPerPage
-        });
-    };
-
-    const updateFilters = (lastUpdated: FiltersEnum, value: any) => {
-        console.log(lastUpdated, value)
+    const updateFilters = (lastUpdated: FiltersEnum, value: FilterValue): void => {
         dispatch(movieListActionPublisher.updateFilters({
             dateRange: dateRange,
             searchText: searchText,
@@ -90,7 +64,36 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
         }))
     };
 
-    const getPlaceHolder = (allGenres: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleDatePicker = (value: any): void => {
+        const newRange: DateRange = {
+            beginDate: value[0].valueOf(),
+            endDate: value[1].valueOf()
+        };
+        dateRange = newRange;
+        updateFilters(FiltersEnum.DATARANGE, newRange);
+    };
+
+    const handleGenreSelect = (value: string[]): void => {
+        selectedGenres = value;
+        updateFilters(FiltersEnum.GENRES, value);
+    };
+
+    const handleSearchText = (e: React.ChangeEvent): void => {
+        const value = (e.target as HTMLInputElement).value;
+        const finalSearchText = value ? value : "";
+        searchText = finalSearchText;
+        updateFilters(FiltersEnum.SEARCH_TEXT, finalSearchText);
+    };
+
+    const handlePage = (page: number, moviesPerPage?: number): void => {
+        updateFilters(FiltersEnum.PAGE, {
+            pageNumber: page - 1,
+            pageSize: moviesPerPage
+        });
+    };
+
+    const getPlaceHolder = (allGenres: number): string => {
         if (allGenres < 1) {
             return 'No genres';
         }
@@ -157,7 +160,7 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps) => {
     )
 }
 
-const mapStateToProps = (state: any, ownProps: OwnProps) => ({
+const mapStateToProps = (state: ReduxStore, ownProps: OwnProps): MovieListFiltersProps => ({
     genreFetched: state.genres.isFetched,
     genreFetching: state.genres.isFetching,
     genres: state.genres.genreList,
@@ -165,6 +168,6 @@ const mapStateToProps = (state: any, ownProps: OwnProps) => ({
     filters: state.movieList.filters,
     totalMovies: state.movieList.playedMovies ? state.movieList.playedMovies.totalElements : 1,
     ...ownProps
-})
+});
 
 export const MovieListFiltersContainer: React.FC<OwnProps> = connect(mapStateToProps)(MovieListFiltersComponent);
