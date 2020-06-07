@@ -2,7 +2,8 @@ import {Action, Dispatch} from "redux";
 import {Alert} from "../../../models/infrastructure";
 import {
     ScreeningsFailureActionInterface,
-    ScreeningsRequestActionInterface, ScreeningsSetCurrentActionInterface,
+    ScreeningsRequestActionInterface,
+    ScreeningsSetCurrentActionInterface,
     ScreeningsSuccessActionInterface
 } from "./types";
 import {AlertPublisher, AlertPublisherImpl} from "../alert";
@@ -14,7 +15,8 @@ import {SeatServiceImpl} from "../../../services/seat-service";
 import moment from "moment";
 
 export interface ScreeningActionPublisher {
-    fetchScreenings(movieId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void;
+    fetchScreenings(movieId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => Promise<Screening[] | void>;
+
     setCurrentScreening(screeningId: number): (dispatch: Dispatch<Action>) => void;
 }
 
@@ -29,7 +31,7 @@ export class ScreeningActionPublisherImpl implements ScreeningActionPublisher {
         this.alertPublisher = alertPublisher || AlertPublisherImpl.createInstance();
     }
 
-    fetchScreenings(movieId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void {
+    fetchScreenings(movieId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => Promise<Screening[] | void> {
         function request(movieId: number): ScreeningsRequestActionInterface {
             return {
                 type: screeningConstants.MOVIE_SCREENINGS_REQUEST,
@@ -51,15 +53,13 @@ export class ScreeningActionPublisherImpl implements ScreeningActionPublisher {
             }
         }
 
-        return (dispatch: Dispatch<Action>): void => {
+        return (dispatch: Dispatch<Action>): Promise<Screening[] | void> => {
             dispatch(request(movieId));
 
-            this.screeningService.fetchScreenings(movieId)
-                .then((screenings: Screening[]) => screenings
-                    .filter(screening => moment(screening.startTime).isAfter(moment.now())))
+            return this.screeningService.fetchScreenings(movieId)
                 .then(
                     (screenings: Screening[]) => {
-                        dispatch(success(screenings));
+                        dispatch(success(screenings.filter(screening => moment(screening.startTime).isAfter(moment.now()))));
                     },
                     (errorResponse: string) => {
                         dispatch(failure(errorResponse));

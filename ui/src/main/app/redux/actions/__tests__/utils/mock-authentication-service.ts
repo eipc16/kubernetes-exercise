@@ -6,6 +6,8 @@ import {Available, LoginData, RegistrationData} from "../../../../models/authori
 import {appConfig} from "../../../../config";
 import {handleResponse} from "../../../../services/response-handler";
 
+test.skip('MockAuthService', () => 1);
+
 export class MockAuthenticationService implements AuthenticationService {
     currentToken: TokenInterface | null;
 
