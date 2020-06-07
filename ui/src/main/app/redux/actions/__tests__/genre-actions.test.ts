@@ -2,39 +2,55 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import fetchMock from 'fetch-mock'
 import expect from 'expect'
-import {movieDetailsConstants} from "../../constants";
-import {ObjectState} from "../../../models/infrastructure";
-import {MovieDetailsActionPublisherImpl} from "../movie-details";
-import {MovieDetailsServiceImpl} from "../../../services/movie-details-service";
 import {appConfig} from "../../../config";
+import {GenreActionPublisherImpl} from "../genre";
+import {GenreServiceImpl} from "../../../services/genre-service";
+import {genreConstants} from "../../constants";
+import {MockAuthenticationService} from "./utils/mock-authentication-service";
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 describe('Genre actions test', () => {
     afterEach(() => {
-        fetchMock.restore()
+        fetchMock.reset()
     })
 
-    it('test action Get movie details', () => {
-
-        const movieBody = { actors: "", runtime: "0", plot: "", id: 0, director: "", year: "2020",
-            posterUrl: "", country: "", language: "", title: "", objectState: ObjectState.ACTIVE,
-            releaseDate: new Date(Date.now()).toUTCString(), imdbId: "0", maturityRate: "0", genres: [] }
-
-        fetchMock.getOnce(`${appConfig.apiUrl}/movies/0/details`, {
-            body: { ...movieBody },
+    it('test action fetchGenres success', () => {
+        const genreList = { 0: {name: "", id: 0}}
+        fetchMock.getOnce(`${appConfig.apiUrl}/genres?searchText=thriller`, {
+            body: { ...genreList },
             headers: { 'content-type': 'application/json' }
         })
 
-        const actions = new MovieDetailsActionPublisherImpl(MovieDetailsServiceImpl.createInstance())
+        const authService = new MockAuthenticationService();
+        const actions = new GenreActionPublisherImpl(GenreServiceImpl.createInstance(authService))
         const expectedActions = [
-            { type: movieDetailsConstants.MOVIE_DETAILS_REQUEST, id: 0 },
-            { type: movieDetailsConstants.MOVIE_DETAILS_SUCCESS, movie: movieBody }
+            { type: genreConstants.GENRES_REQUEST },
+            { type: genreConstants.GENRES_SUCCESS, genreList: genreList }
         ]
-        const store = mockStore({ movie: movieBody })
+        const store = mockStore({})
         // @ts-ignore
-        return store.dispatch(actions.getMovieDetails(0)).then(() => {
-            expect(store.getActions()).toEqual(expectedActions)
+        store.dispatch(actions.fetchGenres("thriller"))
+        return store.getActions().forEach(action => expect(expectedActions.includes(action)
+            && action.length === expectedActions.length));
+    })
+    it('test action fetchGenres failure', () => {
+        const error = "Internal Server Error"
+        fetchMock.getOnce(`${appConfig.apiUrl}/genres?searchText=thriller`, {
+            body: { error },
+            headers: { 'content-type': 'application/json' },
+            status: 500
         })
+        const authService = new MockAuthenticationService();
+        const actions = new GenreActionPublisherImpl(GenreServiceImpl.createInstance(authService))
+        const expectedActions = [
+            { type: genreConstants.GENRES_REQUEST },
+            { type: genreConstants.GENRES_FAILURE, error: "Internal Server Error"}
+        ]
+        const store = mockStore({})
+        // @ts-ignore
+        store.dispatch(actions.fetchGenres("thriller"))
+        return store.getActions().forEach(action => expect(expectedActions.includes(action)
+            && action.length === expectedActions.length));
     })
 })
