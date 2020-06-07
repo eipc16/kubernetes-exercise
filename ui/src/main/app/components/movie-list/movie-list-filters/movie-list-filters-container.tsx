@@ -12,6 +12,7 @@ import moment from 'moment';
 
 import './movie-list-filters.scss';
 import {ReduxStore} from "../../../redux/reducers/root-reducer";
+import {Pageable} from "../../../models/infrastructure";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
@@ -37,7 +38,7 @@ enum FiltersEnum {
     PAGE = "pageOptions"
 }
 
-type FilterValue = DateRange & string[] & string & number & undefined;
+type FilterValue = DateRange | Pageable | string[] | string | number | undefined;
 
 export type MovieListFiltersProps = OwnProps & State;
 
@@ -89,7 +90,7 @@ export const MovieListFiltersComponent = (props: MovieListFiltersProps): JSX.Ele
     const handlePage = (page: number, moviesPerPage?: number): void => {
         updateFilters(FiltersEnum.PAGE, {
             pageNumber: page - 1,
-            pageSize: moviesPerPage
+            pageSize: moviesPerPage || pageOptions.pageSize
         });
     };
 

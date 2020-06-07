@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 export const useFetching = (actionCreator: (dispatch: Dispatch<Action>) => void, deps?: any[]): void => {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(actionCreator)
+    dispatch(actionCreator);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },deps ? deps : [])
 };

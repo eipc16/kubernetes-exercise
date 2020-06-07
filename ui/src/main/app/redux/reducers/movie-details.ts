@@ -6,7 +6,7 @@ const initialState = {
     isFetched: false,
     isFetching: false,
     movie: null
-}
+};
 
 export interface MovieDetailsState {
     isFetching?: boolean;
@@ -22,17 +22,17 @@ export function movieDetailsReducer(state: MovieDetailsState = initialState, act
                 isFetched: true,
                 isFetching: false,
                 movie: (action as MovieDetailsSuccessActionInterface).movie
-            }
+            };
         case movieDetailsConstants.MOVIE_DETAILS_REQUEST:
             return {
                 ...state,
                 isFetching: true
-            }
+            };
         case movieDetailsConstants.MOVIE_DETAILS_FAILURE:
             return {
                 ...state,
                 isFetching: false
-            }
+            };
         default:
             return state
     }

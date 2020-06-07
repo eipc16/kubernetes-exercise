@@ -91,7 +91,8 @@ const MovieDetailsComponent = (props: MovieDetailsProps): JSX.Element => {
 const mapStateToProps = (state: ReduxStore, ownProps: OwnProps): MovieDetailsProps => ({
     isFetched: state.movieDetails.isFetched,
     isFetching: state.movieDetails.isFetching,
-    movie: (state.movieDetails.movie && state.movieDetails.movie.list.length > 0) ? state.movieDetails.movie.list[0] : undefined,
+    // @ts-ignore
+    movie: (state.movieDetails.movie && state.movieDetails.movie.length > 0) ? state.movieDetails.movie[0] : undefined,
     ...ownProps
 });
 
