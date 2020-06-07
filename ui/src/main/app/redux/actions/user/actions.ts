@@ -10,7 +10,7 @@ import {
 } from './types'
 
 export interface UserActionPublisher {
-    getCurrentUser(): (dispatch: Dispatch<CurrentUserAction>) => void;
+    getCurrentUser(): (dispatch: Dispatch<CurrentUserAction>) => Promise<User | void>;
 }
 
 export class UserActionPublisherImpl implements UserActionPublisher {
@@ -20,7 +20,7 @@ export class UserActionPublisherImpl implements UserActionPublisher {
         this.userService = userService
     }
 
-    getCurrentUser(): (dispatch: Dispatch<CurrentUserAction>) => void {
+    getCurrentUser(): (dispatch: Dispatch<CurrentUserAction>) => Promise<User | void> {
         function request(): CurrentUserRequestActionInterface {
             return {
                 type: userConstants.CURRENT_USER_REQUEST
@@ -41,10 +41,10 @@ export class UserActionPublisherImpl implements UserActionPublisher {
             }
         }
 
-        return (dispatch: Dispatch<CurrentUserAction>): void => {
+        return (dispatch: Dispatch<CurrentUserAction>): Promise<User | void> => {
             dispatch(request());
 
-            this.userService.getCurrentUser()
+            return this.userService.getCurrentUser()
                 .then(
                     (userData: User) => {
                         dispatch(success(userData));

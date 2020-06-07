@@ -14,14 +14,15 @@ import {seatConstants} from "../../constants/seat-constants";
 import {SeatService} from "../../../services/seat-service";
 import {AlertPublisher, AlertPublisherImpl} from "../alert";
 import {Reservation} from "../../../models/reservation";
+import {SeatInterface} from "../../../models/screening-rooms/Seat";
 
 export interface SeatActionPublisher {
-    fetchSeats(screeningId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void;
+    fetchSeats(screeningId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => Promise<SeatInterface[] | void>;
 
     updateSeatReservationState(seatId: number, seatReservationState: ReservationState): SeatUpdateStateActionInterface;
 
     reserveSeats(reservation: Reservation, errorAlertSupplier?: (message: string) => Alert,
-                 onSuccess?: (resource: Resource) => void, onException?: (errorResponse: string) => void): (dispatch: Dispatch<Action>) => void;
+                 onSuccess?: (resource: Resource) => void, onException?: (errorResponse: string) => void): (dispatch: Dispatch<Action>) => Promise<Resource | void>;
 }
 
 export class SeatActionPublisherImpl implements SeatActionPublisher {
@@ -33,7 +34,7 @@ export class SeatActionPublisherImpl implements SeatActionPublisher {
         this.alertPublisher = alertPublisher || AlertPublisherImpl.createInstance();
     }
 
-    fetchSeats(screeningId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => void {
+    fetchSeats(screeningId: number, errorAlertSupplier?: (message: string) => Alert): (dispatch: Dispatch<Action>) => Promise<SeatInterface[] | void> {
         function request(screeningId: number): SeatRequestActionInterface {
             return {
                 type: seatConstants.SEAT_LAYOUT_REQUEST,
@@ -42,7 +43,7 @@ export class SeatActionPublisherImpl implements SeatActionPublisher {
         }
 
         function success(seats: Seat[]): SeatSuccessActionInterface {
-            const seatsMap = seats.reduce((acc: { [seatId: number]: Seat }, seat: Seat) => {
+            const seatsMap = Object.values(seats).reduce((acc: { [seatId: number]: Seat }, seat: Seat) => {
                 return {
                     ...acc,
                     [seat.id]: seat
@@ -61,10 +62,10 @@ export class SeatActionPublisherImpl implements SeatActionPublisher {
             }
         }
 
-        return (dispatch: (Dispatch<Action>)): void => {
+        return (dispatch: (Dispatch<Action>)): Promise<Seat[] | void> => {
             dispatch(request(screeningId));
 
-            this.seatService.fetchSeats(screeningId)
+            return this.seatService.fetchSeats(screeningId)
                 .then(
                     (seats: Seat[]) => {
                         dispatch(success(seats))
@@ -89,7 +90,7 @@ export class SeatActionPublisherImpl implements SeatActionPublisher {
     }
 
     reserveSeats(reservation: Reservation, errorAlertSupplier?: (message: string) => Alert,
-                 onSuccess?: (resource: Resource) => void, onException?: (errorResponse: string) => void): (dispatch: Dispatch<Action>) => void {
+                 onSuccess?: (resource: Resource) => void, onException?: (errorResponse: string) => void): (dispatch: Dispatch<Action>) => Promise<Resource | void> {
         function request(reservation: Reservation): SeatReservationRequestActionInterface {
             return {
                 type: seatConstants.SEAT_RESERVATION_REQUEST,
@@ -111,9 +112,9 @@ export class SeatActionPublisherImpl implements SeatActionPublisher {
             }
         }
 
-        return (dispatch: Dispatch<Action>): void => {
+        return (dispatch: Dispatch<Action>): Promise<Resource | void> => {
             dispatch(request(reservation));
-            this.seatService.reserveSeats(reservation)
+            return this.seatService.reserveSeats(reservation)
                 .then(
                     (resource: Resource) => {
                         dispatch(success(resource));
