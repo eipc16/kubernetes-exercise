@@ -12,7 +12,7 @@ describe('User reducer', () => {
                 fetching: true
             }
         )
-    })
+    });
     it('should handle USER_SUCCESS', () => {
         expect(
             currentUserReducer({
@@ -27,7 +27,7 @@ describe('User reducer', () => {
                     surname: '', phoneNumber: '', role: '', username: ''}
             }
         )
-    })
+    });
     it('should handle USER_FAILURE', () => {
         expect(
             currentUserReducer({
@@ -40,4 +40,4 @@ describe('User reducer', () => {
             }
         )
     })
-})
+});

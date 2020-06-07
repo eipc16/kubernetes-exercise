@@ -47,4 +47,4 @@ describe('Movie details reducer', () => {
             }
         )
     })
-})
+});

@@ -3,7 +3,7 @@ import {appConfig} from "../../../config";
 import expect from "expect";
 import {ReservationState} from "../../../models/screening-rooms";
 import {SeatsMap} from "../seat";
-import {MockAuthenticationService} from "./utils/mock-authentication-service";
+import {MockAuthenticationService} from "../../../utils/mock-authentication-service";
 import {seatConstants} from "../../constants/seat-constants";
 import thunk from "redux-thunk";
 import configureMockStore from "redux-mock-store";

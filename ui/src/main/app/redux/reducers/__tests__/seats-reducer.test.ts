@@ -58,4 +58,4 @@ describe('Seats reducer', () => {
             }
         )
     })
-})
+});

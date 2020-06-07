@@ -1,12 +1,12 @@
-import {AuthenticationService} from "../../../../services";
-import {TokenInterface} from "../../../../models/authorization/Token";
-import {UserIdentifiers} from "../../../../models/users";
-import {Resource} from "../../../../models/infrastructure";
-import {Available, LoginData, RegistrationData} from "../../../../models/authorization";
-import {appConfig} from "../../../../config";
-import {handleResponse} from "../../../../services/response-handler";
+import {AuthenticationService} from "../services";
+import {TokenInterface} from "../models/authorization/Token";
+import {UserIdentifiers} from "../models/users";
+import {Resource} from "../models/infrastructure";
+import {Available, LoginData, RegistrationData} from "../models/authorization";
+import {appConfig} from "../config";
+import {handleResponse} from "../services/response-handler";
 
-test.skip('MockAuthService', () => 1);
+// test.skip('MockAuthService', () => 1);
 
 export class MockAuthenticationService implements AuthenticationService {
     currentToken: TokenInterface | null;

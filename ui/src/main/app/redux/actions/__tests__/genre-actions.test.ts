@@ -6,7 +6,7 @@ import {appConfig} from "../../../config";
 import {GenreActionPublisherImpl} from "../genre";
 import {GenreServiceImpl} from "../../../services/genre-service";
 import {genreConstants} from "../../constants";
-import {MockAuthenticationService} from "./utils/mock-authentication-service";
+import {MockAuthenticationService} from "../../../utils/mock-authentication-service";
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 

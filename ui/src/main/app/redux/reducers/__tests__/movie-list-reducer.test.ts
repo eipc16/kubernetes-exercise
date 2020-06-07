@@ -55,7 +55,7 @@ describe('Movie list reducer', () => {
                 playedMovies: null
             }
         )
-    })
+    });
     it('should handle MOVIE_LIST_FILTERS_UPDATE', () => {
         expect(
             movieListReducer({
@@ -74,4 +74,4 @@ describe('Movie list reducer', () => {
             }
         )
     })
-})
+});

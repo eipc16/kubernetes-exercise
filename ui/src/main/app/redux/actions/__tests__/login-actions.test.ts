@@ -53,4 +53,4 @@ describe('Login actions test', () => {
         return store.getActions().forEach(action => expect(expectedActions.includes(action)
             && action.length === expectedActions.length));
     })
-})
+});

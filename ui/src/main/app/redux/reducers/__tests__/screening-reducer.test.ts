@@ -77,4 +77,4 @@ describe('Screening reducer', () => {
             }
         )
     })
-})
+});
