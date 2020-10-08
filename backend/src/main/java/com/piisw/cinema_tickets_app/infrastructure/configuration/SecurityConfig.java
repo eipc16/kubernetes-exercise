@@ -7,6 +7,7 @@ import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationEntryP
 import com.piisw.cinema_tickets_app.infrastructure.security.AuthenticationFilter;
 import com.piisw.cinema_tickets_app.infrastructure.security.TokenHandler;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserDetailsServiceImpl;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,9 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String WILDCARD_PATH = "/**";
 
-    private final UserDetailsServiceImpl userDetailsService;
-    private final AuthenticationEntryPointImpl unauthorizedHandler;
-    private final TokenHandler tokenHandler;
+    private @NonNull final UserDetailsServiceImpl userDetailsService;
+    private @NonNull final AuthenticationEntryPointImpl unauthorizedHandler;
+    private @NonNull final TokenHandler tokenHandler;
 
     @Bean
     public AuthenticationFilter authenticationFilter() {
