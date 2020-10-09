@@ -24,13 +24,13 @@ echo "Database port: $port"
 
 echo "Installing app..."
 
-./mvnw clean install -DskipTests -Ddb.name=$database -Ddb.user=$username -Ddb.password=$password -Ddb.host=$host -Ddb.port=$port
+./mvnw clean install
 
 echo "Installation done..."
 echo "Starting..."
 
-./mvnw -pl backend spring-boot:run -o
-./mvnw -pl ui spring-boot:run -o
+./mvnw -pl backend spring-boot:run -o -DskipTests -Ddb.name=$database -Ddb.user=$username -Ddb.password=$password -Ddb.host=$host -Ddb.port=$port &
+./mvnw -pl ui spring-boot:run -o &
 
 echo "Finishing..."
 

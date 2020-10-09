@@ -10,7 +10,7 @@ done
 
 echo "Initializing Database..."
 
-echo "Database name: $DB_NAME"
+echo "Database name: $database"
 echo "Database username: $username"
 echo "Database password: $password"
 
@@ -25,9 +25,11 @@ systemctl status mariadb
 systemctl restart mariadb
 
 # Set root password
-/usr/bin/mysqladmin -u$username password $password
+#sudo /usr/bin/mysqladmin -u$username password $password
 
 # Enable remote access
+sudo mysql -p
+echo "GRANT ALL PRIVILEGES ON *.* TO '$username'@'localhost' IDENTIFIED BY '$password' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 sudo mysql -u$username -p$password -e "GRANT ALL PRIVILEGES ON *.* TO '$username'@'%' IDENTIFIED BY '$password' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 
 # Create database;
