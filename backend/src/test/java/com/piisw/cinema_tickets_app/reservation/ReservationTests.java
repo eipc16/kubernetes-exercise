@@ -23,7 +23,7 @@ import com.piisw.cinema_tickets_app.domain.seat.control.SeatSpecification;
 import com.piisw.cinema_tickets_app.domain.seat.entity.Seat;
 import com.piisw.cinema_tickets_app.domain.seat.entity.SeatAvailabilityDetails;
 import com.piisw.cinema_tickets_app.domain.user.control.UserService;
-import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.entity.UserEntity;
 import com.piisw.cinema_tickets_app.infrastructure.configuration.AuditingConfig;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
@@ -88,7 +88,7 @@ public class ReservationTests {
         ScreeningRoom screeningRoom = screeningRoomService.createScreeningRoom(ScreeningTests.getDummyScreeningRoom());
         Movie movie = movieRepository.save(ScreeningTests.getDummyMovie());
         Screening screening = screeningRepository.save(getDummyScreeningThatNotStartedYet(screeningRoom, movie));
-        User user = userService.registerUser(getDummyUser());
+        UserEntity user = userService.registerUser(getDummyUser());
         Reservation dummyReservation = getDummyReservation(screening, user);
         List<SeatAvailabilityDetails> seats = seatService.getSeatsDetailsForScreening(screening, Set.of(ObjectState.ACTIVE), user.getId());
         Set<Seat> seatsToReserve = getAtMostNOfSeats(seats, 3);
@@ -102,7 +102,7 @@ public class ReservationTests {
         assertEquals(seatsToBeStillAvailable, seatsByIsAvailable.get(true));
     }
 
-    private Reservation getDummyReservation(Screening screening, User user) {
+    private Reservation getDummyReservation(Screening screening, UserEntity user) {
         return Reservation.builder()
                 .screeningId(screening.getId())
                 .reservedByUser(user.getId())
@@ -110,8 +110,8 @@ public class ReservationTests {
                 .build();
     }
 
-    private User getDummyUser() {
-        return User.builder()
+    private UserEntity getDummyUser() {
+        return UserEntity.builder()
                 .name("Johnny")
                 .surname("Bravo")
                 .username("Johnny123")
@@ -150,7 +150,7 @@ public class ReservationTests {
         ScreeningRoom screeningRoom = screeningRoomService.createScreeningRoom(ScreeningTests.getDummyScreeningRoom());
         Movie movie = movieRepository.save(ScreeningTests.getDummyMovie());
         Screening screening = screeningRepository.save(getDummyScreeningThatAlreadyStarted(screeningRoom, movie));
-        User user = userService.registerUser(getDummyUser());
+        UserEntity user = userService.registerUser(getDummyUser());
         Reservation dummyReservation = getDummyReservation(screening, user);
         List<SeatAvailabilityDetails> seats = seatService.getSeatsDetailsForScreening(screening, Set.of(ObjectState.ACTIVE), user.getId());
         Set<Seat> seatsToReserve = getAtMostNOfSeats(seats, 3);
@@ -171,7 +171,7 @@ public class ReservationTests {
         ScreeningRoom screeningRoom = screeningRoomService.createScreeningRoom(ScreeningTests.getDummyScreeningRoom());
         Movie movie = movieRepository.save(ScreeningTests.getDummyMovie());
         Screening screening = screeningRepository.save(getDummyScreeningThatNotStartedYet(screeningRoom, movie));
-        User user = userService.registerUser(getDummyUser());
+        UserEntity user = userService.registerUser(getDummyUser());
         Reservation dummyReservation = getDummyReservation(screening, user);
         List<SeatAvailabilityDetails> seats = seatService.getSeatsDetailsForScreening(screening, Set.of(ObjectState.ACTIVE), user.getId());
         Set<Seat> seatsToReserve = getAtMostNOfSeats(seats, 3);
@@ -194,7 +194,7 @@ public class ReservationTests {
         ScreeningRoom screeningRoom = screeningRoomService.createScreeningRoom(ScreeningTests.getDummyScreeningRoom());
         Movie movie = movieRepository.save(ScreeningTests.getDummyMovie());
         Screening screening = screeningRepository.save(getDummyScreeningThatNotStartedYet(screeningRoom, movie));
-        User user = userService.registerUser(getDummyUser());
+        UserEntity user = userService.registerUser(getDummyUser());
         Reservation dummyReservation = getDummyReservation(screening, user);
         List<SeatAvailabilityDetails> seats = seatService.getSeatsDetailsForScreening(screening, Set.of(ObjectState.ACTIVE), user.getId());
         Set<Seat> seatsToReserve = getAtMostNOfSeats(seats, 3);
@@ -212,16 +212,16 @@ public class ReservationTests {
         ScreeningRoom screeningRoom = screeningRoomService.createScreeningRoom(ScreeningTests.getDummyScreeningRoom());
         Movie movie = movieRepository.save(ScreeningTests.getDummyMovie());
         Screening screening = screeningRepository.save(getDummyScreeningThatNotStartedYet(screeningRoom, movie));
-        User user = userService.registerUser(getDummyUser());
+        UserEntity user = userService.registerUser(getDummyUser());
         Reservation dummyReservation = getDummyReservation(screening, user);
         List<SeatAvailabilityDetails> seats = seatService.getSeatsDetailsForScreening(screening, Set.of(ObjectState.ACTIVE), user.getId());
         Set<Seat> seatsToReserve = getAtMostNOfSeats(seats, 3);
         Reservation reservation = reservationService.createReservation(dummyReservation, seatsToReserve, UserInfo.fromUser(user));
-        User otherDummyUser = getDummyUser().toBuilder()
+        UserEntity otherDummyUser = getDummyUser().toBuilder()
                 .username("Tommy")
                 .email("tommy@example.com")
                 .build();
-        User otherUser = userService.registerUser(otherDummyUser);
+        UserEntity otherUser = userService.registerUser(otherDummyUser);
         exceptionRule.expect(IllegalArgumentException.class);
         exceptionRule.expectMessage(ReservationService.NO_PERMISSION_TO_MAKE_OR_REMOVE_RESERVATION);
         reservationService.removeReservationsByIds(Set.of(reservation.getId()), UserInfo.fromUser(otherUser));

@@ -1,7 +1,7 @@
 package com.piisw.cinema_tickets_app.infrastructure.configuration;
 
 
-import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.entity.UserEntity;
 import com.piisw.cinema_tickets_app.domain.user.control.UserService;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +23,14 @@ public class AuditingConfig {
     private final UserService userService;
 
     @Bean
-    public AuditorAware<User> auditorProvider() {
+    public AuditorAware<UserEntity> auditorProvider() {
         return new SpringSecurityAuditAwareImpl();
     }
 
-    class SpringSecurityAuditAwareImpl implements AuditorAware<User> {
+    class SpringSecurityAuditAwareImpl implements AuditorAware<UserEntity> {
 
         @Override
-        public Optional<User> getCurrentAuditor() {
+        public Optional<UserEntity> getCurrentAuditor() {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {

@@ -1,6 +1,6 @@
 package com.piisw.cinema_tickets_app.domain.auditedobject.entity;
 
-import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.entity.UserEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,11 +48,11 @@ public abstract class AuditedObject {
     @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(updatable = false)
-    private User createdBy;
+    private UserEntity createdBy;
 
     @LastModifiedBy
     @ManyToOne(fetch = FetchType.LAZY)
-    private User updatedBy;
+    private UserEntity updatedBy;
 
     @Enumerated(EnumType.STRING)
     private ObjectState objectState = ObjectState.ACTIVE;

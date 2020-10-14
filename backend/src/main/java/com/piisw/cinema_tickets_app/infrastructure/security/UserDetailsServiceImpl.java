@@ -1,7 +1,7 @@
 package com.piisw.cinema_tickets_app.infrastructure.security;
 
 import com.piisw.cinema_tickets_app.domain.user.control.UserRepository;
-import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,13 +23,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) {
-        User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+        UserEntity user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UsernameNotFoundException(MessageFormat.format(USER_WITH_LOGIN_NOT_FOUND_MSG, usernameOrEmail)));
         return UserInfo.fromUser(user);
     }
 
     public UserDetails loadUserById(Long id) {
-        User user = userRepository.findById(id)
+        UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException(MessageFormat.format(USER_WITH_ID_NOT_FOUND, id)));
         return UserInfo.fromUser(user);
     }

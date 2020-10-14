@@ -2,7 +2,7 @@ package com.piisw.cinema_tickets_app.infrastructure.security;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +36,7 @@ public class UserInfo implements UserDetails {
         this.userRole = userRole;
     }
 
-    public static UserInfo fromUser(User user) {
+    public static UserInfo fromUser(UserEntity user) {
         GrantedAuthority userRole = mapToSimpleGrantedAuthority(user.getUserRole());
         return new UserInfo(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getPassword(), userRole);
     }

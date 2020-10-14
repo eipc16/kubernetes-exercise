@@ -22,22 +22,17 @@ apt-get -y install mariadb-server
 systemctl status mariadb
 
 # Restart (ensure it's running)
-systemctl restart mariadb
+sudo systemctl restart mariadb
 
-# Set root password
-#sudo /usr/bin/mysqladmin -u$username password $password
-
-# Enable remote access
-sudo mysql -p
 echo "GRANT ALL PRIVILEGES ON *.* TO '$username'@'localhost' IDENTIFIED BY '$password' WITH GRANT OPTION; FLUSH PRIVILEGES;"
-sudo mysql -u$username -p$password -e "GRANT ALL PRIVILEGES ON *.* TO '$username'@'%' IDENTIFIED BY '$password' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO '$username'@'%' IDENTIFIED BY '$password' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 
 # Create database;
 echo "DROP TABLE IF EXISTS $database;"
-sudo mysql -u$username -p$password -e "DROP DATABASE IF EXISTS ${database};"
+mysql -u $username -p$password -e "DROP DATABASE IF EXISTS ${database};"
 
 echo "CREATE DATABASE $database;"
-sudo mysql -u$username -p$password -e "CREATE DATABASE ${database};"
+mysql -u $username -p$password -e "CREATE DATABASE ${database};"
 
 # Restart again
-systemctl restart mariadb
+sudo systemctl restart mariadb

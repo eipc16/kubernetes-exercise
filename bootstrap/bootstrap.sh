@@ -16,9 +16,9 @@ apt-get update -y
 chmod +x /vagrant/bootstrap/java.sh
 /vagrant/bootstrap/java.sh
 
-# Node installation script
-chmod +x /vagrant/bootstrap/node.sh
-/vagrant/bootstrap/node.sh
+# Node installation script (It's installed with maven build)
+#chmod +x /vagrant/bootstrap/node.sh
+#/vagrant/bootstrap/node.sh
 
 # Setup database
 chmod +x /vagrant/bootstrap/database.sh
@@ -30,7 +30,7 @@ sudo /vagrant/bootstrap/cinema-tickets-app.sh -d $DB_NAME -U $DB_USERNAME -P $DB
 
 
 # Add host
-echo "127.0.0.1 cinematicketsapp.com" >> /etc/hosts
+sudo echo "127.0.0.1 cinematicketsapp.com" >> /etc/hosts
 
 # Default to main dir
 echo "cd /vagrant" >> /home/vagrant/.bashrc

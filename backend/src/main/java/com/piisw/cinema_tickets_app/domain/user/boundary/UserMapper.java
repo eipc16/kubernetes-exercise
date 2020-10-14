@@ -3,7 +3,7 @@ package com.piisw.cinema_tickets_app.domain.user.boundary;
 import com.piisw.cinema_tickets_app.api.ResourceDTO;
 import com.piisw.cinema_tickets_app.api.UserDTO;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
-import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.entity.UserEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -15,7 +15,7 @@ import static com.piisw.cinema_tickets_app.infrastructure.utils.ResourcePath.OBJ
 @Component
 public class UserMapper {
 
-    public UserDTO mapToUserDTO(User user) {
+    public UserDTO mapToUserDTO(UserEntity user) {
         return UserDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -28,7 +28,7 @@ public class UserMapper {
                 .build();
     }
 
-    public ResourceDTO mapToResourceDTO(User user) {
+    public ResourceDTO mapToResourceDTO(UserEntity user) {
         return ResourceDTO.builder()
                 .id(user.getId())
                 .identifier(user.getUsername())

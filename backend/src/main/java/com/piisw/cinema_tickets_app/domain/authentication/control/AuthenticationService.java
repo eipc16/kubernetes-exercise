@@ -4,7 +4,7 @@ import com.piisw.cinema_tickets_app.api.LoginDataDTO;
 import com.piisw.cinema_tickets_app.api.RegistrationDataDTO;
 import com.piisw.cinema_tickets_app.api.TokenDTO;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
-import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.entity.UserEntity;
 import com.piisw.cinema_tickets_app.domain.user.control.UserService;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
@@ -34,8 +34,8 @@ public class AuthenticationService {
         return new TokenDTO(token);
     }
 
-    public User createUserBasedOnRegistrationData(RegistrationDataDTO registrationData) {
-        User newUser = User.builder()
+    public UserEntity createUserBasedOnRegistrationData(RegistrationDataDTO registrationData) {
+        UserEntity newUser = UserEntity.builder()
                 .name(registrationData.getName())
                 .surname(registrationData.getSurname())
                 .username(registrationData.getUsername())

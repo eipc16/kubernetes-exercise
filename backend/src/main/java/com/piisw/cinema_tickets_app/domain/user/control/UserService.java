@@ -1,12 +1,15 @@
 package com.piisw.cinema_tickets_app.domain.user.control;
 
+import com.piisw.cinema_tickets_app.infrastructure.security.UserRole;
 import com.piisw.cinema_tickets_app.domain.auditedobject.entity.ObjectState;
-import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -23,10 +26,16 @@ public class UserService {
     private static final Pattern EMAIL_REGEX = Pattern.compile("[^@ ]+@[^@ ]+\\.[^@ ]+");
     public static final String EMAIL_INCORRECT = "Supplied email is incorrect";
 
+    @Value("${root.name}")
+    private String rootUserName;
+
+    @Value("${root.password}")
+    private String rootUserPassowrd;
+
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public User registerUser(User newUser) {
+    public UserEntity registerUser(UserEntity newUser) {
         validateUsernameUniqueness(newUser);
         validateEmailCorrectness(newUser.getEmail());
         validateEmailUniqueness(newUser.getEmail());
@@ -36,7 +45,7 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    private void validateUsernameUniqueness(User user) {
+    private void validateUsernameUniqueness(UserEntity user) {
         if(userRepository.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentException(MessageFormat.format(USERNAME_ALREADY_TAKEN_MSG, user.getUsername()));
         }
@@ -60,7 +69,7 @@ public class UserService {
         }
     }
 
-    public User getExistingUser(Long userId) {
+    public UserEntity getExistingUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException(MessageFormat.format(NO_SUCH_USER, userId)));
     }
@@ -69,7 +78,7 @@ public class UserService {
         return userRepository.existsByIdAndAndObjectState(id, ObjectState.ACTIVE);
     }
 
-    public List<User> getUsersFromDatabase(List<Long> usersId){
+    public List<UserEntity> getUsersFromDatabase(List<Long> usersId){
         return userRepository.findAllById(usersId);
     }
 
@@ -81,22 +90,40 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public void setNewPassword(User user, String newPassword) {
+    public void setNewPassword(UserEntity user, String newPassword) {
         validatePasswordRules(newPassword);
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
 
-    public void setNewEmail(User user, String email) {
+    public void setNewEmail(UserEntity user, String email) {
         validateEmailCorrectness(email);
         validateEmailUniqueness(email);
         user.setEmail(email);
         userRepository.save(user);
     }
 
-    public void setNewPhoneNumber(User user, String phoneNumber) {
+    public void setNewPhoneNumber(UserEntity user, String phoneNumber) {
         user.setPhoneNumber(phoneNumber);
         userRepository.save(user);
     }
 
+    @PostConstruct
+    public void createRootUser() {
+        if (!userExistsByUsername(rootUserName)) {
+            registerUser(getRootUser());
+        }
+    }
+
+    private UserEntity getRootUser() {
+        return UserEntity.builder()
+                .name(rootUserName)
+                .surname(rootUserName)
+                .username(rootUserName)
+                .userRole(UserRole.ROLE_ADMIN)
+                .phoneNumber("111-111-111")
+                .email("email@email.com")
+                .password(rootUserPassowrd)
+                .build();
+    }
 }

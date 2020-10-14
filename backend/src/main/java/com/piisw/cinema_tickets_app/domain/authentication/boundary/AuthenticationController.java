@@ -8,7 +8,7 @@ import com.piisw.cinema_tickets_app.api.ResponseDTO;
 import com.piisw.cinema_tickets_app.api.TokenDTO;
 import com.piisw.cinema_tickets_app.domain.authentication.control.AuthenticationService;
 import com.piisw.cinema_tickets_app.domain.user.boundary.UserMapper;
-import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.entity.UserEntity;
 import com.piisw.cinema_tickets_app.domain.user.control.UserService;
 import com.piisw.cinema_tickets_app.infrastructure.security.TokenHandler;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
@@ -54,7 +54,7 @@ public class AuthenticationController {
     @ApiOperation(value = "${api.auth.signup.value}", notes = "${api.auth.signup.notes}")
     @PostMapping("/signup")
     public ResourceDTO registerUser(@Valid @RequestBody RegistrationDataDTO registrationData) {
-        User newUser = authenticationService.createUserBasedOnRegistrationData(registrationData);
+        UserEntity newUser = authenticationService.createUserBasedOnRegistrationData(registrationData);
         return userMapper.mapToResourceDTO(newUser);
     }
 
@@ -63,7 +63,7 @@ public class AuthenticationController {
     @HasAnyRole
     public ResponseDTO changePassword(@Valid @RequestBody PasswordConfirmedDataDTO passwordChange, @ApiIgnore @LoggedUser UserInfo userInfo) {
         authenticationManager.authenticate(authenticationService.getAuthenticationToken(userInfo.getUsername(), passwordChange.getPassword()));
-        User user = userService.getExistingUser(userInfo.getId());
+        UserEntity user = userService.getExistingUser(userInfo.getId());
         userService.setNewPassword(user, passwordChange.getValue());
         return ResponseDTO.builder()
                 .success(true)
@@ -75,7 +75,7 @@ public class AuthenticationController {
     @HasAnyRole
     public ResponseDTO changeEmail(@Valid @RequestBody PasswordConfirmedDataDTO emailChange, @ApiIgnore @LoggedUser UserInfo userInfo) {
         authenticationManager.authenticate(authenticationService.getAuthenticationToken(userInfo.getUsername(), emailChange.getPassword()));
-        User user = userService.getExistingUser(userInfo.getId());
+        UserEntity user = userService.getExistingUser(userInfo.getId());
         userService.setNewEmail(user, emailChange.getValue());
         return ResponseDTO.builder()
                 .success(true)

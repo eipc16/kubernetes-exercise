@@ -24,7 +24,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder(toBuilder = true)
-public class User extends AuditedObject {
+public class UserEntity extends AuditedObject {
 
     @NotBlank
     @Size(max = 40)
@@ -60,11 +60,11 @@ public class User extends AuditedObject {
             return true;
         }
 
-        if (!(obj instanceof User)) {
+        if (!(obj instanceof UserEntity)) {
             return false;
         }
 
-        User otherUser = (User) obj;
+        UserEntity otherUser = (UserEntity) obj;
         return Objects.equals(otherUser.getId(), getId());
     }
 

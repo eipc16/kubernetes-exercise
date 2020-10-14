@@ -3,7 +3,7 @@ package com.piisw.cinema_tickets_app.domain.user.boundary;
 import com.piisw.cinema_tickets_app.api.AvailableDTO;
 import com.piisw.cinema_tickets_app.api.UserDTO;
 import com.piisw.cinema_tickets_app.domain.user.control.UserService;
-import com.piisw.cinema_tickets_app.domain.user.entity.User;
+import com.piisw.cinema_tickets_app.domain.user.entity.UserEntity;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.HasAnyRole;
 import com.piisw.cinema_tickets_app.infrastructure.security.validation.LoggedUser;
@@ -51,7 +51,7 @@ public class UserController {
     @GetMapping(ID_PATH)
     @HasAnyRole
     public UserDTO getUser(@PathVariable(ID) Long id) {
-        User user = userService.getExistingUser(id);
+        UserEntity user = userService.getExistingUser(id);
         return userMapper.mapToUserDTO(user);
     }
 
@@ -59,7 +59,7 @@ public class UserController {
     @GetMapping("/current")
     @HasAnyRole
     public UserDTO getCurrentUser(@ApiIgnore @LoggedUser UserInfo currentUserInfo) {
-        User user = userService.getExistingUser(currentUserInfo.getId());
+        UserEntity user = userService.getExistingUser(currentUserInfo.getId());
         return userMapper.mapToUserDTO(user);
     }
 
