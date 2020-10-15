@@ -46,7 +46,7 @@ CREATE TABLE `movie` (
   KEY `FK2scb1oeliwojvj1evgjmuvfs1` (`updated_by_id`),
   CONSTRAINT `FK2scb1oeliwojvj1evgjmuvfs1` FOREIGN KEY (`updated_by_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKim3m96vcj7bybk3j7hu3xtx7l` FOREIGN KEY (`created_by_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

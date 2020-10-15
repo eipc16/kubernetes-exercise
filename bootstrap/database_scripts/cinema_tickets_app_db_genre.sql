@@ -35,7 +35,7 @@ CREATE TABLE `genre` (
   KEY `FK76qo2ggap75govlm0dnq8wkiy` (`updated_by_id`),
   CONSTRAINT `FK1016ks3339xks0t3xih7gtxuu` FOREIGN KEY (`created_by_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FK76qo2ggap75govlm0dnq8wkiy` FOREIGN KEY (`updated_by_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -40,7 +40,7 @@ CREATE TABLE `reservation_x_seat` (
   CONSTRAINT `FKlmicq4dxwjl917furobv3b93o` FOREIGN KEY (`updated_by_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKrb9dypvt2qsqoc6skgomhv859` FOREIGN KEY (`seat_id`) REFERENCES `seat` (`id`),
   CONSTRAINT `FKs0gtk86qe0elcelobc8ml3mn` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -16,10 +16,6 @@ apt-get update -y
 chmod +x /vagrant/bootstrap/java.sh
 /vagrant/bootstrap/java.sh
 
-# Node installation script (It's installed with maven build)
-#chmod +x /vagrant/bootstrap/node.sh
-#/vagrant/bootstrap/node.sh
-
 # Setup database
 chmod +x /vagrant/bootstrap/database.sh
 sudo /vagrant/bootstrap/database.sh -d $DB_NAME -u $DB_USERNAME -p $DB_PASSWORD

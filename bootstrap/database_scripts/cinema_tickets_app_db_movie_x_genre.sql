@@ -40,7 +40,7 @@ CREATE TABLE `movie_x_genre` (
   CONSTRAINT `FKh6jt7mmrfbf7qr6ralm79ybc7` FOREIGN KEY (`created_by_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKq6qrgsiktoeh2w2y433rh3avl` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`id`),
   CONSTRAINT `FKr6ofas0gu8lh963owxxnrj99q` FOREIGN KEY (`genre_id`) REFERENCES `genre` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

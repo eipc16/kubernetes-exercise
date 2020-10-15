@@ -16,38 +16,25 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `screening_room`
+-- Table structure for table `general_sequence`
 --
 
-DROP TABLE IF EXISTS `screening_room`;
+DROP TABLE IF EXISTS `general_sequence`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `screening_room` (
-  `id` bigint NOT NULL,
-  `created_at` datetime NOT NULL,
-  `object_state` varchar(255) DEFAULT NULL,
-  `updated_at` datetime NOT NULL,
-  `number` bigint NOT NULL,
-  `rows_number` bigint NOT NULL,
-  `seats_in_row_number` bigint NOT NULL,
-  `created_by_id` bigint DEFAULT NULL,
-  `updated_by_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKp1iwdwfv2m7sgs04uv4c1s2sm` (`created_by_id`),
-  KEY `FKeu7bn0gsvador27lj5xa1y24h` (`updated_by_id`),
-  CONSTRAINT `FKeu7bn0gsvador27lj5xa1y24h` FOREIGN KEY (`updated_by_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `FKp1iwdwfv2m7sgs04uv4c1s2sm` FOREIGN KEY (`created_by_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `general_sequence` (
+  `next_val` bigint DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `screening_room`
+-- Dumping data for table `general_sequence`
 --
 
-LOCK TABLES `screening_room` WRITE;
-/*!40000 ALTER TABLE `screening_room` DISABLE KEYS */;
-INSERT INTO `screening_room` VALUES (220,'2020-05-30 16:23:09','ACTIVE','2020-05-30 16:23:09',1,10,15,1,1),(387,'2020-05-31 11:56:03','ACTIVE','2020-05-31 11:56:03',2,5,10,1,1),(438,'2020-05-31 11:56:05','ACTIVE','2020-05-31 11:56:05',2,5,10,1,1);
-/*!40000 ALTER TABLE `screening_room` ENABLE KEYS */;
+LOCK TABLES `general_sequence` WRITE;
+/*!40000 ALTER TABLE `general_sequence` DISABLE KEYS */;
+INSERT INTO `general_sequence` VALUES (491),(491),(491),(491),(491),(491),(491),(491),(491);
+/*!40000 ALTER TABLE `general_sequence` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

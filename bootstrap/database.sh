@@ -34,5 +34,11 @@ mysql -u $username -p$password -e "DROP DATABASE IF EXISTS ${database};"
 echo "CREATE DATABASE $database;"
 mysql -u $username -p$password -e "CREATE DATABASE ${database};"
 
+for sql_file in `ls /vagrant/bootstrap/database_scripts/*.sql`
+  do
+    echo "Processing file $sql_file..."
+    mysql -u $username -p$password $database < $sql_file
+done
+
 # Restart again
 sudo systemctl restart mariadb

@@ -4,9 +4,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/vagrant"
 
   config.vm.network "forwarded_port", guest: 8080, host: 8080
-  config.vm.network "forwarded_port", guest: 8080, host: 8080
   config.vm.network "forwarded_port", guest: 8081, host: 8081
-#   config.vm.network "private_network", ip: "192.168.33.10"
 
   config.vm.provision "shell",
     path: "bootstrap/bootstrap.sh",

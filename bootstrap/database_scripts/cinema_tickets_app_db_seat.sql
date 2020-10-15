@@ -39,7 +39,7 @@ CREATE TABLE `seat` (
   CONSTRAINT `FK6fuqa1svd0uoegmyrn6oq0a6s` FOREIGN KEY (`screening_room_id`) REFERENCES `screening_room` (`id`),
   CONSTRAINT `FKnk7g4o0v3960lbue11wr769go` FOREIGN KEY (`created_by_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKqlte80ahu22514x4qvp75y4f5` FOREIGN KEY (`updated_by_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

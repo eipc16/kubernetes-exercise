@@ -16,38 +16,43 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `reservation`
+-- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `reservation`;
+DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `reservation` (
+CREATE TABLE `user` (
   `id` bigint NOT NULL,
   `created_at` datetime NOT NULL,
   `object_state` varchar(255) DEFAULT NULL,
   `updated_at` datetime NOT NULL,
-  `is_paid` bit(1) NOT NULL,
-  `reserved_by_user` bigint NOT NULL,
-  `screening_id` bigint NOT NULL,
+  `email` varchar(40) DEFAULT NULL,
+  `name` varchar(40) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `phone_number` varchar(255) DEFAULT NULL,
+  `surname` varchar(40) DEFAULT NULL,
+  `user_role` varchar(255) DEFAULT NULL,
+  `username` varchar(40) DEFAULT NULL,
   `created_by_id` bigint DEFAULT NULL,
   `updated_by_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKqiswbwd12rssb3bg38fjjhhtw` (`created_by_id`),
-  KEY `FKc5la6miv713oxo1eqsw6mg2ep` (`updated_by_id`),
-  CONSTRAINT `FKc5la6miv713oxo1eqsw6mg2ep` FOREIGN KEY (`updated_by_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `FKqiswbwd12rssb3bg38fjjhhtw` FOREIGN KEY (`created_by_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `UK_ob8kqyqqgmefl0aco34akdtpe` (`email`),
+  KEY `FK9o7r2qptrh93devpob11veidj` (`created_by_id`),
+  KEY `FKnede8yco9u8399icxl1aj37or` (`updated_by_id`),
+  CONSTRAINT `FK9o7r2qptrh93devpob11veidj` FOREIGN KEY (`created_by_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `FKnede8yco9u8399icxl1aj37or` FOREIGN KEY (`updated_by_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reservation`
+-- Dumping data for table `user`
 --
 
-LOCK TABLES `reservation` WRITE;
-/*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
-INSERT INTO `reservation` VALUES (378,'2020-05-31 11:54:52','ACTIVE','2020-05-31 11:54:52',_binary '\0',1,373,1,1);
-/*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'2020-05-30 16:21:03','ACTIVE','2020-05-30 16:21:03','przemek@gmail.com','Przemek','$2a$10$bTERQoLDob8f/iuktMuYXus3BQv66Dt.cPY/7pQ5OfTUrEzwwN6j6','517-175-123','Pietrzak','ROLE_ADMIN','eipc',NULL,NULL);
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -59,4 +64,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-15 19:11:26
+-- Dump completed on 2020-10-15 19:11:27
