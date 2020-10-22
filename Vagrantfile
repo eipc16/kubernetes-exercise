@@ -1,41 +1,36 @@
-BOX = "ubuntu/bionic64"
-DB_NAME = "cinema_tickets_app_db"
-DB_USERNAME = "test"
-DB_PASSWORD = "test"
-APP_IP="10.0.0.33"
-DB_IP="10.0.0.34"
-DB_HOST = "localhost"
-DB_PORT = 3306
+require 'json'
 
+vm_config = JSON.parse(File.read('vm_config.json'))
 
 Vagrant.configure("2") do |config|
-  config.vm.box = BOX
-  config.vm.synced_folder ".", "/vagrant"
+  config.vm.box = "ubuntu/bionic64"
+  config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
 
   config.vm.define "db" do |db|
-    db.vm.network "private_network", ip: DB_IP
+    db.vm.network "private_network", ip: vm_config['DB_IP']
 
     db.vm.provision "shell",
     path: "bootstrap/database.sh",
       env: {
-        "DB_NAME" => DB_NAME,
-        "DB_USERNAME" => DB_USERNAME,
-        "DB_PASSWORD" => DB_PASSWORD
+        "DB_NAME" => vm_config['DB_NAME'],
+        "DB_USERNAME" => vm_config['DB_USERNAME'],
+        "DB_PASSWORD" => vm_config['DB_PASSWORD']
       }
   end
 
   config.vm.define "app" do |app|
-    app.vm.network "private_network", ip: APP_IP
+    app.vm.network "private_network", ip: vm_config['APP_IP']
+    app.vm.network "forwarded_port", guest: 8081, host: 8081
 
     app.vm.provision "shell",
       path: "bootstrap/bootstrap.sh",
       env: {
-          "DB_NAME" => DB_NAME,
-          "DB_USERNAME" => DB_USERNAME,
-          "DB_PASSWORD" => DB_PASSWORD,
-          "APP_IP" => APP_IP,
-          "DB_HOST" => DB_IP,
-          "DB_PORT" => DB_PORT
+          "DB_NAME" => vm_config['DB_NAME'],
+          "DB_USERNAME" => vm_config['DB_USERNAME'],
+          "DB_PASSWORD" => vm_config['DB_PASSWORD'],
+          "APP_IP" => vm_config['APP_IP'],
+          "DB_HOST" => vm_config['DB_IP'],
+          "DB_PORT" => vm_config['DB_PORT']
       }
     
     app.vm.provider "virtualbox" do |vb|

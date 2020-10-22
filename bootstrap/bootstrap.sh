@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-# while [ ! -f .db_setup_completed ]
-# do
-#   sleep 2
-#   echo "Waiting for database configuration..."
-# done
+while [ ! -f /vagrant/bootstrap/.db_setup_completed ]
+do
+  sleep 20
+  echo "Waiting for database configuration..."
+done
 
 echo "Start VM initialization"
 

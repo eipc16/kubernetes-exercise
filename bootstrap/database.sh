@@ -1,4 +1,4 @@
-rm -r .db_setup_completed
+rm -r /vagrant/bootstrap/.db_setup_completed
 
 echo "Initializing Database..."
 echo "Database variables..."
@@ -39,4 +39,4 @@ echo "bind-address = 0.0.0.0" | sudo tee -a /etc/mysql/my.cnf
 # Restart again
 sudo systemctl restart mariadb
 
-touch .db_setup_completed
+touch /vagrant/bootstrap/.db_setup_completed
