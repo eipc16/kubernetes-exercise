@@ -4,7 +4,6 @@
 	<modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>ui</module>
 		<module>backend</module>
 	</modules>
     <parent>
@@ -25,12 +24,6 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-
-		<db.name>cinema_tickets_app_db</db.name>
-		<db.user>root</db.user>
-		<db.password>root</db.password>
-		<db.host>localhost</db.host>
-		<db.port>3306</db.port>
 	</properties>
 
 	<dependencies>

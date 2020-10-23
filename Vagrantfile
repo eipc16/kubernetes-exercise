@@ -1,6 +1,6 @@
 require 'json'
 
-vm_config = JSON.parse(File.read('vm_config.json'))
+vm_config = JSON.parse(File.read('./vm_config.json'))
 
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
     db.vm.network "private_network", ip: vm_config['DB_IP']
 
     db.vm.provision "shell",
-    path: "bootstrap/database.sh",
+      path: "bootstrap/database.sh",
       env: {
         "DB_NAME" => vm_config['DB_NAME'],
         "DB_USERNAME" => vm_config['DB_USERNAME'],
