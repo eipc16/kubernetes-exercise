@@ -132,6 +132,21 @@ W celu zalogowania się do maszyny z bazą danych należy wykonać polecenie:
 vagrant ssh db
 ```
 
+#### systemd
+
+MariaDB uruchamiana jest jako serwis dlatego jej działanie można zweryfikować poprzez wykonanie komendy:
+
+```bash
+systemctl status mariadb
+```
+
+Jej rezultat powinien być następujący:
+
+![db systemd](./screenshots/systemd_db.png)
+
+
+#### lsof
+
 Baza danych uruchamiana jest domyślnie na porcie `3306`. Efekt wywołania komendy `lsof` powinien być następujący:
 
 ![Db lsof](./screenshots/db_lsof.png)
@@ -141,6 +156,19 @@ W celu połaczenia się z maszyną backendu należy użyć komendy:
 ```bash
 vagrant ssh app
 ```
+#### systemctl
+
+Aplikacja odpala się jako serwis, dlatego jej działanie można zweryfikować poprzez uruchomienie komendy:
+
+```bash
+systemctl status cinema_tickets_app
+```
+
+Jej rezultat powinien być następujący:
+
+![App systemd](./screenshots/systemd_app.png)
+
+#### lsof
 
 Backend uruchamia się na porcie `8081`, aby zwalidować jego działanie należy wywołać komendę `lsof`, rezultat powinien być następujący:
 
