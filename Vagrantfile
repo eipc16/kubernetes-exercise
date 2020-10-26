@@ -2,6 +2,9 @@ require 'json'
 
 vm_config = JSON.parse(File.read('./vm_config.json'))
 
+LOCK_FILE_PATH = "/vagrant/bootstrap-ansible/.db_setup_completed"
+SERVICE_SRC_PATH = "/vagrant/bootstrap-ansible/cinema_tickets_app.service"
+
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
   config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
@@ -9,33 +12,36 @@ Vagrant.configure("2") do |config|
   config.vm.define "db" do |db|
     db.vm.network "private_network", ip: vm_config['DB_IP']
 
-    db.vm.provision "shell",
-      path: "bootstrap/database.sh",
-      env: {
-        "DB_NAME" => vm_config['DB_NAME'],
-        "DB_USERNAME" => vm_config['DB_USERNAME'],
-        "DB_PASSWORD" => vm_config['DB_PASSWORD']
+    db.vm.provision "ansible_local" do |ansible|
+      ansible.playbook = "./bootstrap-ansible/database-setup.yml"
+      ansible.extra_vars = {
+        lock_file_path: LOCK_FILE_PATH,
+        db: {
+          name: vm_config['DB_NAME'],
+          username: vm_config['DB_USERNAME'],
+          password: vm_config['DB_PASSWORD']
+        }
       }
+    end
   end
 
   config.vm.define "app" do |app|
     app.vm.network "private_network", ip: vm_config['APP_IP']
     app.vm.network "forwarded_port", guest: 8081, host: 8081
 
-    app.vm.provision "shell",
-      path: "bootstrap/bootstrap.sh",
-      env: {
-          "DB_NAME" => vm_config['DB_NAME'],
-          "DB_USERNAME" => vm_config['DB_USERNAME'],
-          "DB_PASSWORD" => vm_config['DB_PASSWORD'],
-          "APP_IP" => vm_config['APP_IP'],
-          "DB_HOST" => vm_config['DB_IP'],
-          "DB_PORT" => vm_config['DB_PORT']
+    app.vm.provision "ansible_local" do |ansible|
+      ansible.playbook = "./bootstrap-ansible/backend-setup.yml"
+      ansible.extra_vars = {
+        lock_file_path: LOCK_FILE_PATH,
+        service_src_path: SERVICE_SRC_PATH,
+        db: {
+          name: vm_config['DB_NAME'],
+          username: vm_config['DB_USERNAME'],
+          password: vm_config['DB_PASSWORD'],
+          host: vm_config['DB_IP'],
+          port: vm_config['DB_PORT']
+        }
       }
-    
-    app.vm.provider "virtualbox" do |vb|
-      vb.memory = "4096"
-      vb.cpus = "2"
     end
   end
 end

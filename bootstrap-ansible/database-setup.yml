@@ -1,0 +1,109 @@
+- name: MariaDB Database
+  hosts: all
+  user: vagrant
+  vars:
+    root_user: "root"
+    sql_scripts_path: "/vagrant/bootstrap-ansible/database_scripts"
+    bind_address: 0.0.0.0
+    binding_address_file_path: "/etc/mysql/my.cnf"
+  tasks:
+    - name: Remove lock file if exists
+      file:
+        path: "{{lock_file_path}}"
+        state: absent
+    - name: Install MariaDB Server (with update cache)
+      apt:
+        name: mariadb-server
+        update_cache: yes
+      become: yes
+    - name: Install PIP
+      apt:
+        name: python-pip
+        update_cache: yes
+      become: yes
+    - name: Install required PyMySQL
+      pip:
+        name: PyMySQL
+      become: yes
+    - name: Check if MariaDB Server is running
+      command: systemctl is-active mariadb
+      register: result
+      become: yes
+    - name: Restart MariaDB Server if it's not active
+      service:
+        name: mariadb
+        state: restarted
+      become: yes
+      when: result.stdout != 'active'
+    - name: Create root user
+      mysql_user:
+        login_user: "{{root_user}}"
+        login_password: ""
+        check_implicit_admin: yes
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        user: "{{db.username}}"
+        password: "{{db.password}}"
+        priv: '*.*:ALL'
+        host: '%'
+      become: yes
+    - name: Drop table {{db.name}} if exists
+      mysql_db:
+        name: "{{db.name}}"
+        login_user: "{{db.username}}"
+        login_password: "{{db.password}}"
+        state: absent
+      tags: mariadb
+    - name: Create Table {{db.name}}
+      mysql_db:
+        name: "{{db.name}}"
+        login_user: "{{db.username}}"
+        login_password: "{{db.password}}"
+        state: present
+      tags: mariadb
+    - name: Load initialization scripts
+      find:
+        paths: "{{sql_scripts_path}}"
+        patterns: '*.sql'
+      register: sql_dump_files
+    - name: Import database dump
+      mysql_db:
+        name: "{{db.name}}"
+        login_user: "{{db.username}}"
+        login_password: "{{db.password}}"
+        target: "{{item.path}}"
+        state: import
+      with_items: "{{sql_dump_files.files}}"
+    - name: Configure Firewall
+      command: ufw allow mysql/tcp
+      become: yes
+    - name: Test if current binding exists
+      shell: "grep -c bind-address {{binding_address_file_path}}"
+      ignore_errors: true
+      register: bind_address_test_result
+    - name: Replace current binding with {{bind_address}}
+      lineinfile:
+        path: "{{binding_address_file_path}}"
+        backrefs: yes
+        regexp: "^bind-address"
+        line: "bind-address = {{bind_address}}"
+        state: present
+      when: bind_address_test_result.stdout != "0"
+      become: true
+    - name: "Create new binding: {{bind_address}}"
+      lineinfile:
+        path: "{{binding_address_file_path}}"
+        line: "{{item}}"
+      with_items:
+        - "[mysqld]"
+        - "bind-address = {{bind_address}}"
+      when: bind_address_test_result.stdout == "0"
+      become: true
+    - name: Restart MariaDB Server
+      service:
+        name: mariadb
+        state: restarted
+      become: yes
+    - name: Create lockfile
+      file:
+        path: "{{lock_file_path}}"
+        state: touch

@@ -1,12 +1,13 @@
 package com.piisw.cinema_tickets_app.infrastructure.configuration;
 
-
 import com.piisw.cinema_tickets_app.domain.user.entity.UserEntity;
 import com.piisw.cinema_tickets_app.domain.user.control.UserService;
 import com.piisw.cinema_tickets_app.infrastructure.security.UserInfo;
-import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -17,10 +18,14 @@ import java.util.Optional;
 
 @Configuration
 @EnableJpaAuditing
-@RequiredArgsConstructor
 public class AuditingConfig {
 
     private final UserService userService;
+
+    @Autowired
+    public AuditingConfig(@Lazy UserService userService) {
+        this.userService = userService;
+    }
 
     @Bean
     public AuditorAware<UserEntity> auditorProvider() {
