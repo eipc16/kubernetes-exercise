@@ -61,3 +61,8 @@ yarn-error.log*
 .vagrant/
 /nohup.out
 /cinema_tickets_app.log
+
+
+.db_setup_finished
+build.log
+log.log

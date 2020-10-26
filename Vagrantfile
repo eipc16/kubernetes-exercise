@@ -2,7 +2,7 @@ require 'json'
 
 vm_config = JSON.parse(File.read('./vm_config.json'))
 
-LOCK_FILE_PATH = "/vagrant/bootstrap-ansible/.db_setup_completed"
+LOCK_FILE_PATH = "/vagrant/bootstrap-ansible/.db_setup_finished"
 SERVICE_SRC_PATH = "/vagrant/bootstrap-ansible/cinema_tickets_app.service"
 
 Vagrant.configure("2") do |config|
