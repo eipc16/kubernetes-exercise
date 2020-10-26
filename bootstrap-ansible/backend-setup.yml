@@ -50,15 +50,15 @@
       args:
         chdir: /vagrant/
       register: maven_build_result
-    - name: "[Maven Build] Create log file"
-      file:
-        path: "{{maven_build_log}}"
-        state: touch
-    - name: "[Maven Build] Dump log info"
-      lineinfile:
-        dest: "{{maven_build_log}}"
-        line: "{{item}}"
-      with_items: "{{maven_build_result.stdout_lines}}"
+    # - name: "[Maven Build] Create log file"
+    #   file:
+    #     path: "{{maven_build_log}}"
+    #     state: touch
+    # - name: "[Maven Build] Dump log info"
+    #   lineinfile:
+    #     dest: "{{maven_build_log}}"
+    #     line: "{{item}}"
+    #   with_items: "{{maven_build_result.stdout_lines}}"
     - name: "Copy executable (Version: {{executable_version}})"
       copy:
         src: "{{item}}"
