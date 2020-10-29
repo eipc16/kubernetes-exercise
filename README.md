@@ -1,5 +1,11 @@
 # Laboratorium 4. Ansible (Technologie wspierające wytwarzanie oprogramowania)
 
+
+## Ansible
+
+Ansible to narzędzie, które pozwala wdrażać i konfigurować systemy IT. Jest on alternatywą dla skryptów powłoki. Ansible może działać zarówno na systemach z rodziny Unix jak i Microsoft, a jego główną zaletą jest to, że jest idempotentny. Na tle konkurencyjnych rozwiązań Ansible wyróżnia się tym, że do działania nie wymaga on instalowania żadnego dodatkowego oprogramowania na zarządzanych komputerach, wystarcza mu jedynie połączenie SSH. 
+Wykorzystując Ansible w aplikacji Vagrant dostępne są dwa moduły `ansible` oraz `ansible_local`. W dużym skrócie w ramach tego pierwszego modułu aplikacja zadziała tylko, jeśli na komputerze gospodarzu zainstalowany będzie Ansible oraz Python. W drugim przypadku Ansible oraz Python zostaną zainstalowane na maszynie wirtualnej, na której w kolejnym kroku zostanie wykonany plik Ansible.
+
 ## Konfiguracja
 
 ### Ogólna konfiguracja
@@ -181,3 +187,7 @@ for genre in response_json:
 Skrypt wykorzystuje jeden z nielicznych endpointów niewymagających autoryzacji do pobrania listy gatunków znajdującej się w bazie danych. Efektem działania skryptu powinna być lista gatunków zaprezentowana poniżej:
 
 ![Script results](./screenshots/smoke_test.png)
+
+## Podsumowanie
+
+Ansible to z pewnością ciekawa propozycja, która pozwala uczynić proces wdrażania aplikacji jeszcze prostszym i mniej podatnym na błędy. Plik konfiguracyjny Ansible jest także czytelniejszy niż jego odpowiednik napisany w bashu. Głównym problemem podczas przygotowywania tego rozwiązania był brak znajomości dostępnych metod, co znacznie wydłużało czas przygotowania tego pliku względem tego opracowanego w bashu. Jednak ten problem z pewnością z czasem zniknie. Kolejną napotkaną małą trudnością okazała się konieczność ręcznej instalacji dodatkowej biblioteki w Pythonie, aby umożliwić prawidłowe działanie metody konfiugurującej działanie bazy. Ponadto odkryliśmy jedną właściwość, która naszym zdaniem może być potencjalną wadą tego oprogramowania. Ansible w większości korzysta się z zewnętrznych definicji skryptów, co potencjalnie daje nam mniejszą możliwość kontroli nad tym co dzieje się pod spodem, co w połączeniu z tym, że opiera się on na Pythonie pozwala mieć pewne obawy związane z bezpieczeństwem.
