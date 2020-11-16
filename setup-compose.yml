@@ -1,0 +1,35 @@
+- name: Cinema Tickets App Configuration
+  hosts: all
+  roles:
+    - role: gantsign.java
+      java_version: '11'
+      java_is_default_installation: yes
+      java_fact_group_name: java
+  user: vagrant
+  tasks:
+    - name: "[Python] Install pip"
+      apt:
+        name: python3-pip
+        update_cache: yes
+      become: yes
+    - name: "[Python] Install docker"
+      pip:
+        name: docker
+      become: yes
+    - name: "[Python] Install missing libffi-dev (Required to install docker-compose, but for some reason not bundled in python 3.5)"
+      apt:
+        name: libffi-dev
+      become: yes
+    - name: "[Python] Install docker-compose"
+      pip:
+        name: docker-compose
+      become: yes
+    - name: "[Maven Build] Build maven"
+      shell: "./mvnw clean package -DskipTests -DdbHost=cta_db"
+      ignore_errors: yes
+      args:
+        chdir: /vagrant/
+      register: maven_build_result
+    - name: "[Docker] Compose services"
+      docker_compose:
+        project_src: "/vagrant/"

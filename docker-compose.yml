@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  database:
+    image: 'cta_db_image:1.0'
+    container_name: 'cta_db'
+    restart: always
+    build:
+      context: './db/'
+      dockerfile: Dockerfile
+    ports:
+      - "3306:3306"
+    networks:
+      - 'cta-bridge'
+  app:
+    image: 'cta_app_image:1.0'
+    container_name: 'cta_app'
+    restart: always
+    build:
+      context: './backend/'
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - 'cta-bridge'
+networks:
+  cta-bridge:
+    driver: bridge

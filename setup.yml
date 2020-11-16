@@ -21,7 +21,7 @@
   tasks:
     - name: "[Python] Install pip"
       apt:
-        name: python-pip
+        name: python3-pip
         update_cache: yes
       become: yes
     - name: "[Python] Install docker-py"
