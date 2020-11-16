@@ -1,8 +1,0 @@
-{
-    "DB_NAME": "cinema_tickets_app_db",
-    "DB_USERNAME": "test",
-    "DB_PASSWORD": "test123",
-    "APP_IP": "10.0.0.33",
-    "DB_IP": "10.0.0.34",
-    "DB_PORT": 3306
-}

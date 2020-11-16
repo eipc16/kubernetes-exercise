@@ -1,0 +1,71 @@
+- name: Cinema Tickets App Configuration
+  hosts: all
+  roles:
+    - role: gantsign.java
+      java_version: '11'
+      java_is_default_installation: yes
+      java_fact_group_name: java
+  user: vagrant
+  vars:
+    db:
+      path: "./db"
+      image_name: "cta_db_image"
+      image_tag: 1.0
+      container_name: "cta_db"
+    backend:
+      path: "./backend"
+      image_name: "cta_app_image"
+      image_tag: 1.0
+      container_name: "cta_app"
+    docker_bridge_network_name: 'cta-bridge'
+  tasks:
+    - name: "[Python] Install pip"
+      apt:
+        name: python-pip
+        update_cache: yes
+      become: yes
+    - name: "[Python] Install docker-py"
+      pip:
+        name: docker
+      become: yes
+    - name: "[Maven Build] Build maven"
+      shell: "./mvnw clean package -DskipTests -DdbHost={{db.container_name}}"
+      ignore_errors: yes
+      args:
+        chdir: /vagrant/
+      register: maven_build_result
+    - name: "[Docker] Create network"
+      docker_network:
+        name: "{{docker_bridge_network_name}}"
+    - name: "[Docker] Build database docker image"
+      docker_image:
+        build:
+          path: "{{db.path}}"
+        name: "{{db.image_name}}"
+        tag: "{{db.image_tag}}"
+    - name: "[Docker] Start database docker container"
+      docker_container:
+        name: "{{db.container_name}}"
+        image: "{{db.image_name}}:{{db.image_tag}}"
+        detach: yes
+        restart_policy: always
+        networks:
+          - name: "{{docker_bridge_network_name}}"
+        ports:
+          - "3306:3306"
+    - name: "[Docker] Build backend docker image"
+      docker_image:
+        build:
+          path: "{{backend.path}}"
+        name: "{{backend.image_name}}"
+        tag: "{{backend.image_tag}}"
+    - name: "[Docker] Start backend docker container"
+      docker_container:
+        name: "{{backend.container_name}}"
+        image: "{{backend.image_name}}:{{backend.image_tag}}"
+        detach: yes
+        restart_policy: always
+        networks:
+          - name: "{{docker_bridge_network_name}}"
+        ports:
+          - "8081:8081"

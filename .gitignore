@@ -66,3 +66,7 @@ yarn-error.log*
 .db_setup_finished
 build.log
 log.log
+
+ansible_collections
+
+app-target
