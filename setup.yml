@@ -1,10 +1,5 @@
 - name: Cinema Tickets App Configuration
   hosts: all
-  roles:
-    - role: gantsign.java
-      java_version: '11'
-      java_is_default_installation: yes
-      java_fact_group_name: java
   user: vagrant
   vars:
     db:
@@ -19,6 +14,25 @@
       container_name: "cta_app"
     docker_bridge_network_name: 'cta-bridge'
   tasks:
+    - name: Install Java (with update cache)
+      apt:
+        name: openjdk-11-jdk-headless
+        update_cache: yes
+      become: yes
+    - name: Install Docker (with update cache)
+      apt:
+        name: docker.io
+        update_cache: yes
+      become: yes
+    - name: Reload daemon
+      command: systemctl daemon-reload
+      become: true
+    - name: Enable and Start docker
+      service:
+        name: docker
+        enabled: yes
+        state: started
+      become: true
     - name: "[Python] Install pip"
       apt:
         name: python3-pip
