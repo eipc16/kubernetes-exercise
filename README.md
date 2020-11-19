@@ -9,7 +9,7 @@ Celem ćwiczenia było przygotowanie konfiguracji do uruchomienia aplikacji webo
 ## Uruchomienie bez docker-compose
 Aby uruchomić aplikację bez wykorzystania polecenia docker-compose należy w pliku `Vagrant` wprowadzić w linii 7 (kod poniżej) wprowadzić ścieżke do pliku `setup.yml`, który zawiera skrypt Ansible konfigurujący środowisko. Następnie należy wywołać polecenie Vagrant up. Spowoduje to uruchomienie i skonfigurwanie maszyny.
 
-`
+```
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"  
   config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
@@ -24,9 +24,12 @@ Vagrant.configure("2") do |config|
     }
   end
 end
-`
+```
 
 Poniżej zrzuty ekranu z działającą maszyną i kontenerami:
+
+![Architektura](./images/architecture.png)
+
 
 ## Uruchomienie z docker-compose
 Aby uruchomić aplikację z wykorzystaniem polecenia docker-compose należy w pliku `Vagrant` wprowadzić w linii 7 (kod powyżej) wprowadzić ścieżke do pliku `setup-compose.yml`, który zawiera skrypt Ansible konfigurujący środowisko. Następnie należy wywołać polecenie Vagrant up. Spowoduje to uruchomienie i skonfigurwanie maszyny.
