@@ -70,3 +70,5 @@ log.log
 ansible_collections
 
 app-target
+
+ubuntu-bionic-18.04-cloudimg-console.log
