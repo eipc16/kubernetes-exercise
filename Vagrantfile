@@ -7,6 +7,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "./setup-compose.yml"
+    # ansible.playbook = "./setup.yml"
 
     ansible.install_mode = "pip3"
     ansible.extra_vars = { 

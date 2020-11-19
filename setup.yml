@@ -1,6 +1,7 @@
 - name: Cinema Tickets App Configuration
   hosts: all
   user: vagrant
+  become: yes
   vars:
     db:
       path: "./db"
@@ -18,12 +19,10 @@
       apt:
         name: openjdk-11-jdk-headless
         update_cache: yes
-      become: yes
     - name: Install Docker (with update cache)
       apt:
         name: docker.io
         update_cache: yes
-      become: yes
     - name: Reload daemon
       command: systemctl daemon-reload
       become: true
@@ -37,11 +36,9 @@
       apt:
         name: python3-pip
         update_cache: yes
-      become: yes
     - name: "[Python] Install docker-py"
       pip:
         name: docker
-      become: yes
     - name: "[Maven Build] Build maven"
       shell: "./mvnw clean package -DskipTests -DdbHost={{db.container_name}}"
       ignore_errors: yes
