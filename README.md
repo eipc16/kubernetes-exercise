@@ -6,6 +6,8 @@ Celem ćwiczenia było przygotowanie konfiguracji do uruchomienia aplikacji webo
 ## Środowisko
 Środowisko składa się z dwóch kontenerów. W pierwszym uruchamiana jest baza danych, natomiast w drugim uruchamiana jest aplikacja. Jako adresy kontenerów zostały wykorzystane ich nazwy. Poniższy rysunek obrazuje konfigurację środowiska:
 
+![Architektura](./images/architecture.png)
+
 ## Uruchomienie bez docker-compose
 Aby uruchomić aplikację bez wykorzystania polecenia docker-compose należy w pliku `Vagrant` wprowadzić w linii 7 (kod poniżej) wprowadzić ścieżke do pliku `setup.yml`, który zawiera skrypt Ansible konfigurujący środowisko. Następnie należy wywołać polecenie Vagrant up. Spowoduje to uruchomienie i skonfigurwanie maszyny.
 
@@ -27,8 +29,6 @@ end
 ```
 
 Poniżej zrzuty ekranu z działającą maszyną i kontenerami:
-
-![Architektura](./images/architecture.png)
 
 
 ## Uruchomienie z docker-compose
