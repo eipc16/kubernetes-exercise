@@ -458,7 +458,7 @@ Events:
 Po uruchomieniu maszyny dashboard powinien być dostępny pod adresem:
 
 ```bash
-http://10.0.0.33:8001/api/v1/namespaces/kubernetes-dashboard/services/kubernetes-dashboard/proxy
+http://10.0.0.33:8081/api/v1/namespaces/kubernetes-dashboard/services/kubernetes-dashboard/proxy
 ```
 
 ![Główny widok](./images/dashboard_main.png)
