@@ -1,4 +1,4 @@
-# Laboratorium 6. Docker (Technologie wspierające wytwarzanie oprogramowania)
+# Laboratorium 8. Kubernetes (Technologie wspierające wytwarzanie oprogramowania)
 
 ## Opis zadania
 
@@ -6,7 +6,7 @@
 
 ## Środowisko
 
--- opis środowiska
+W środowisku znajdują się trzy pody, dwa należą do backendu, ostatni to baza danych. Do nich został zdefiniowane deploymenty oraz serwisy, odpowiadające ich zadaniu. Całe środowisko jest tworzone przy pomocy Vagrantfile i konfiguracji Ansible. Wewnątrz tej konfiguracji tworzone jest środowisko maszyny wirtualnej, budowane są projekty oraz obrazy Dockera. Po tych krokach odpalana jest konfiguracja kuard.yaml, która tworzy wcześniej wspomniane konstrukcje kuberenetesowe.
 
 
 ### Ogólna architektura
@@ -452,4 +452,4 @@ Events:
 
 ## Podsumowanie
 
--- podsumowanie
+Praca z narzędziem Kubernetes nie obyła się bez małych problemów. Jednym z elementów raportu miały być zdjęcia dashboarda minikube z widocznymi działającymi podami. Przez to, że klaster znajduję się wewnątrz wirtualnej maszyny Vagrant, konieczne było exposeowanie do hosta działającego dashboarda. W ten sposób rozwiązany został ten problem.
