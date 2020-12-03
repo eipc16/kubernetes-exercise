@@ -2,18 +2,18 @@
   hosts: all
   user: vagrant
   become: yes
+  roles:
+    - role: gantsign.minikube
+    - role: ericsysmin.kubectl
   vars:
     db:
-      path: "./db"
-      image_name: "cta_db_image"
-      image_tag: 1.0
-      container_name: "cta_db"
+      path: "/vagrant/db/"
+      image_name: "cta_db"
+      image_tag: 1.1
     backend:
-      path: "./backend"
-      image_name: "cta_app_image"
-      image_tag: 1.0
-      container_name: "cta_app"
-    docker_bridge_network_name: 'cta-bridge'
+      path: "/vagrant/backend/"
+      image_name: "cta_core"
+      image_tag: 1.1
   tasks:
     - name: Install Java (with update cache)
       apt:
@@ -23,6 +23,13 @@
       apt:
         name: docker.io
         update_cache: yes
+    - name: "[Docker] Grant user privileges"
+      user:
+        name: "{{ansible_user}}"
+        groups: docker
+        append: yes
+    - name: "[Docker] Restart ssh connection"
+      meta: reset_connection
     - name: Reload daemon
       command: systemctl daemon-reload
       become: true
@@ -32,51 +39,21 @@
         enabled: yes
         state: started
       become: true
-    - name: "[Python] Install pip"
-      apt:
-        name: python3-pip
-        update_cache: yes
-    - name: "[Python] Install docker-py"
-      pip:
-        name: docker
+    - name: "[Kubernetes] Start minicube"
+      command: minikube start -p minikube docker-env
+      become: no
     - name: "[Maven Build] Build maven"
-      shell: "./mvnw clean package -DskipTests -DdbHost={{db.container_name}}"
+      shell: "./mvnw clean package -DskipTests"
       ignore_errors: yes
       args:
         chdir: /vagrant/
       register: maven_build_result
-    - name: "[Docker] Create network"
-      docker_network:
-        name: "{{docker_bridge_network_name}}"
     - name: "[Docker] Build database docker image"
-      docker_image:
-        build:
-          path: "{{db.path}}"
-        name: "{{db.image_name}}"
-        tag: "{{db.image_tag}}"
-    - name: "[Docker] Start database docker container"
-      docker_container:
-        name: "{{db.container_name}}"
-        image: "{{db.image_name}}:{{db.image_tag}}"
-        detach: yes
-        restart_policy: always
-        networks:
-          - name: "{{docker_bridge_network_name}}"
-        ports:
-          - "3306:3306"
+      shell: "eval $(minikube -p minikube docker-env) && docker build -t {{db.image_name}}:{{db.image_tag}} {{db.path}}"
+      become: no
     - name: "[Docker] Build backend docker image"
-      docker_image:
-        build:
-          path: "{{backend.path}}"
-        name: "{{backend.image_name}}"
-        tag: "{{backend.image_tag}}"
-    - name: "[Docker] Start backend docker container"
-      docker_container:
-        name: "{{backend.container_name}}"
-        image: "{{backend.image_name}}:{{backend.image_tag}}"
-        detach: yes
-        restart_policy: always
-        networks:
-          - name: "{{docker_bridge_network_name}}"
-        ports:
-          - "8081:8081"
+      shell: "eval $(minikube -p minikube docker-env) && docker build -t {{backend.image_name}}:{{backend.image_tag}} {{backend.path}}"
+      become: no
+    - name: "[Kubernetes] Apply Kubernetes Configuration"
+      shell: kubectl apply -f /vagrant/kuard.yaml
+      become: no

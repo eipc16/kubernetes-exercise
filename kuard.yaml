@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cta-db
+spec:
+  selector:
+    matchLabels: 
+      app: cta-db
+      tier: database
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: cta-db
+        tier: database
+        track: stable
+    spec:
+      containers:
+        - name: cta-db
+          image: "cta_db:1.1"
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 3306
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 600
+            timeoutSeconds: 1
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cta-db
+spec:
+  selector:
+    app: cta-db
+    tier: database
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: http
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cta-core
+spec:
+  selector:
+    matchLabels: 
+      app: cta-core
+      tier: backend
+      track: stable
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: cta-core
+        tier: backend
+        track: stable
+    spec:
+      containers:
+        - name: cta-core
+          image: "cta_core:1.1"
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 8081
+            initialDelaySeconds: 600
+            timeoutSeconds: 1
+          env:
+            - name: CTA_DATABASE_HOST
+              value: cta-db
+            - name: CTA_DATABASE_PORT
+              value: "3306"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cta-core
+spec:
+  type: NodePort
+  ports:
+    - nodePort: 31316
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    app: cta-core

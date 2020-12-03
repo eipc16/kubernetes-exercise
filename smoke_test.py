@@ -2,7 +2,7 @@
 import json
 import requests
 
-url = 'http://localhost:8080/cinema-tickets-app/api/genres'
+url = 'http://10.104.78.104:31316/cinema-tickets-app/api/genres'
 response_json = requests.get(url).json()
 
 print('Found genres:')
