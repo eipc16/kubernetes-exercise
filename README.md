@@ -2,7 +2,10 @@
 
 ## Opis zadania
 
--- opis zadania
+Celem zadania jest zapoznanie się z architekturą i działaniem Kubernetesa poprzez konfiguracje aplikacji w tym narzędziu. 
+
+Kubernetes to platforma do wdrażania, zarządzania i skalowania aplikacji kontenerowych. Jego pierwotna wersja została opracowana w 2014 roku przez Google. Kubernetes udostępnia zestaw narzędzi, dzięki którym możliwe jest zarządzanie i skalowanie aplikacji. Z perspektywy administratora klaster Kubernetesa składa się z APIServera oraz węzłów (Node). Wewnątrz węzłów uruchamiane są tak zwane Pody. Natomiast w Podzie może działać jeden lub wiele kontenerów. Ponadto w Kubernetesie istnieje wiele różnego typu obiektów np.: ReplicaSet, Service, Deployment, Volume, ConfigMap lub Secret. Każdy z nich odpowiada za dostarczenie różnego typu funkcjonalności.
+
 
 ## Środowisko
 
