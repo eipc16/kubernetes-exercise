@@ -14,7 +14,26 @@
       path: "/vagrant/backend/"
       image_name: "cta_core"
       image_tag: 1.1
+    proxy_service_name: "kubectlproxy"
+    proxy_service_src_path: "/vagrant/{{proxy_service_name}}.service"
+    proxy_service_dest_path: "/etc/systemd/system/{{proxy_service_name}}.service"
+    dashboard_service_name: "minikube_dashboard"
+    dashboard_service_src_path: "/vagrant/{{dashboard_service_name}}.service"
+    dashboard_service_dest_path: "/etc/systemd/system/{{dashboard_service_name}}.service"
+    
   tasks:
+    - name: "Copy {{proxy_service_name}}.service file to {{proxy_service_dest_path}}"
+      copy:
+        src: "{{proxy_service_src_path}}"
+        dest: "{{proxy_service_dest_path}}"
+        mode: 0777
+      become: true
+    - name: "Copy {{dashboard_service_name}}.service file to {{dashboard_service_dest_path}}"
+      copy:
+        src: "{{dashboard_service_src_path}}"
+        dest: "{{dashboard_service_dest_path}}"
+        mode: 0777
+      become: true
     - name: Install Java (with update cache)
       apt:
         name: openjdk-11-jdk-headless
@@ -23,11 +42,19 @@
       apt:
         name: docker.io
         update_cache: yes
+    - name: "[Docker] Ensure `docker` group exists"
+      group:
+        name: docker
+        state: present
     - name: "[Docker] Grant user privileges"
       user:
         name: "{{ansible_user}}"
         groups: docker
         append: yes
+    - name: "[Docker] Add Socket Permission"
+      file:
+        path: /var/run/docker.sock
+        mode: 666
     - name: "[Docker] Restart ssh connection"
       meta: reset_connection
     - name: Reload daemon
@@ -57,3 +84,13 @@
     - name: "[Kubernetes] Apply Kubernetes Configuration"
       shell: kubectl apply -f /vagrant/kuard.yaml
       become: no
+    - name: "[Kubernetes] Start Proxy Service"
+      service:
+        name: "{{proxy_service_name}}"
+        enabled: yes
+        state: started
+    - name: "[Kubernetes] Start Dashboard Service"
+      service:
+        name: "{{dashboard_service_name}}"
+        enabled: yes
+        state: started

@@ -1,0 +1,14 @@
+[Unit]
+Description=minikube dashboard service
+After=network.target
+
+[Service]
+User=vagrant
+Group=vagrant
+ExecStart=/bin/bash -c "/usr/bin/minikube dashboard"
+StartLimitInterval=0
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
