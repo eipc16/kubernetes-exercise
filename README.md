@@ -453,6 +453,17 @@ Events:
   Normal  SuccessfulCreate  14m   replicaset-controller  Created pod: cta-db-6999448466-5lmxj
 ```
 
+## Dashboard
+
+![Główny widok](./images/dashboard_main.png)
+
+![Pierwszy pod - cta_core](./images/cta_core_pod_1.png)
+
+![Drugi pod - cta_core](./images/cta_core_pod_2.png)
+
+![Pierwszy pod - cta_db](./images/cta_db_pod.png)
+
+
 ## Podsumowanie
 
-Praca z narzędziem Kubernetes nie obyła się bez małych problemów. Jednym z elementów raportu miały być zdjęcia dashboarda minikube z widocznymi działającymi podami. Przez to, że klaster znajduję się wewnątrz wirtualnej maszyny Vagrant, konieczne było exposeowanie do hosta działającego dashboarda. W ten sposób rozwiązany został ten problem.
+Praca z narzędziem Kubernetes nie obyła się bez małych problemów. Jednym z elementów raportu miały być zdjęcia dashboarda minikube z widocznymi działającymi podami. Przez to, że klaster znajduję się wewnątrz wirtualnej maszyny Vagrant, konieczne było exposeowanie do hosta działającego dashboarda. Problem został rozwiązany poprzez dodanie dwóch serwisów. Pierwszy z nich `kubectlproxy`, który tworzy proxy tak, aby możliwy był dostęp do api Kubernetesa z adresu `http://localhost:8081`, drugi serwis - `minikube_dashboard` uruchamia dashboard. Dzięki ich połączeniu jest on dostępny z hosta. 
