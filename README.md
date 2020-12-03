@@ -455,6 +455,12 @@ Events:
 
 ## Dashboard
 
+Po uruchomieniu maszyny dashboard powinien być dostępny pod adresem:
+
+```bash
+http://10.0.0.33:8001/api/v1/namespaces/kubernetes-dashboard/services/kubernetes-dashboard/proxy
+```
+
 ![Główny widok](./images/dashboard_main.png)
 
 ![Pierwszy pod - cta_core](./images/cta_core_pod_1.png)
@@ -464,6 +470,24 @@ Events:
 ![Pierwszy pod - cta_db](./images/cta_db_pod.png)
 
 
+## Wywołanie z hosta
+
+W maszynie wirtualnej uruchomione jest proxy, które nasłuchuje na porcie `8081`. Z serwisu można korzystać na hoście za pomocą poniższego adresu:
+
+```bash
+http://10.0.0.33:8081/api/v1/namespaces/default/services/cta-core/proxy
+```
+
+Konkretny endpoint np. `cinema-tickets-app/api/genres` można wywołać za pomocą komendy:
+
+```bash
+curl --url http://10.0.0.33:8081/api/v1/namespaces/default/services/cta-core/proxy/cinema-tickets-app/api/genres
+```
+
+W rezultacie powinno otrzymać się następującą odpowiedź:
+
+![Response /api/genres](images/response.png)
+
 ## Podsumowanie
 
-Praca z narzędziem Kubernetes nie obyła się bez małych problemów. Jednym z elementów raportu miały być zdjęcia dashboarda minikube z widocznymi działającymi podami. Przez to, że klaster znajduję się wewnątrz wirtualnej maszyny Vagrant, konieczne było exposeowanie do hosta działającego dashboarda. Problem został rozwiązany poprzez dodanie dwóch serwisów. Pierwszy z nich `kubectlproxy`, który tworzy proxy tak, aby możliwy był dostęp do api Kubernetesa z adresu `http://localhost:8081`, drugi serwis - `minikube_dashboard` uruchamia dashboard. Dzięki ich połączeniu jest on dostępny z hosta. 
+Praca z narzędziem Kubernetes nie obyła się bez małych problemów. Jednym z elementów raportu miały być zdjęcia dashboarda minikube z widocznymi działającymi podami. Przez to, że klaster znajduję się wewnątrz wirtualnej maszyny Vagrant, konieczne było exposeowanie do hosta działającego dashboarda. Problem został rozwiązany poprzez dodanie dwóch serwisów. Pierwszy z nich `kubectlproxy`, który tworzy proxy tak, aby możliwy był dostęp do api Kubernetesa z adresu `http://localhost:8081`, drugi serwis - `minikube_dashboard` uruchamia dashboard. Dzięki ich połączeniu jest on dostępny z hosta.

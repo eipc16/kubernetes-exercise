@@ -1,11 +1,10 @@
 [Unit]
 Description=kubectl proxy 8081
 After=network.target
-
 [Service]
 User=vagrant
 Group=vagrant
-ExecStart=/bin/bash -c "/usr/bin/kubectl proxy --port=8081"
+ExecStart=/bin/bash -c "/usr/bin/kubectl proxy --address='0.0.0.0' --port=8081 --disable-filter=true"
 StartLimitInterval=0
 RestartSec=10
 Restart=always
