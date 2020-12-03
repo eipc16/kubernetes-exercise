@@ -1,12 +1,15 @@
-# Laboratorium 6. Docker (Technologie wspierające wytwarzanie oprogramowania)
+# Laboratorium 8. Kubernetes (Technologie wspierające wytwarzanie oprogramowania)
 
 ## Opis zadania
 
--- opis zadania
+Celem zadania jest zapoznanie się z architekturą i działaniem Kubernetesa poprzez konfiguracje aplikacji w tym narzędziu. 
+
+Kubernetes to platforma do wdrażania, zarządzania i skalowania aplikacji kontenerowych. Jego pierwotna wersja została opracowana w 2014 roku przez Google. Kubernetes udostępnia zestaw narzędzi, dzięki którym możliwe jest zarządzanie i skalowanie aplikacji. Z perspektywy administratora klaster Kubernetesa składa się z APIServera oraz węzłów (Node). Wewnątrz węzłów uruchamiane są tak zwane Pody. Natomiast w Podzie może działać jeden lub wiele kontenerów. Ponadto w Kubernetesie istnieje wiele różnego typu obiektów np.: ReplicaSet, Service, Deployment, Volume, ConfigMap lub Secret. Każdy z nich odpowiada za dostarczenie różnego typu funkcjonalności.
+
 
 ## Środowisko
 
--- opis środowiska
+W środowisku znajdują się trzy pody, dwa należą do backendu, ostatni to baza danych. Do nich został zdefiniowane deploymenty oraz serwisy, odpowiadające ich zadaniu. Całe środowisko jest tworzone przy pomocy Vagrantfile i konfiguracji Ansible. Wewnątrz tej konfiguracji tworzone jest środowisko maszyny wirtualnej, budowane są projekty oraz obrazy Dockera. Po tych krokach odpalana jest konfiguracja kuard.yaml, która tworzy wcześniej wspomniane konstrukcje kuberenetesowe.
 
 
 ### Ogólna architektura
@@ -452,4 +455,4 @@ Events:
 
 ## Podsumowanie
 
--- podsumowanie
+Praca z narzędziem Kubernetes nie obyła się bez małych problemów. Jednym z elementów raportu miały być zdjęcia dashboarda minikube z widocznymi działającymi podami. Przez to, że klaster znajduję się wewnątrz wirtualnej maszyny Vagrant, konieczne było exposeowanie do hosta działającego dashboarda. W ten sposób rozwiązany został ten problem.
