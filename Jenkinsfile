@@ -22,6 +22,7 @@ pipeline {
                 sh '''
                 echo $JAVA_HOME
                 java -version
+                ls /usr/local
                 '''
             }
         }
