@@ -5,15 +5,24 @@ pipeline {
         jdk 'openjdk-11'
     }
 
-    environment {
-        JAVA_HOME = "${tool 'openjdk-11'}"
-        PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
-    }
+    // environment {
+    //     JAVA_HOME = "${tool 'openjdk-11'}"
+    //     PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
+    // }
 
     stages {
         stage('Cloning Git repository') {
             steps {
                 git 'https://github.com/eipc16/kubernetes-exercise'
+            }
+        }
+
+        stage('Show JAVA_HOME') {
+            steps {
+                sh '''
+                    echo $JAVA_HOME
+                    echo $PATH
+                '''
             }
         }
 
