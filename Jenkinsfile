@@ -17,6 +17,12 @@ pipeline {
             }
         }
 
+        stage('Display Java Version') {
+            steps {
+                sh 'java --version'
+            }
+        }
+
         stage('Maven clean install') {
             steps {
                 sh './mvnw clean install -DskipTests'
