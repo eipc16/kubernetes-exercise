@@ -2,8 +2,11 @@ pipeline {
     agent any
 
     tools {
-        jdk 'openjdk_11_0_1'
+        jdk 'openjdk-11'
     }
+
+    env.JAVA_HOME="${tool 'openjdk-11'}"
+    env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
 
     stages {
         stage('Cloning Git repository') {
