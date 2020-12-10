@@ -19,7 +19,7 @@ pipeline {
 
         stage('Display Java Version') {
             steps {
-                sh 'java --version'
+                sh 'java -version'
             }
         }
 
