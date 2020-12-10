@@ -22,7 +22,10 @@ pipeline {
                 sh '''
                 echo $JAVA_HOME
                 java -version
-                ls /usr/local
+                echo "/usr/local/bin"
+                ls /usr/local/bin/
+                echo "/usr/bin"
+                ls /usr/bin
                 '''
             }
         }
