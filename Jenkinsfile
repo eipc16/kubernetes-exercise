@@ -6,7 +6,7 @@ pipeline {
     }
 
     stages {
-        state('Cloning Git repository') {
+        stage('Cloning Git repository') {
             steps {
                 git 'https://github.com/eipc16/kubernetes-exercise'
             }
