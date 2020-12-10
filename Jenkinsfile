@@ -19,7 +19,10 @@ pipeline {
 
         stage('Display Java Version') {
             steps {
-                sh 'java -version'
+                sh '''
+                echo $JAVA_HOME
+                java -version
+                '''
             }
         }
 
