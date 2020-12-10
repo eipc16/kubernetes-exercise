@@ -5,8 +5,10 @@ pipeline {
         jdk 'openjdk-11'
     }
 
-    env.JAVA_HOME="${tool 'openjdk-11'}"
-    env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
+    environment {
+        JAVA_HOME = "${tool 'openjdk-11'}"
+        PATH = "${JAVA_HOME}/bin:${PATH}"
+    }
 
     stages {
         stage('Cloning Git repository') {
